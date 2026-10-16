@@ -11,13 +11,13 @@ const npmCmd = isWin ? 'npm.cmd' : 'npm';
 
 console.log('🚀 Starting Samjhao Development Environment (Client + Server)...\n');
 
-const server = spawn(npmCmd, ['run', 'dev'], {
+const server = spawn(`${npmCmd} run dev`, {
   cwd: path.join(rootDir, 'server'),
   stdio: 'inherit',
   shell: true
 });
 
-const client = spawn(npmCmd, ['run', 'dev'], {
+const client = spawn(`${npmCmd} run dev`, {
   cwd: path.join(rootDir, 'client'),
   stdio: 'inherit',
   shell: true
