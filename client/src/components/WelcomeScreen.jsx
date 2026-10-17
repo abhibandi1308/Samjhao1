@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, HelpCircle, ArrowRight, Volume2, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Camera, HelpCircle, ArrowRight, Volume2, Sparkles, AlertTriangle, ShieldAlert } from 'lucide-react';
 import welcomeImg from '../assets/welcome_illustration.jpg';
 
 export function WelcomeScreen({
@@ -144,33 +144,93 @@ export function WelcomeScreen({
           </div>
         </div>
 
-        {/* Quick Sample Button (Instant test without camera) */}
+        {/* Quick Sample Document Tray (Instant test without camera) */}
         <div style={{ width: '100%', borderTop: '1px solid var(--slate-200)', paddingTop: '16px', textAlign: 'center' }}>
-          <div style={{ fontSize: '0.85rem', color: 'var(--slate-500)', marginBottom: '8px' }}>
+          <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--slate-600)', marginBottom: '10px' }}>
             {t.quickTryHeading}
           </div>
-          <button
-            type="button"
-            onClick={() => onSelectSample('bill')}
-            style={{
-              background: 'var(--primary-light)',
-              border: '1px solid var(--primary-border)',
-              color: 'var(--primary)',
-              fontSize: '0.95rem',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '8px 16px',
-              borderRadius: 'var(--radius-full)'
-            }}
-            id="quick-sample-bill-btn"
-          >
-            <Sparkles size={16} />
-            <span>{t.sampleBillBtn}</span>
-            <ArrowRight size={14} />
-          </button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '380px', marginInline: 'auto' }}>
+            {/* Sample 1: Electricity Bill */}
+            <button
+              type="button"
+              onClick={() => onSelectSample('bill')}
+              style={{
+                background: 'var(--primary-light)',
+                border: '1px solid var(--primary-border)',
+                color: 'var(--primary)',
+                fontSize: '0.92rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '10px 14px',
+                borderRadius: 'var(--radius-md)',
+                width: '100%'
+              }}
+              id="quick-sample-bill-btn"
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Sparkles size={16} />
+                <span>{t.sampleBillBtn}</span>
+              </div>
+              <ArrowRight size={14} />
+            </button>
+
+            {/* Sample 2: Suspicious Scam Message */}
+            <button
+              type="button"
+              onClick={() => onSelectSample('scam')}
+              style={{
+                background: '#FFFBEB',
+                border: '1px solid #FDE68A',
+                color: '#B45309',
+                fontSize: '0.92rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '10px 14px',
+                borderRadius: 'var(--radius-md)',
+                width: '100%'
+              }}
+              id="quick-sample-scam-btn"
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <AlertTriangle size={16} />
+                <span>{t.sampleScamBtn}</span>
+              </div>
+              <ArrowRight size={14} />
+            </button>
+
+            {/* Sample 3: Doctor Prescription Refusal */}
+            <button
+              type="button"
+              onClick={() => onSelectSample('medical')}
+              style={{
+                background: '#FEF2F2',
+                border: '1px solid #FECACA',
+                color: '#DC2626',
+                fontSize: '0.92rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '10px 14px',
+                borderRadius: 'var(--radius-md)',
+                width: '100%'
+              }}
+              id="quick-sample-medical-btn"
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <ShieldAlert size={16} />
+                <span>{t.sampleMedicalBtn}</span>
+              </div>
+              <ArrowRight size={14} />
+            </button>
+          </div>
         </div>
       </div>
     </div>

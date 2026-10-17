@@ -13,6 +13,7 @@ describe('Samjhao Frontend Client Logic Tests', () => {
       assert.ok(TRANSLATIONS[lang].medicalRefusalTitle, `medicalRefusalTitle in ${lang} must exist`);
       assert.ok(TRANSLATIONS[lang].medicalRefusalText, `medicalRefusalText in ${lang} must exist`);
       assert.ok(TRANSLATIONS[lang].scamWarningTitle, `scamWarningTitle in ${lang} must exist`);
+      assert.ok(TRANSLATIONS[lang].btnShareFamily, `btnShareFamily in ${lang} must exist`);
     });
   });
 

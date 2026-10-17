@@ -29,15 +29,14 @@ Many cannot read fine print or understand technical English. Existing AI tools o
 1. **Native Spoken Audio (Read-Aloud)**: Uses the browser's native Web Speech API to read the entire explanation or individual cards aloud in **Hindi (हिन्दी)**, **Telugu (తెలుగు)**, **Gujarati (ગુજરાતી)**, or **English**, with a **0.8x slower playback speed** designed for elders.
 2. **Prominent Key Information Cards**: Instant visibility on the three things that matter most:
    - **Total Due Amount** (e.g. ₹ 850)
-   - **Payment Due Date** (e.g. 25 October 2024)
-   - **Document Type** (e.g. Electricity Bill)
-3. **Action-First Summaries**: Clear answer to *"What should I do?"* (e.g., *"Pay ₹850 before 25 October to avoid ₹50 late fee. If already paid via UPI, keep receipt."*).
-4. **🔒 Zero Persistent Document Storage**: Uploads exist **strictly in RAM memory** during the request lifecycle and are never saved to disk, database, or persistent logs.
-5. **🛡️ Responsible AI Guardrails**:
+   - **Payment Due Date** (e.3. **Action-First Summaries**: Clear answer to *"What should I do?"* (e.g., *"Pay ₹850 before 25 October to avoid ₹50 late fee. If already paid via UPI, keep receipt."*).
+4. **📲 1-Tap WhatsApp Family Share**: Directly forwards the simplified breakdown (bill amount, due date, action needed, or scam warning) to sons, daughters, or caregivers on WhatsApp.
+5. **🔒 Zero Persistent Document Storage**: Uploads exist **strictly in RAM memory** during the request lifecycle and are never saved to disk, database, or persistent logs.
+6. **🛡️ Responsible AI Guardrails**:
    - **Prescription Refusal**: Strictly refuses to interpret medical prescriptions or provide medical advice, directing users to doctors or pharmacists.
    - **Scam Detection**: Flags threats and urgency signals in screenshots without falsely certifying authenticity.
    - **Explicit Uncertainty**: If text is smudged or cut off, fields are tagged as `❓ Uncertain` rather than guessed.
-6. **One-Click Sample Documents Tray**: Test instant real-world samples (Electricity Bill, Disconnection Scam SMS, Medical Prescription refusal) without needing a camera.
+7. **One-Click Sample Documents Tray**: Test instant real-world samples (Electricity Bill, Disconnection Scam SMS, Medical Prescription refusal) without needing a camera.
 
 ---
 
@@ -55,14 +54,16 @@ The application follows the 10-screen UX blueprint specified in [`assets/Samjhao
    ┌──────────────────────────────────────────────────────────────┘
    ▼
 [7 & 8. Result Cards & Spoken Audio] ──► [9. Step-by-Step Help Guide]
-                                     └──► [10. Error Recovery & Retake]
+      │                               └──► [10. Error Recovery & Retake]
+      └──► [Share with Family via WhatsApp]
 ```
 
 ### Technology Stack
 
-- **Frontend**: React 19, Vite, Vanilla CSS Design System (high-contrast, 48px touch targets, Google Fonts *Outfit* & *Noto Sans Devanagari*), Lucide icons.
+- **Frontend**: React 19, Vite, Vanilla CSS Design System (high-contrast, 48px touch targets, Google Fonts *Outfit* & *Noto Sans Devanagari*), Lucide vector icons (zero emojis).
 - **Backend**: Node.js v24, Express, Multer (`memoryStorage`), dotenv, cors.
-- **AI Multimodal Vision**: Official `@google/generative-ai` (Gemini Vision) with structured JSON validation and a deterministic offline fallback engine.
+- **Single-Port Fullstack Production**: Express automatically serves the compiled `client/dist/` build on `http://localhost:5000` with API routes attached.
+- **AI Multimodal Vision**: Official `@google/generative-ai` with multi-model fallback (`gemini-1.5-flash` ➔ `gemini-2.0-flash` ➔ `gemini-1.5-pro`), structured JSON validation, and deterministic domain-aware offline mocks.
 - **Voice Playback**: Browser Web Speech API (`SpeechSynthesis`) with localized voice matching and speed control.
 - **Testing**: Built-in `node:test` suite for backend endpoints, schemas, and client logic.
 
@@ -91,10 +92,9 @@ Clone the repository and install dependencies:
 git clone https://github.com/your-username/samjhao.git
 cd samjhao
 
-# Install backend dependencies
+# Install root, backend, and frontend dependencies
+npm install
 cd server && npm install
-
-# Install frontend dependencies
 cd ../client && npm install
 cd ..
 ```
@@ -116,13 +116,37 @@ MAX_FILE_SIZE_MB=10
 GEMINI_API_KEY=
 ```
 
-> **Note**: If `GEMINI_API_KEY` is not provided, Samjhao automatically operates in **Offline Demo Mode**, allowing full offline verification of all flows, cards, audio, and error states without requiring API keys or credits.
+> **Note**: If `GEMINI_API_KEY` is not provided, Samjhao automatically operates in **Offline Demo Mode**, allowing full offline verification of all flows, cards, audio, scam alerts, and error states without requiring API keys or credits.
 
-### 4. Running the Development Server
-From the project root:
+### 4. Running the Application
+
+#### Option A: Single-Port Production Mode (Recommended for Demos)
+Build the frontend and run everything from a single server on port 5000:
 
 ```bash
-# Starts both Express backend (port 5000) and Vite frontend (port 5173) concurrently
+npm run build
+npm start
+```
+Open **`http://localhost:5000`** in your browser.
+
+#### Option B: Split Development Mode
+Run both Express backend and Vite hot-reloading dev server:
+
+```bash
+npm run dev
+```
+Open **`http://localhost:5173`** in your browser.
+
+---
+
+## 🧪 Automated Testing
+
+Samjhao includes a comprehensive automated test suite covering safety guardrails, schema validation, HTTP endpoints, file constraints, and multilingual translations:
+
+```bash
+# Run the complete test suite (both backend and client)
+npm test
+```frontend (port 5173) concurrently
 npm run dev
 ```
 

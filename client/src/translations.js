@@ -93,6 +93,7 @@ export const TRANSLATIONS = {
     // Actions & Feedback
     btnTryAnother: 'Understand another document',
     btnGoHome: 'Go to home',
+    btnShareFamily: 'Share with Family (WhatsApp)',
     feedbackTitle: 'Was this explanation helpful?',
     feedbackYes: 'Yes, understood',
     feedbackNo: 'No, not clear',
@@ -208,6 +209,7 @@ export const TRANSLATIONS = {
     // Actions & Feedback
     btnTryAnother: 'एक और डॉक्यूमेंट समझें',
     btnGoHome: 'मुख्य पेज पर जाएं',
+    btnShareFamily: 'परिवार के साथ शेयर करें (WhatsApp)',
     feedbackTitle: 'क्या यह समझाई आपके काम आई?',
     feedbackYes: 'हाँ, समझ आ गया',
     feedbackNo: 'नहीं, साफ नहीं था',
@@ -323,6 +325,7 @@ export const TRANSLATIONS = {
     // Actions & Feedback
     btnTryAnother: 'మరొక పత్రాన్ని అర్థం చేసుకోండి',
     btnGoHome: 'హోమ్ పేజీకి వెళ్లండి',
+    btnShareFamily: 'కుటుంబ సభ్యులకు పంపండి (WhatsApp)',
     feedbackTitle: 'ఈ వివరణ మీకు ఉపయోగపడిందా?',
     feedbackYes: 'అవును, ఉపయోగపడింది',
     feedbackNo: 'లేదు',
@@ -438,6 +441,7 @@ export const TRANSLATIONS = {
     // Actions & Feedback
     btnTryAnother: 'બીજો દસ્તાવેજ સમજો',
     btnGoHome: 'મુખ્ય પેજ પર જાઓ',
+    btnShareFamily: 'પરિવાર સાથે શેર કરો (WhatsApp)',
     feedbackTitle: 'શું આ માહિતી ઉપયોગી હતી?',
     feedbackYes: 'હા, સમજાઈ ગયું',
     feedbackNo: 'ના',

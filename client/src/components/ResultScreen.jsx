@@ -14,7 +14,8 @@ import {
   HelpCircle,
   Home,
   RefreshCw,
-  Info
+  Info,
+  Share2
 } from 'lucide-react';
 
 export function ResultScreen({
@@ -65,6 +66,27 @@ export function ResultScreen({
 
   const handleSpeak = (text, key) => {
     speak(text, currentLang, key);
+  };
+
+  const handleShareWhatsApp = () => {
+    let shareText = `*${result.title || 'Document Explanation via Samjhao'}*\n\n`;
+    if (result.whatToDo) {
+      shareText += `📌 *Action Needed:* ${result.whatToDo}\n\n`;
+    }
+    if (result.keyDetails && result.keyDetails.length > 0) {
+      shareText += `📋 *Key Details:*\n`;
+      result.keyDetails.forEach(item => {
+        shareText += `• ${item.label}: ${item.value}\n`;
+      });
+      shareText += `\n`;
+    }
+    if (result.suspiciousAlert) {
+      shareText += `⚠️ *Warning:* ${result.suspiciousAlert}\n\n`;
+    }
+    shareText += `_Simplified with Samjhao (समझो) - Accessible AI Document Reader_`;
+
+    const encoded = encodeURIComponent(shareText);
+    window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -427,8 +449,36 @@ export function ResultScreen({
         </div>
       )}
 
+      {/* 1-Tap Share with Family via WhatsApp */}
+      <button
+        type="button"
+        id="btn-share-family"
+        onClick={handleShareWhatsApp}
+        className="btn"
+        style={{
+          width: '100%',
+          minHeight: '50px',
+          backgroundColor: '#16A34A',
+          color: '#FFFFFF',
+          borderRadius: '16px',
+          fontWeight: 700,
+          fontSize: '0.98rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '10px',
+          boxShadow: '0 4px 14px rgba(22, 163, 74, 0.25)',
+          marginTop: '22px',
+          border: 'none',
+          cursor: 'pointer'
+        }}
+      >
+        <Share2 size={18} />
+        <span>{t.btnShareFamily || 'Share with Family (WhatsApp)'}</span>
+      </button>
+
       {/* Bottom Actions matching Screen 7 */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '22px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '12px' }}>
         <button
           type="button"
           className="btn btn-secondary"

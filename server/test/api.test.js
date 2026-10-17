@@ -62,4 +62,48 @@ describe('Samjhao Schema & Safety Guardrails Tests', () => {
     assert.ok(result.simpleSummary.length > 0);
     assert.ok(result.fullSpokenText.length > 0);
   });
+
+  test('explainDocument offline mock classifies suspicious scam SMS', async () => {
+    const result = await explainDocument({
+      fileBuffer: Buffer.from('fake-sms-bytes'),
+      mimeType: 'image/jpeg',
+      fileName: 'sample_suspicious_sms.jpg',
+      language: 'en'
+    });
+
+    assert.equal(result.isSuspiciousMessage, true);
+    assert.ok(result.suspiciousSignals.length > 0);
+  });
+
+  test('explainDocument offline mock classifies doctor prescription refusal', async () => {
+    const result = await explainDocument({
+      fileBuffer: Buffer.from('fake-rx-bytes'),
+      mimeType: 'image/jpeg',
+      fileName: 'sample_medical_prescription.jpg',
+      language: 'en'
+    });
+
+    assert.equal(result.isMedicalOrPrescription, true);
+    assert.ok(result.actionRequired.length > 0);
+  });
+
+  test('explainDocument offline mock supports Telugu and Gujarati', async () => {
+    const teResult = await explainDocument({
+      fileBuffer: Buffer.from('bill-bytes'),
+      mimeType: 'image/jpeg',
+      fileName: 'sample_electricity_bill.jpg',
+      language: 'te'
+    });
+    assert.equal(teResult.language, 'te');
+    assert.ok(teResult.fullSpokenText.length > 0);
+
+    const guResult = await explainDocument({
+      fileBuffer: Buffer.from('bill-bytes'),
+      mimeType: 'image/jpeg',
+      fileName: 'sample_electricity_bill.jpg',
+      language: 'gu'
+    });
+    assert.equal(guResult.language, 'gu');
+    assert.ok(guResult.fullSpokenText.length > 0);
+  });
 });

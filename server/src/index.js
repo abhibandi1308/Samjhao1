@@ -85,7 +85,8 @@ app.post('/api/explain', upload.single('document'), async (req, res) => {
     const result = await explainDocument({
       fileBuffer,
       mimeType,
-      language
+      language,
+      fileName: file?.originalname || req.body.fileName || ''
     });
 
     // Zero-storage guarantee: Clean up local reference
@@ -100,11 +101,29 @@ app.post('/api/explain', upload.single('document'), async (req, res) => {
   }
 });
 
+// Production Static Serving (Single-Port Fullstack Deployment)
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const clientDistPath = path.resolve(__dirname, '../../client/dist');
+
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+  console.log(`📦 [Samjhao] Production build detected. Serving static assets from client/dist.`);
+}
+
 // Start Express Server
 app.listen(PORT, () => {
   const mode = process.env.GEMINI_API_KEY ? 'Live AI Mode (Gemini)' : 'Offline Mock Demo Mode';
   console.log(`\n==================================================`);
-  console.log(`✨ Samjhao Backend running on http://localhost:${PORT}`);
+  console.log(`✨ Samjhao Fullstack Server running on http://localhost:${PORT}`);
   console.log(`🔒 Zero-storage policy active (Memory-only processing)`);
   console.log(`🤖 Mode: ${mode}`);
   console.log(`==================================================\n`);
