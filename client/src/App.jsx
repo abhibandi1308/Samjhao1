@@ -25,7 +25,7 @@ const SCREENS = {
 };
 
 export default function App() {
-  const [currentLang, setCurrentLang] = useState('hi');
+  const [currentLang, setCurrentLang] = useState('en');
   const [currentScreen, setCurrentScreen] = useState(SCREENS.WELCOME);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);

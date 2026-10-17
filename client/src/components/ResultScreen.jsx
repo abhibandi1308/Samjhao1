@@ -69,6 +69,8 @@ export function ResultScreen({
     }
   };
 
+  const listenBtnText = currentLang === 'hi' ? 'सुनें' : currentLang === 'te' ? 'వినండి' : currentLang === 'gu' ? 'સાંભળો' : 'Listen';
+
   const handleSpeakSection = (text, key) => {
     speak(text, currentLang, key);
   };
@@ -104,18 +106,19 @@ export function ResultScreen({
         {result.simpleSummary ? result.simpleSummary.split('.')[0] : t.resultHeading}
       </h1>
 
-      {/* Primary Audio Player Bar (Screen 7/8 in Walkthrough) */}
+      {/* Primary Audio Player Bar (Voice First for Elders) */}
       <div className="audio-player-bar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
           <button
             type="button"
             className="btn btn-primary"
             style={{
               width: 'auto',
-              minHeight: '40px',
-              padding: '8px 16px',
-              fontSize: '0.9rem',
-              borderRadius: '20px'
+              minHeight: '52px',
+              padding: '12px 24px',
+              fontSize: '1.1rem',
+              borderRadius: 'var(--radius-full)',
+              boxShadow: '0 4px 14px rgba(29, 78, 216, 0.3)'
             }}
             onClick={toggleFullAudio}
             id="btn-play-full-audio"
@@ -123,12 +126,12 @@ export function ResultScreen({
           >
             {isPlaying && activeKey === 'full' && !isPaused ? (
               <>
-                <Pause size={16} />
+                <Pause size={20} />
                 <span>{t.btnPause}</span>
               </>
             ) : (
               <>
-                <Volume2 size={16} />
+                <Volume2 size={22} />
                 <span>{t.btnListenFull}</span>
               </>
             )}
@@ -140,10 +143,10 @@ export function ResultScreen({
               onClick={() => speak(result.fullSpokenText || result.simpleSummary, currentLang, 'full')}
               style={{
                 background: 'white',
-                border: '1px solid var(--primary-200)',
+                border: '2px solid var(--primary-300)',
                 borderRadius: '50%',
-                width: '36px',
-                height: '36px',
+                width: '46px',
+                height: '46px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -153,20 +156,31 @@ export function ResultScreen({
               title={t.btnReplay}
               aria-label={t.btnReplay}
             >
-              <RotateCcw size={16} />
+              <RotateCcw size={20} />
             </button>
           )}
+
+          <span style={{ fontSize: '0.9rem', color: 'var(--slate-600)', fontWeight: 600 }}>
+            {currentLang === 'hi' 
+              ? 'आवाज में सुनने के लिए बटन दबाएं' 
+              : currentLang === 'te'
+              ? 'వినడానికి బటన్ నొక్కండి'
+              : currentLang === 'gu'
+              ? 'સાંભળવા માટે બટન દબાવો'
+              : 'Press button to hear explanation read aloud'}
+          </span>
         </div>
 
-        {/* Speed Slower Toggle */}
+        {/* Speed Slower Toggle for Elders */}
         <button
           type="button"
           className="audio-speed-btn"
           onClick={() => setPlaybackRate(playbackRate === 1.0 ? 0.8 : 1.0)}
           title="Toggle playback speed"
           aria-label={`Playback speed: ${playbackRate === 1.0 ? 'Normal' : 'Slower'}`}
+          style={{ minHeight: '44px', padding: '8px 18px', fontSize: '0.95rem' }}
         >
-          {playbackRate === 1.0 ? t.speedNormal : t.speedSlow}
+          {playbackRate === 1.0 ? `🐰 ${t.speedNormal}` : `🐢 ${t.speedSlow}`}
         </button>
       </div>
 
@@ -251,19 +265,19 @@ export function ResultScreen({
             type="button"
             className={`btn-audio ${isPlaying && activeKey === 'action' ? 'is-playing' : ''}`}
             onClick={() => handleSpeakSection(result.actionRequired, 'action')}
-            style={{ padding: '4px 12px', fontSize: '0.82rem', minHeight: '34px' }}
+            style={{ padding: '6px 14px', fontSize: '0.9rem', minHeight: '38px' }}
           >
-            <Volume2 size={14} />
-            <span>सुनें</span>
+            <Volume2 size={16} />
+            <span>{listenBtnText}</span>
           </button>
         </div>
 
-        <p style={{ fontSize: '0.98rem', color: 'var(--slate-800)', lineHeight: 1.5 }}>
+        <p style={{ fontSize: '1.05rem', color: 'var(--slate-800)', lineHeight: 1.6 }}>
           {result.actionRequired}
         </p>
       </div>
 
-      {/* Warnings & Important Points ("महत्वपूर्ण बातें") */}
+      {/* Warnings & Important Points */}
       {result.warnings && result.warnings.length > 0 && (
         <div className="card" style={{ background: '#FFFBEB', borderColor: '#FDE68A' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
@@ -277,26 +291,26 @@ export function ResultScreen({
               className={`btn-audio ${isPlaying && activeKey === 'warnings' ? 'is-playing' : ''}`}
               onClick={() => handleSpeakSection(result.warnings.map(w => w.text).join('. '), 'warnings')}
               style={{
-                padding: '4px 12px',
-                fontSize: '0.82rem',
-                minHeight: '34px',
+                padding: '6px 14px',
+                fontSize: '0.9rem',
+                minHeight: '38px',
                 background: '#FEF3C7',
                 color: '#92400E',
                 borderColor: '#FCD34D'
               }}
             >
-              <Volume2 size={14} />
-              <span>सुनें</span>
+              <Volume2 size={16} />
+              <span>{listenBtnText}</span>
             </button>
           </div>
 
-          <ul style={{ paddingLeft: '20px', color: '#78350F', fontSize: '0.92rem', lineHeight: 1.5 }}>
+          <ul style={{ paddingLeft: '20px', color: '#78350F', fontSize: '0.98rem', lineHeight: 1.55 }}>
             {result.warnings.map((w, idx) => (
-              <li key={idx} style={{ marginBottom: '6px' }}>
+              <li key={idx} style={{ marginBottom: '8px' }}>
                 <span>{w.text}</span>
                 {w.isGeneralGuidance && (
-                  <span style={{ fontSize: '0.72rem', color: '#B45309', marginLeft: '6px', fontStyle: 'italic' }}>
-                    (सामान्य सुरक्षा नियम)
+                  <span style={{ fontSize: '0.78rem', color: '#B45309', marginLeft: '6px', fontStyle: 'italic' }}>
+                    {currentLang === 'hi' ? '(सामान्य सुरक्षा नियम)' : currentLang === 'te' ? '(సాధారణ భద్రతా నియమం)' : currentLang === 'gu' ? '(સામાન્ય સુરક્ષા નિયમ)' : '(General Safety Tip)'}
                   </span>
                 )}
               </li>
@@ -373,7 +387,7 @@ export function ResultScreen({
               onClick={() => handleSpeakSection(result.simpleSummary, 'summary')}
             >
               <Volume2 size={16} />
-              <span>सुनें / Listen</span>
+              <span>{listenBtnText}</span>
             </button>
           </div>
         )}
@@ -385,14 +399,14 @@ export function ResultScreen({
               <div key={idx} className="card" style={{ marginBottom: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
                   <div>
-                    <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--slate-500)' }}>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--slate-500)' }}>
                       {item.label}
                     </div>
-                    <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--slate-900)', margin: '2px 0 4px' }}>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--slate-900)', margin: '2px 0 4px' }}>
                       {item.value}
                     </div>
                     {item.explanation && (
-                      <div style={{ fontSize: '0.85rem', color: 'var(--slate-600)' }}>
+                      <div style={{ fontSize: '0.92rem', color: 'var(--slate-600)' }}>
                         {item.explanation}
                       </div>
                     )}
@@ -402,10 +416,10 @@ export function ResultScreen({
                     type="button"
                     className={`btn-audio ${isPlaying && activeKey === `item_${idx}` ? 'is-playing' : ''}`}
                     onClick={() => handleSpeakSection(`${item.label}: ${item.value}. ${item.explanation || ''}`, `item_${idx}`)}
-                    style={{ padding: '6px 12px', fontSize: '0.8rem', minHeight: '34px' }}
+                    style={{ padding: '6px 14px', fontSize: '0.85rem', minHeight: '36px' }}
                   >
                     <Volume2 size={14} />
-                    <span>सुनें</span>
+                    <span>{listenBtnText}</span>
                   </button>
                 </div>
               </div>
@@ -419,17 +433,17 @@ export function ResultScreen({
             {result.glossary && result.glossary.length > 0 ? (
               result.glossary.map((item, idx) => (
                 <div key={idx} className="card" style={{ marginBottom: 0 }}>
-                  <div style={{ fontWeight: 700, fontSize: '0.98rem', color: 'var(--slate-900)', marginBottom: '4px' }}>
+                  <div style={{ fontWeight: 700, fontSize: '1.05rem', color: 'var(--slate-900)', marginBottom: '4px' }}>
                     {item.term}
                   </div>
-                  <div style={{ fontSize: '0.88rem', color: 'var(--slate-600)', lineHeight: 1.45 }}>
+                  <div style={{ fontSize: '0.92rem', color: 'var(--slate-600)', lineHeight: 1.5 }}>
                     {item.meaning}
                   </div>
                 </div>
               ))
             ) : (
               <div className="card" style={{ textAlign: 'center', color: 'var(--slate-500)', padding: '24px' }}>
-                कोई कठिन शब्द नहीं पाया गया।
+                {currentLang === 'hi' ? 'कोई कठिन शब्द नहीं पाया गया।' : currentLang === 'te' ? 'కఠినమైన పదాలు లేవు.' : currentLang === 'gu' ? 'કોઈ અઘરા શબ્દો મળ્યા નથી.' : 'No difficult terms found in this document.'}
               </div>
             )}
           </div>

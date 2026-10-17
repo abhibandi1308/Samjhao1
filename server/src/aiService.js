@@ -142,6 +142,60 @@ const SAMPLE_MOCK_RESPONSES = {
       { term: 'Surcharge', meaning: 'Additional penalty fee applied if paid late' },
       { term: 'KWh', meaning: 'Kilowatt hour, the standard unit of electrical energy' }
     ]
+  },
+  te: {
+    id: 'mock_bill_te',
+    documentType: 'కరెంట్ బిల్లు (Electricity Bill)',
+    documentTypeLocalized: 'కరెంట్ బిల్లు',
+    language: 'te',
+    languageName: 'తెలుగు',
+    simpleSummary: 'ఇది మీ నెలవారీ కరెంట్ బిల్లు. ఈ నెలలో మీరు 142 యూనిట్ల విద్యుత్ ఉపయోగించారు.',
+    actionRequired: 'ఈ బిల్లు మొత్తం ₹ 850, దీనిని 25 అక్టోబర్ 2024 లోగా చెల్లించాలి.',
+    keyDetails: [
+      { label: 'చెల్లించాల్సిన మొత్తం', value: '₹ 850', explanation: 'ఈ నెలకు చెల్లించవలసిన మొత్తం.', isUncertain: false, icon: 'currency' },
+      { label: 'చివరి తేదీ', value: '25 అక్టోబర్ 2024', explanation: 'ఆలస్య రుసుము లేకుండా చెల్లించడానికి చివరి తేదీ.', isUncertain: false, icon: 'calendar' },
+      { label: 'వినియోగించిన యూనిట్లు', value: '142 యూనిట్లు', explanation: 'మీ మీటర్ రీడింగ్ ప్రకారం వాడిన యూనిట్లు.', isUncertain: false, icon: 'zap' }
+    ],
+    warnings: [
+      { text: '25 అక్టోబర్ 2024 తర్వాత చెల్లిస్తే ₹50 ఆలస్య రుసుము విధించబడుతుంది.', severity: 'warning', isGeneralGuidance: false }
+    ],
+    uncertainFields: [],
+    needsClearerPhoto: false,
+    photoGuidance: null,
+    isMedicalOrPrescription: false,
+    isSuspiciousMessage: false,
+    suspiciousSignals: [],
+    fullSpokenText: 'ఇది మీ నెలవారీ కరెంట్ బిల్లు. మొత్తం చెల్లించాల్సిన మొత్తం ఎనిమిది వందల యాభై రూపాయలు. చెల్లించడానికి చివరి తేదీ ఇరవై ఐదు అక్టోబర్ రెండు వేల ఇరవై నాలుగు.',
+    glossary: [
+      { term: 'CA Number', meaning: 'వినియోగదారు ఖాతా సంఖ్య' }
+    ]
+  },
+  gu: {
+    id: 'mock_bill_gu',
+    documentType: 'લાઈટ બિલ (Electricity Bill)',
+    documentTypeLocalized: 'લાઈટ બિલ',
+    language: 'gu',
+    languageName: 'ગુજરાતી',
+    simpleSummary: 'આ તમારા ઘરનું લાઈટ બિલ છે. આ મહિને તમે 142 યુનિટ વીજળી વાપરી છે.',
+    actionRequired: 'આ બિલની કુલ રકમ ₹ 850 છે, જે 25 ઑક્ટોબર 2024 સુધીમાં ભરવાની રહેશે.',
+    keyDetails: [
+      { label: 'કુલ ભરવાની રકમ', value: '₹ 850', explanation: 'આ બિલની કુલ ભરવાપાત્ર રકમ.', isUncertain: false, icon: 'currency' },
+      { label: 'છેલ્લી તારીખ', value: '25 ઑક્ટોબર 2024', explanation: 'દંડ વગર ભરવાની છેલ્લી તારીખ.', isUncertain: false, icon: 'calendar' },
+      { label: 'વાપરેલા યુનિટ', value: '142 Units', explanation: 'મીટર મુજબ વપરાયેલ વીજળીના યુનિટ.', isUncertain: false, icon: 'zap' }
+    ],
+    warnings: [
+      { text: '25 ઑક્ટોબર 2024 પછી બિલ ભરવા પર ₹50 લેટ ફી લાગી શકે છે.', severity: 'warning', isGeneralGuidance: false }
+    ],
+    uncertainFields: [],
+    needsClearerPhoto: false,
+    photoGuidance: null,
+    isMedicalOrPrescription: false,
+    isSuspiciousMessage: false,
+    suspiciousSignals: [],
+    fullSpokenText: 'આ તમારું લાઈટ બિલ છે. કુલ ભરવાની રકમ આઠસો પચાસ રૂપિયા છે. બિલ ભરવાની છેલ્લી તારીખ પચ્ચીસ ઑક્ટોબર બે હજાર ચોવીસ છે.',
+    glossary: [
+      { term: 'CA Number', meaning: 'ગ્રાહક ખાતા નંબર' }
+    ]
   }
 };
 

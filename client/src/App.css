@@ -1,4 +1,4 @@
-/* Component Specific Styling for Samjhao Flows */
+/* Component Specific Styling for Samjhao Accessible Flows */
 
 /* Hero / Welcome Screen */
 .welcome-hero {
@@ -6,58 +6,104 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 16px 8px 24px;
+  padding: 10px 4px 20px;
 }
 
 .welcome-avatar-wrap {
-  width: 140px;
-  height: 140px;
+  width: 170px;
+  height: 170px;
   border-radius: 50%;
   background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
-  box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.25);
+  margin-bottom: 24px;
+  box-shadow: 0 12px 28px -6px rgba(245, 158, 11, 0.3);
   position: relative;
 }
 
-.welcome-avatar-wrap svg {
-  width: 90px;
-  height: 90px;
-}
-
 .welcome-title {
-  font-size: 1.85rem;
+  font-size: 2.2rem;
   font-weight: 800;
   color: var(--slate-900);
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   line-height: 1.25;
 }
 
 .welcome-subtitle {
-  font-size: 1.05rem;
-  color: var(--slate-600);
-  line-height: 1.5;
+  font-size: 1.2rem;
+  color: var(--slate-700);
+  line-height: 1.6;
   margin-bottom: 28px;
-  max-width: 380px;
+  max-width: 640px;
+}
+
+/* 3 How It Works Steps (For Elders) */
+.how-it-works-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+  margin: 28px 0;
+  text-align: left;
+}
+
+@media (min-width: 640px) {
+  .how-it-works-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.how-step-card {
+  background: #F8FAFC;
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.how-step-num {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--primary-100);
+  color: var(--primary-700);
+  font-size: 1.2rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.how-step-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--slate-900);
+}
+
+.how-step-desc {
+  font-size: 0.95rem;
+  color: var(--slate-600);
+  line-height: 1.45;
 }
 
 /* Upload Options Stack */
 .upload-options-stack {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   width: 100%;
 }
 
 .upload-card-option {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 18px 20px;
+  gap: 20px;
+  padding: 22px 24px;
   background: white;
-  border: 2px solid var(--border-subtle);
+  border: 2.5px solid var(--border-subtle);
   border-radius: var(--radius-md);
   text-align: left;
   cursor: pointer;
@@ -66,16 +112,16 @@
 }
 
 .upload-card-option:hover {
-  border-color: var(--primary-500);
+  border-color: var(--primary-600);
   background: var(--primary-50);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
 .upload-option-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -88,62 +134,36 @@
 }
 
 .upload-option-title {
-  font-size: 1.15rem;
-  font-weight: 700;
+  font-size: 1.35rem;
+  font-weight: 800;
   color: var(--slate-900);
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 
 .upload-option-subtitle {
-  font-size: 0.85rem;
-  color: var(--slate-500);
+  font-size: 1rem;
+  color: var(--slate-600);
 }
 
 /* Document Preview Box */
 .preview-box {
-  background: #000;
+  background: #0F172A;
   border-radius: var(--radius-md);
   overflow: hidden;
   position: relative;
-  max-height: 380px;
+  max-height: 480px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 18px;
-  border: 2px solid var(--slate-200);
+  margin-bottom: 22px;
+  border: 3px solid var(--slate-200);
 }
 
 .preview-img {
   width: 100%;
   height: auto;
-  max-height: 380px;
+  max-height: 480px;
   object-fit: contain;
-}
-
-/* Camera Target Overlay Frame */
-.camera-overlay-frame {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  bottom: 15px;
-  border: 2px dashed rgba(255, 255, 255, 0.7);
-  border-radius: 10px;
-  pointer-events: none;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 10px;
-}
-
-.camera-guide-badge {
-  background: rgba(0, 0, 0, 0.65);
-  color: white;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  backdrop-filter: blur(4px);
 }
 
 /* Loading State Animation */
@@ -152,17 +172,17 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 40px 16px;
+  padding: 48px 20px;
 }
 
 .processing-graphic {
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .pulse-ring {
@@ -181,17 +201,18 @@
 
 .progress-bar-container {
   width: 100%;
-  height: 8px;
+  max-width: 400px;
+  height: 12px;
   background: var(--slate-200);
-  border-radius: 4px;
+  border-radius: 6px;
   overflow: hidden;
-  margin: 20px 0 12px;
+  margin: 24px 0 16px;
 }
 
 .progress-bar-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--primary-600), #60A5FA);
-  border-radius: 4px;
+  border-radius: 6px;
   animation: progress-indet 2.2s infinite ease-in-out;
 }
 
@@ -206,23 +227,23 @@
   display: flex;
   background: var(--slate-100);
   border-radius: var(--radius-md);
-  padding: 4px;
-  margin-bottom: 16px;
-  gap: 4px;
+  padding: 6px;
+  margin-bottom: 20px;
+  gap: 6px;
 }
 
 .tab-btn {
   flex: 1;
-  padding: 10px 8px;
-  font-size: 0.88rem;
-  font-weight: 600;
+  padding: 14px 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
   background: transparent;
   border: none;
   border-radius: var(--radius-sm);
   color: var(--slate-600);
   cursor: pointer;
   transition: all 0.2s ease;
-  min-height: 40px;
+  min-height: 48px;
 }
 
 .tab-btn.active {
@@ -233,24 +254,25 @@
 
 /* Audio Player Control Bar */
 .audio-player-bar {
-  background: var(--primary-50);
-  border: 1px solid var(--primary-200);
+  background: #EFF6FF;
+  border: 2px solid #BFDBFE;
   border-radius: var(--radius-md);
-  padding: 12px 16px;
+  padding: 16px 20px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 18px;
-  gap: 12px;
+  margin-bottom: 24px;
+  gap: 16px;
 }
 
 .audio-speed-btn {
   background: white;
-  border: 1px solid var(--primary-200);
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-size: 0.78rem;
-  font-weight: 700;
+  border: 2px solid var(--primary-200);
+  border-radius: var(--radius-full);
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  font-weight: 800;
   color: var(--primary-700);
   cursor: pointer;
 }
@@ -261,46 +283,44 @@
 
 /* Help Modal / Screen */
 .help-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(15, 23, 42, 0.65);
   backdrop-filter: blur(4px);
-  z-index: 50;
+  z-index: 100;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
 }
 
 .help-modal {
   background: white;
-  border-radius: 24px 24px 0 0;
-  padding: 24px 20px;
-  box-shadow: var(--shadow-xl);
-  max-height: 85%;
+  border-radius: 24px;
+  padding: 32px 28px;
+  box-shadow: var(--shadow-lg);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
   overflow-y: auto;
-  animation: slide-up 0.25s ease-out;
-}
-
-@keyframes slide-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  border: 2px solid var(--border-subtle);
 }
 
 .help-step-item {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
-  margin-bottom: 16px;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .help-step-number {
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: #FEF3C7;
   color: #B45309;
   font-weight: 800;
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   display: flex;
   align-items: center;
   justify-content: center;
