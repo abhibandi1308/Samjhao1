@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertCircle, Camera, Image as ImageIcon, RotateCcw, ArrowLeft } from 'lucide-react';
+import { AlertCircle, Camera, Image as ImageIcon, RotateCcw, ArrowLeft, Volume2 } from 'lucide-react';
 
 export function ErrorScreen({
   t,
@@ -8,9 +8,20 @@ export function ErrorScreen({
   onRetakePhoto,
   onChooseAnother,
   onTryAgain,
-  onGoHome
+  onGoHome,
+  onSpeak,
+  isSpeaking,
+  currentLang
 }) {
   const isBlurry = errorType === 'blurry';
+  const title = isBlurry ? t.errBlurryTitle : (errorType === 'unsupported' ? t.errUnsupportedTitle : t.errSizeTitle);
+  const desc = customMessage || (isBlurry ? t.errBlurryDesc : (errorType === 'unsupported' ? t.errUnsupportedDesc : t.errSizeDesc));
+
+  const handleListenError = () => {
+    if (onSpeak) {
+      onSpeak(`${title}. ${desc}`, currentLang, 'error-guidance');
+    }
+  };
 
   return (
     <div className="main-content" style={{ justifyContent: 'center' }}>
@@ -25,20 +36,33 @@ export function ErrorScreen({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            margin: '0 auto 24px',
+            margin: '0 auto 20px',
             boxShadow: '0 8px 20px rgba(239, 68, 68, 0.2)'
           }}
         >
           <AlertCircle size={56} color="#DC2626" />
         </div>
 
-        <h1 style={{ fontSize: '1.55rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '10px' }}>
-          {isBlurry ? t.errBlurryTitle : (errorType === 'unsupported' ? t.errUnsupportedTitle : t.errSizeTitle)}
+        <h1 style={{ fontSize: '1.55rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '8px' }}>
+          {title}
         </h1>
 
-        <p style={{ fontSize: '0.98rem', color: 'var(--slate-600)', lineHeight: 1.5, marginBottom: '32px', maxWidth: '340px', marginInline: 'auto' }}>
-          {customMessage || (isBlurry ? t.errBlurryDesc : (errorType === 'unsupported' ? t.errUnsupportedDesc : t.errSizeDesc))}
+        <p style={{ fontSize: '0.98rem', color: 'var(--slate-600)', lineHeight: 1.5, marginBottom: '20px', maxWidth: '340px', marginInline: 'auto' }}>
+          {desc}
         </p>
+
+        {/* Audio advice button */}
+        {onSpeak && (
+          <button
+            type="button"
+            className={`btn-card-audio ${isSpeaking ? 'is-playing' : ''}`}
+            onClick={handleListenError}
+            style={{ margin: '0 auto 28px', padding: '8px 18px', borderRadius: 'var(--radius-full)' }}
+          >
+            <Volume2 size={16} />
+            <span>{t.listenToThisPage || 'Listen'}</span>
+          </button>
+        )}
 
         {/* Action Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', maxWidth: '340px', marginInline: 'auto' }}>

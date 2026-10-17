@@ -4,24 +4,24 @@ import helperAvatarImg from '../assets/helper_avatar.jpg';
 
 export function HelpModal({ t, currentLang, onClose, onSpeak, isSpeaking }) {
   const handleListenHelp = () => {
-    const textToSpeak = `${t.helpTitle}. ${t.helpSubtitle}. 1. ${t.helpStep1}. 2. ${t.helpStep2}. 3. ${t.helpStep3}. 4. ${t.helpStep4}`;
+    const textToSpeak = `${t.helpTitle}. ${t.helpSubtitle}. 1. ${t.helpStep1}. 2. ${t.helpStep2}. 3. ${t.helpStep3}. 4. ${t.helpStep4}.`;
     onSpeak(textToSpeak, currentLang, 'help-modal');
   };
 
   return (
     <div className="help-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="help-title">
       <div className="help-modal" onClick={(e) => e.stopPropagation()}>
-        {/* Top Header with Avatar */}
+        {/* Top Header with Assistant Avatar matching Screen 9 */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <div
               style={{
-                width: '56px',
-                height: '56px',
+                width: '54px',
+                height: '54px',
                 borderRadius: '50%',
                 overflow: 'hidden',
-                border: '2px solid #38BDF8',
-                boxShadow: '0 4px 12px rgba(56, 189, 248, 0.25)'
+                border: '2px solid var(--primary-border)',
+                flexShrink: 0
               }}
             >
               <img
@@ -34,7 +34,7 @@ export function HelpModal({ t, currentLang, onClose, onSpeak, isSpeaking }) {
               <h2 id="help-title" style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--slate-900)', margin: 0 }}>
                 {t.helpTitle}
               </h2>
-              <div style={{ fontSize: '0.85rem', color: 'var(--slate-500)' }}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--slate-500)', marginTop: '2px' }}>
                 {t.helpSubtitle}
               </div>
             </div>
@@ -55,49 +55,49 @@ export function HelpModal({ t, currentLang, onClose, onSpeak, isSpeaking }) {
               cursor: 'pointer',
               color: 'var(--slate-600)'
             }}
-            aria-label="Close help"
+            aria-label="Close"
           >
             <X size={20} />
           </button>
         </div>
 
-        {/* 4 Step Items */}
+        {/* 4 Steps matching Screen 9 */}
         <div style={{ margin: '20px 0' }}>
           <div className="help-step-item">
             <div className="help-step-number">1</div>
-            <div style={{ fontSize: '0.98rem', color: 'var(--slate-800)', lineHeight: 1.45 }}>
+            <div style={{ fontSize: '0.95rem', color: 'var(--slate-800)', lineHeight: 1.45 }}>
               {t.helpStep1}
             </div>
           </div>
 
           <div className="help-step-item">
             <div className="help-step-number">2</div>
-            <div style={{ fontSize: '0.98rem', color: 'var(--slate-800)', lineHeight: 1.45 }}>
+            <div style={{ fontSize: '0.95rem', color: 'var(--slate-800)', lineHeight: 1.45 }}>
               {t.helpStep2}
             </div>
           </div>
 
           <div className="help-step-item">
             <div className="help-step-number">3</div>
-            <div style={{ fontSize: '0.98rem', color: 'var(--slate-800)', lineHeight: 1.45 }}>
+            <div style={{ fontSize: '0.95rem', color: 'var(--slate-800)', lineHeight: 1.45 }}>
               {t.helpStep3}
             </div>
           </div>
 
           <div className="help-step-item">
             <div className="help-step-number">4</div>
-            <div style={{ fontSize: '0.98rem', color: 'var(--slate-800)', lineHeight: 1.45 }}>
+            <div style={{ fontSize: '0.95rem', color: 'var(--slate-800)', lineHeight: 1.45 }}>
               {t.helpStep4}
             </div>
           </div>
         </div>
 
-        {/* Audio Button */}
+        {/* Bottom Blue Audio Button matching Screen 9 */}
         <button
           type="button"
-          className="btn btn-primary"
+          className={`btn-audio-pill ${isSpeaking ? 'is-playing' : ''}`}
           onClick={handleListenHelp}
-          style={{ marginBottom: '12px' }}
+          style={{ marginBottom: '10px' }}
         >
           <Volume2 size={20} />
           <span>{t.listenToThisPage}</span>
@@ -107,6 +107,7 @@ export function HelpModal({ t, currentLang, onClose, onSpeak, isSpeaking }) {
           type="button"
           className="btn btn-secondary"
           onClick={onClose}
+          style={{ minHeight: '44px', fontSize: '0.95rem' }}
         >
           <span>{t.btnClose}</span>
         </button>

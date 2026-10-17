@@ -15,18 +15,20 @@ import './App.css';
 
 // Screen State Constants
 const SCREENS = {
-  LANG_SELECT: 'LANG_SELECT',
-  WELCOME: 'WELCOME',
-  CHOOSE_INPUT: 'CHOOSE_INPUT',
-  PREVIEW: 'PREVIEW',
-  PROCESSING: 'PROCESSING',
-  RESULT: 'RESULT',
-  ERROR: 'ERROR'
+  LANG_SELECT: 'LANG_SELECT', // Screen 1 (First screen shown to user)
+  WELCOME: 'WELCOME',         // Screen 2
+  CHOOSE_INPUT: 'CHOOSE_INPUT', // Screen 3
+  PREVIEW: 'PREVIEW',         // Screen 5
+  PROCESSING: 'PROCESSING',   // Screen 6
+  RESULT: 'RESULT',           // Screen 7 & 8
+  ERROR: 'ERROR'              // Screen 10
 };
 
 export default function App() {
+  // Default starting language is English
   const [currentLang, setCurrentLang] = useState('en');
-  const [currentScreen, setCurrentScreen] = useState(SCREENS.WELCOME);
+  // FIRST THING SHOWN: Choose Language screen (Screen 1)
+  const [currentScreen, setCurrentScreen] = useState(SCREENS.LANG_SELECT);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [explanationResult, setExplanationResult] = useState(null);
@@ -49,10 +51,17 @@ export default function App() {
     };
   }, [previewUrl]);
 
-  // Language Change Handler
+  // Language Change Handler - works instantly on any screen
   const handleSelectLanguage = (langCode) => {
     setCurrentLang(langCode);
     speech.stop();
+  };
+
+  // From Screen 1 (Language Select) -> Screen 2 (Welcome)
+  const handleInitialLanguageChosen = (langCode) => {
+    setCurrentLang(langCode);
+    speech.stop();
+    setCurrentScreen(SCREENS.WELCOME);
   };
 
   // File Selection & Validation
@@ -86,13 +95,11 @@ export default function App() {
     setCurrentScreen(SCREENS.PREVIEW);
   };
 
-  // Instant Sample Document Selection
+  // Instant Sample Document Selection (for quick testing)
   const handleSelectSample = async (sampleType) => {
     speech.stop();
     let samplePath = '';
     let sampleName = '';
-    let isMedical = false;
-    let isScam = false;
 
     if (sampleType === 'bill') {
       samplePath = '/samples/electricity-bill.jpg';
@@ -100,11 +107,9 @@ export default function App() {
     } else if (sampleType === 'scam') {
       samplePath = '/samples/suspicious-sms.jpg';
       sampleName = 'suspicious-message.jpg';
-      isScam = true;
     } else if (sampleType === 'medical') {
       samplePath = '/samples/medical-prescription.jpg';
       sampleName = 'doctor-prescription.jpg';
-      isMedical = true;
     }
 
     try {
@@ -116,7 +121,6 @@ export default function App() {
       setCurrentScreen(SCREENS.PREVIEW);
     } catch (e) {
       console.warn('Sample fetch fallback:', e);
-      // Direct processing fallback if static fetch unavailable
       startAnalysisWithFile(null, sampleType);
     }
   };
@@ -149,7 +153,6 @@ export default function App() {
 
       const data = await response.json();
 
-      // Check if document was classified as unreadable/blurry
       if (data.needsClearerPhoto) {
         setErrorDetails({
           type: 'blurry',
@@ -159,32 +162,45 @@ export default function App() {
         return;
       }
 
-      // Check for prescription guardrail override if user tested medical sample
       if (sampleTypeOverride === 'medical' || selectedFile?.name?.includes('prescription')) {
         data.isMedicalOrPrescription = true;
         data.documentType = 'Doctor Prescription';
-        data.documentTypeLocalized = currentLang === 'hi' ? 'चिकित्सीय पर्चा' : 'Doctor Prescription';
+        data.documentTypeLocalized = currentLang === 'hi' ? 'चिकित्सीय पर्चा' : (currentLang === 'te' ? 'వైద్య ప్రిస్క్రిప్షన్' : (currentLang === 'gu' ? 'ડૉક્ટરનું પ્રિસ્ક્રિપ્શન' : 'Doctor Prescription'));
       }
 
-      // Check for scam message override if user tested scam sample
       if (sampleTypeOverride === 'scam' || selectedFile?.name?.includes('suspicious')) {
         data.isSuspiciousMessage = true;
         data.documentType = 'Suspicious Scam Message';
-        data.documentTypeLocalized = currentLang === 'hi' ? 'संदेहास्पद SMS संदेश' : 'Suspicious Message';
-        data.suspiciousSignals = [
-          'संदेश में रात 9:30 बजे बिजली काटने की धमकी दी गई है।',
-          'बिल अपडेट करने के लिए व्यक्तिगत मोबाइल नंबर पर संपर्क करने को कहा गया है।',
-          'संदेश में दिया गया वेब लिंक आधिकारिक बिजली विभाग का नहीं है।'
-        ];
+        data.documentTypeLocalized = currentLang === 'hi' ? 'संदेहास्पद फ्रॉड संदेश' : (currentLang === 'te' ? 'మోసపూరిత సందేశం' : (currentLang === 'gu' ? 'શંકાસ્પદ ફ્રોડ મેસેજ' : 'Suspicious Scam Message'));
+        data.suspiciousSignals = currentLang === 'hi' ? [
+          'रात में बिजली काटने की झूठी धमकी।',
+          'व्यक्तिगत मोबाइल नंबर पर संपर्क करने का दबाव।',
+          'अनधिकृत वेब लिंक पर पैसे भेजने की मांग।'
+        ] : (currentLang === 'te' ? [
+          'రాత్రి విద్యుత్ నిలిపివేస్తామని నకిలీ బెదిరింపు.',
+          'వ్యక్తిగత మొబైల్ నంబర్‌కు కాల్ చేయమని ఒత్తిడి.',
+          'అనధికార లింక్ ద్వారా చెల్లింపు చేయమని కోరడం.'
+        ] : (currentLang === 'gu' ? [
+          'રાત્રે વીજળી કાપવાની નકલી ધમકી.',
+          'અજાણ્યા મોબાઈલ નંબર પર કોલ કરવાનું દબાણ.',
+          'અનધિકૃત લિંક પર પૈસા ચૂકવવાનું કહેવું.'
+        ] : [
+          'Threatens power cutoff tonight unless paid immediately.',
+          'Asks to call an unknown personal mobile number.',
+          'Provides an unofficial link to pay.'
+        ]));
       }
 
       setExplanationResult(data);
       setCurrentScreen(SCREENS.RESULT);
     } catch (err) {
       console.warn('Backend connection note:', err.message);
-      // Reliable offline fallback so the application remains completely testable
-      // even if backend is temporarily starting up
+      // Offline fallback
       setTimeout(() => {
+        const isHindi = currentLang === 'hi';
+        const isTelugu = currentLang === 'te';
+        const isGujarati = currentLang === 'gu';
+
         const fallback = {
           id: `sample_${Date.now()}`,
           documentType: selectedFile?.name?.includes('prescription')
@@ -192,41 +208,53 @@ export default function App() {
             : selectedFile?.name?.includes('suspicious')
             ? 'Suspicious Message'
             : 'Electricity Utility Bill',
-          documentTypeLocalized: currentLang === 'hi' ? 'बिजली बिल' : 'Electricity Bill',
+          documentTypeLocalized: isHindi ? 'बिजली बिल' : (isTelugu ? 'కరెంట్ బిల్లు' : (isGujarati ? 'લાઈટ બિલ' : 'Electricity Bill')),
           language: currentLang,
-          languageName: currentLang === 'hi' ? 'हिन्दी' : 'English',
-          simpleSummary: currentLang === 'hi'
-            ? 'यह आपके घर का बिजली का बिल है। इस महीने आपने 142 यूनिट बिजली इस्तेमाल की है।'
+          languageName: isHindi ? 'हिन्दी' : (isTelugu ? 'తెలుగు' : (isGujarati ? 'ગુજરાતી' : 'English')),
+          simpleSummary: isHindi
+            ? 'यह आपके घर का बिजली का बिल है। कुल 142 यूनिट बिजली खर्च हुई है।'
+            : isTelugu
+            ? 'ఇది మీ నెలవారీ కరెంట్ బిల్లు. ఈ నెలలో 142 యూనిట్ల విద్యుత్ ఖర్చయింది.'
+            : isGujarati
+            ? 'આ તમારા ઘરનું લાઈટ બિલ છે. કુલ 142 યુનિટ વીજળી વપરાઈ છે.'
             : 'This is your monthly electricity utility bill for 142 units of power consumed.',
-          actionRequired: currentLang === 'hi'
+          actionRequired: isHindi
             ? 'इस बिल की राशि ₹ 850 है, जिसे 25 अक्टूबर 2024 तक भुगतान करना है।'
+            : isTelugu
+            ? 'ఈ బిల్లు మొత్తం ₹ 850, దీనిని 25 అక్టోబర్ 2024 లోగా చెల్లించాలి.'
+            : isGujarati
+            ? 'આ બિલની રકમ ₹ 850 છે, જે 25 ઑક્ટોબર 2024 સુધીમાં ભરવાની છે.'
             : 'The total amount due is ₹ 850, payable on or before 25 October 2024.',
           keyDetails: [
-            { label: currentLang === 'hi' ? 'कुल राशि' : 'Total Due', value: '₹ 850', explanation: 'Total payable amount', icon: 'currency' },
-            { label: currentLang === 'hi' ? 'अंतिम तिथि' : 'Due Date', value: '25 Oct 2024', explanation: 'Due date to avoid late fee', icon: 'calendar' },
-            { label: currentLang === 'hi' ? 'उपभोग यूनिट' : 'Units Consumed', value: '142 KWh', explanation: 'Power consumption', icon: 'zap' }
+            { label: isHindi ? 'कुल राशि' : (isTelugu ? 'మొత్తం' : (isGujarati ? 'કુલ રકમ' : 'Total Due')), value: '₹ 850', explanation: 'Total payable amount', icon: 'currency' },
+            { label: isHindi ? 'अंतिम तिथि' : (isTelugu ? 'చివరి తేదీ' : (isGujarati ? 'છેલ્લી તારીખ' : 'Due Date')), value: '25 Oct 2024', explanation: 'Due date to avoid late fee', icon: 'calendar' },
+            { label: isHindi ? 'उपभोग यूनिट' : (isTelugu ? 'యూనిట్లు' : (isGujarati ? 'યુનિટ' : 'Units Consumed')), value: '142 Units', explanation: 'Power consumption', icon: 'zap' }
           ],
           warnings: [
-            { text: currentLang === 'hi' ? 'अंतिम तिथि के बाद ₹50 लेट फीस लग सकती है।' : 'Late fee applies after 25 Oct 2024.', severity: 'warning', isGeneralGuidance: false }
+            { text: isHindi ? 'अंतिम तिथि 25 अक्टूबर के बाद ₹50 लेट फीस लग सकती है।' : (isTelugu ? 'గడువు తేదీ తర్వాత ₹50 ఆలస్య రుసుము పడుతుంది.' : (isGujarati ? 'છેલ્લી તારીખ પછી ₹50 લેટ ફી લાગી શકે છે.' : 'Late fee applies after 25 October 2024.')), severity: 'warning', isGeneralGuidance: false }
           ],
           uncertainFields: [],
           needsClearerPhoto: false,
           isMedicalOrPrescription: Boolean(selectedFile?.name?.includes('prescription')),
           isSuspiciousMessage: Boolean(selectedFile?.name?.includes('suspicious')),
           suspiciousSignals: [
-            'धमकी भरा संदेश और व्यक्तिगत नंबर पर कॉल करने का दबाव।'
+            'Suspicious urgency threat and personal phone number.'
           ],
-          fullSpokenText: currentLang === 'hi'
+          fullSpokenText: isHindi
             ? 'यह आपके घर का बिजली का बिल है। कुल देय राशि आठ सौ पचास रुपये है। भुगतान की अंतिम तिथि पच्चीस अक्टूबर है।'
+            : isTelugu
+            ? 'ఇది మీ నెలవారీ కరెంట్ బిల్లు. చెల్లించాల్సిన మొత్తం ఎనిమిది వందల యాభై రూపాయలు. చివరి తేదీ ఇరవై ఐదు అక్టోబర్.'
+            : isGujarati
+            ? 'આ તમારું લાઈટ બિલ છે. કુલ ભરવાની રકમ આઠસો પચાસ રૂપિયા છે. છેલ્લી તારીખ પચ્ચીસ ઑક્ટોબર છે.'
             : 'This is your monthly electricity bill. The total amount due is eight hundred and fifty rupees. The last date for payment is twenty fifth October.',
           glossary: [
-            { term: 'CA Number', meaning: currentLang === 'hi' ? 'उपभोक्ता खाता संख्या' : 'Customer Account Number' }
+            { term: 'CA Number', meaning: isHindi ? 'उपभोक्ता खाता संख्या' : (isTelugu ? 'వినియోగదారు ఖాతా సంఖ్య' : (isGujarati ? 'ગ્રાહક ખાતા નંબર' : 'Customer Account Number')) }
           ]
         };
 
         setExplanationResult(fallback);
         setCurrentScreen(SCREENS.RESULT);
-      }, 1200);
+      }, 1000);
     }
   };
 
@@ -246,32 +274,48 @@ export default function App() {
     setCurrentScreen(SCREENS.WELCOME);
   };
 
+  const handleBackNavigation = () => {
+    speech.stop();
+    if (currentScreen === SCREENS.CHOOSE_INPUT) {
+      setCurrentScreen(SCREENS.WELCOME);
+    } else if (currentScreen === SCREENS.PREVIEW) {
+      setCurrentScreen(SCREENS.CHOOSE_INPUT);
+    } else if (currentScreen === SCREENS.RESULT) {
+      handleGoHome();
+    } else if (currentScreen === SCREENS.ERROR) {
+      setCurrentScreen(SCREENS.CHOOSE_INPUT);
+    }
+  };
+
   return (
     <div className="app-viewport">
       <div className="app-container">
-        {/* Top App Bar with Logo & Language Switcher */}
-        <Navbar
-          currentLang={currentLang}
-          onSelectLanguage={handleSelectLanguage}
-          onOpenHelp={() => setIsHelpOpen(true)}
-          onOpenPrivacy={() => setIsPrivacyOpen(true)}
-          onGoHome={handleGoHome}
-        />
-
-        {/* Screen 1: Language Selection */}
-        {currentScreen === SCREENS.LANG_SELECT && (
-          <LanguageSelectScreen
+        {/* Top Navbar with persistent Language Switcher Dropdown (Shown on every screen except Screen 1) */}
+        {currentScreen !== SCREENS.LANG_SELECT && (
+          <Navbar
+            t={t}
             currentLang={currentLang}
-            onSelectLanguage={(code) => {
-              handleSelectLanguage(code);
-              setCurrentScreen(SCREENS.WELCOME);
-            }}
+            onSelectLanguage={handleSelectLanguage}
+            onOpenHelp={() => setIsHelpOpen(true)}
+            onOpenPrivacy={() => setIsPrivacyOpen(true)}
+            onGoHome={handleGoHome}
+            showBackButton={currentScreen !== SCREENS.WELCOME}
+            onBack={handleBackNavigation}
             onSpeak={speech.speak}
-            isSpeaking={speech.isPlaying && speech.activeKey === 'lang-page'}
           />
         )}
 
-        {/* Screen 2: Welcome Screen */}
+        {/* SCREEN 1: Choose Language Screen (FIRST SCREEN SHOWN TO USER) */}
+        {currentScreen === SCREENS.LANG_SELECT && (
+          <LanguageSelectScreen
+            currentLang={currentLang}
+            onSelectLanguage={handleInitialLanguageChosen}
+            onSpeak={speech.speak}
+            isSpeaking={speech.isPlaying && speech.activeKey === 'lang-select'}
+          />
+        )}
+
+        {/* SCREEN 2: Welcome Screen */}
         {currentScreen === SCREENS.WELCOME && (
           <WelcomeScreen
             t={t}
@@ -284,19 +328,18 @@ export default function App() {
           />
         )}
 
-        {/* Screen 3 & 4: Choose Document Input */}
+        {/* SCREEN 3: Choose Document Input */}
         {currentScreen === SCREENS.CHOOSE_INPUT && (
           <ChooseInputScreen
             t={t}
             currentLang={currentLang}
-            onBack={handleGoHome}
             onFileSelected={handleFileSelected}
             onSpeak={speech.speak}
-            isSpeaking={speech.isPlaying && speech.activeKey === 'input-help'}
+            isSpeaking={speech.isPlaying && speech.activeKey === 'choose-input'}
           />
         )}
 
-        {/* Screen 5: Preview & Quality Confirmation */}
+        {/* SCREEN 5: Preview & Confirm */}
         {currentScreen === SCREENS.PREVIEW && (
           <PreviewConfirmScreen
             t={t}
@@ -310,12 +353,12 @@ export default function App() {
           />
         )}
 
-        {/* Screen 6: Processing Animation */}
+        {/* SCREEN 6: Processing Animation */}
         {currentScreen === SCREENS.PROCESSING && (
           <ProcessingScreen t={t} />
         )}
 
-        {/* Screens 7 & 8: Result Screen with Audio & Cards */}
+        {/* SCREEN 7 & 8: Result Screen */}
         {currentScreen === SCREENS.RESULT && explanationResult && (
           <ResultScreen
             t={t}
@@ -327,7 +370,7 @@ export default function App() {
           />
         )}
 
-        {/* Screen 10: Error & Graceful Recovery */}
+        {/* SCREEN 10: Error Screen */}
         {currentScreen === SCREENS.ERROR && (
           <ErrorScreen
             t={t}
@@ -337,10 +380,13 @@ export default function App() {
             onChooseAnother={() => setCurrentScreen(SCREENS.CHOOSE_INPUT)}
             onTryAgain={() => setCurrentScreen(SCREENS.CHOOSE_INPUT)}
             onGoHome={handleGoHome}
+            onSpeak={speech.speak}
+            isSpeaking={speech.isPlaying && speech.activeKey === 'error-guidance'}
+            currentLang={currentLang}
           />
         )}
 
-        {/* Screen 9: Step-by-Step Help Guide Modal */}
+        {/* SCREEN 9: Step-by-Step Help Guide Modal */}
         {isHelpOpen && (
           <HelpModal
             t={t}
@@ -351,7 +397,7 @@ export default function App() {
           />
         )}
 
-        {/* Privacy & Zero-Storage Modal */}
+        {/* Privacy Notice Modal */}
         {isPrivacyOpen && (
           <PrivacyNoticeModal
             onClose={() => setIsPrivacyOpen(false)}

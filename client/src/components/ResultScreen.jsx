@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
 import {
   Volume2,
-  VolumeX,
-  Play,
   Pause,
   RotateCcw,
-  AlertTriangle,
-  AlertOctagon,
   Calendar,
   IndianRupee,
   Clock,
   Zap,
   Hash,
   FileText,
-  CheckCircle,
+  AlertTriangle,
+  AlertOctagon,
   HelpCircle,
   Home,
   RefreshCw,
-  ThumbsUp,
-  ThumbsDown,
   Info
 } from 'lucide-react';
 
@@ -30,8 +25,7 @@ export function ResultScreen({
   onReset,
   onGoHome
 }) {
-  const [activeTab, setActiveTab] = useState('simple'); // 'simple' | 'details' | 'glossary'
-  const [feedbackGiven, setFeedbackGiven] = useState(null);
+  const [activeTab, setActiveTab] = useState('simple');
 
   const {
     isPlaying,
@@ -40,20 +34,20 @@ export function ResultScreen({
     playbackRate,
     setPlaybackRate,
     speak,
-    stop,
     pause,
     resume
   } = speech;
 
-  // Icon mapping helper
+  const listenLabel = t.btnListen || 'Listen';
+
   const getFieldIcon = (iconName) => {
     switch (iconName) {
-      case 'currency': return <IndianRupee size={22} color="#059669" />;
-      case 'calendar': return <Calendar size={22} color="#DC2626" />;
-      case 'clock': return <Clock size={22} color="#7C3AED" />;
-      case 'zap': return <Zap size={22} color="#2563EB" />;
-      case 'hash': return <Hash size={22} color="#475569" />;
-      default: return <FileText size={22} color="#2563EB" />;
+      case 'currency': return <IndianRupee size={20} color="#059669" />;
+      case 'calendar': return <Calendar size={20} color="#DC2626" />;
+      case 'clock': return <Clock size={20} color="#7C3AED" />;
+      case 'zap': return <Zap size={20} color="#2563EB" />;
+      case 'hash': return <Hash size={20} color="#475569" />;
+      default: return <FileText size={20} color="#2563EB" />;
     }
   };
 
@@ -69,260 +63,257 @@ export function ResultScreen({
     }
   };
 
-  const listenBtnText = currentLang === 'hi' ? 'सुनें' : currentLang === 'te' ? 'వినండి' : currentLang === 'gu' ? 'સાંભળો' : 'Listen';
-
-  const handleSpeakSection = (text, key) => {
+  const handleSpeak = (text, key) => {
     speak(text, currentLang, key);
   };
 
   return (
-    <div className="main-content" style={{ paddingBottom: '32px' }}>
-      {/* Document Type Badge & Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            background: 'var(--primary-50)',
-            border: '1px solid var(--primary-200)',
-            color: 'var(--primary-700)',
-            padding: '4px 12px',
-            borderRadius: '20px',
-            fontSize: '0.82rem',
-            fontWeight: 700
-          }}
-        >
-          <FileText size={14} />
-          <span>{result.documentTypeLocalized || result.documentType}</span>
-        </div>
-
-        <span style={{ fontSize: '0.75rem', color: 'var(--slate-500)', fontWeight: 600 }}>
-          {result.languageName}
-        </span>
-      </div>
-
-      <h1 style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '8px' }}>
-        {result.simpleSummary ? result.simpleSummary.split('.')[0] : t.resultHeading}
-      </h1>
-
-      {/* Primary Audio Player Bar (Voice First for Elders) */}
-      <div className="audio-player-bar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
-          <button
-            type="button"
-            className="btn btn-primary"
-            style={{
-              width: 'auto',
-              minHeight: '52px',
-              padding: '12px 24px',
-              fontSize: '1.1rem',
-              borderRadius: 'var(--radius-full)',
-              boxShadow: '0 4px 14px rgba(29, 78, 216, 0.3)'
-            }}
-            onClick={toggleFullAudio}
-            id="btn-play-full-audio"
-            aria-label={isPlaying && activeKey === 'full' && !isPaused ? 'Pause explanation audio' : 'Play full explanation audio'}
-          >
-            {isPlaying && activeKey === 'full' && !isPaused ? (
-              <>
-                <Pause size={20} />
-                <span>{t.btnPause}</span>
-              </>
-            ) : (
-              <>
-                <Volume2 size={22} />
-                <span>{t.btnListenFull}</span>
-              </>
-            )}
-          </button>
-
-          {isPlaying && activeKey === 'full' && (
-            <button
-              type="button"
-              onClick={() => speak(result.fullSpokenText || result.simpleSummary, currentLang, 'full')}
-              style={{
-                background: 'white',
-                border: '2px solid var(--primary-300)',
-                borderRadius: '50%',
-                width: '46px',
-                height: '46px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: 'var(--primary-700)'
-              }}
-              title={t.btnReplay}
-              aria-label={t.btnReplay}
-            >
-              <RotateCcw size={20} />
-            </button>
-          )}
-
-          <span style={{ fontSize: '0.9rem', color: 'var(--slate-600)', fontWeight: 600 }}>
-            {currentLang === 'hi' 
-              ? 'आवाज में सुनने के लिए बटन दबाएं' 
-              : currentLang === 'te'
-              ? 'వినడానికి బటన్ నొక్కండి'
-              : currentLang === 'gu'
-              ? 'સાંભળવા માટે બટન દબાવો'
-              : 'Press button to hear explanation read aloud'}
-          </span>
-        </div>
-
-        {/* Speed Slower Toggle for Elders */}
+    <div className="main-content" style={{ paddingBottom: '28px' }}>
+      {/* Top Prominent Voice Player Bar for Elders & Low-Literacy Users */}
+      <div
+        className="result-audio-bar"
+        style={{
+          background: 'var(--primary-light)',
+          border: '1.5px solid var(--primary-border)',
+          borderRadius: '16px',
+          padding: '14px 18px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '12px',
+          marginBottom: '18px'
+        }}
+      >
         <button
           type="button"
-          className="audio-speed-btn"
-          onClick={() => setPlaybackRate(playbackRate === 1.0 ? 0.8 : 1.0)}
-          title="Toggle playback speed"
-          aria-label={`Playback speed: ${playbackRate === 1.0 ? 'Normal' : 'Slower'}`}
-          style={{ minHeight: '44px', padding: '8px 18px', fontSize: '0.95rem' }}
+          className={`btn ${isPlaying && activeKey === 'full' ? 'btn-primary is-playing' : 'btn-primary'}`}
+          onClick={toggleFullAudio}
+          id="btn-result-full-audio"
+          style={{
+            minHeight: '48px',
+            fontSize: '1.05rem',
+            padding: '10px 20px',
+            borderRadius: 'var(--radius-full)',
+            flex: 1,
+            boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)'
+          }}
         >
-          {playbackRate === 1.0 ? `🐰 ${t.speedNormal}` : `🐢 ${t.speedSlow}`}
+          {isPlaying && activeKey === 'full' && !isPaused ? <Pause size={20} /> : <Volume2 size={20} />}
+          <span>{isPlaying && activeKey === 'full' && !isPaused ? t.btnPause : t.btnListenFull}</span>
+        </button>
+
+        {/* Slower Voice Toggle for Elders */}
+        <button
+          type="button"
+          onClick={() => setPlaybackRate(playbackRate === 1.0 ? 0.8 : 1.0)}
+          style={{
+            background: '#FFFFFF',
+            border: '1.5px solid var(--slate-300)',
+            borderRadius: 'var(--radius-full)',
+            padding: '10px 16px',
+            fontSize: '0.88rem',
+            fontWeight: 800,
+            color: 'var(--slate-800)',
+            cursor: 'pointer',
+            minHeight: '48px',
+            flexShrink: 0
+          }}
+          aria-label="Toggle slower voice speed"
+        >
+          {playbackRate === 1.0 ? t.speedNormal : t.speedSlow}
         </button>
       </div>
 
-      {/* MEDICAL PRESCRIPTION REFUSAL GUARDRAIL ALERT */}
+      {/* Document Type Badge & Title */}
+      <div style={{ marginBottom: '16px' }}>
+        <div className="result-doc-badge" style={{ marginBottom: '6px' }}>
+          <FileText size={14} />
+          <span>{result.documentTypeLocalized || result.documentType}</span>
+        </div>
+        <h1 className="result-main-title" style={{ margin: '4px 0 6px', fontSize: '1.65rem' }}>
+          {result.documentTypeLocalized ? `${result.documentTypeLocalized}` : t.resultHeading}
+        </h1>
+        <p className="result-subtitle" style={{ margin: 0, fontSize: '0.98rem' }}>
+          {result.simpleSummary ? result.simpleSummary.split('.')[0] : ''}
+        </p>
+      </div>
+
+      {/* MEDICAL PRESCRIPTION REFUSAL GUARDRAIL */}
       {result.isMedicalOrPrescription && (
         <div className="card card-danger" style={{ marginBottom: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-            <AlertOctagon size={24} color="#DC2626" style={{ flexShrink: 0, marginTop: '2px' }} />
-            <div>
-              <div style={{ fontWeight: 800, fontSize: '1rem', color: '#991B1B', marginBottom: '4px' }}>
-                {t.medicalRefusalTitle}
-              </div>
-              <div style={{ fontSize: '0.88rem', color: '#7F1D1D', lineHeight: 1.45 }}>
-                {t.medicalRefusalText}
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+              <AlertOctagon size={26} color="#DC2626" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <div>
+                <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#991B1B', marginBottom: '4px' }}>
+                  {t.medicalRefusalTitle}
+                </div>
+                <div style={{ fontSize: '0.92rem', color: '#7F1D1D', lineHeight: 1.5 }}>
+                  {t.medicalRefusalText}
+                </div>
               </div>
             </div>
+
+            <button
+              type="button"
+              className={`btn-card-audio ${isPlaying && activeKey === 'medical' ? 'is-playing' : ''}`}
+              onClick={() => handleSpeak(t.medicalRefusalText, 'medical')}
+              style={{ background: '#FEE2E2', borderColor: '#FCA5A5', color: '#991B1B' }}
+            >
+              <Volume2 size={14} />
+              <span>{listenLabel}</span>
+            </button>
           </div>
         </div>
       )}
 
-      {/* SUSPICIOUS SCAM MESSAGE WARNING ALERT */}
+      {/* SUSPICIOUS SCAM MESSAGE ALERT */}
       {result.isSuspiciousMessage && (
         <div className="card card-warning" style={{ marginBottom: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-            <AlertTriangle size={24} color="#D97706" style={{ flexShrink: 0, marginTop: '2px' }} />
-            <div>
-              <div style={{ fontWeight: 800, fontSize: '1rem', color: '#92400E', marginBottom: '4px' }}>
-                {t.scamWarningTitle}
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px', marginBottom: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+              <AlertTriangle size={26} color="#D97706" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <div>
+                <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#92400E', marginBottom: '4px' }}>
+                  {t.scamWarningTitle}
+                </div>
+                <div style={{ fontSize: '0.92rem', color: '#78350F' }}>
+                  {t.scamWarningNote}
+                </div>
               </div>
-              <div style={{ fontSize: '0.88rem', color: '#78350F', marginBottom: '8px' }}>
-                {t.scamWarningNote}
-              </div>
-              {result.suspiciousSignals && result.suspiciousSignals.length > 0 && (
-                <ul style={{ paddingLeft: '20px', fontSize: '0.82rem', color: '#92400E' }}>
-                  {result.suspiciousSignals.map((sig, idx) => (
-                    <li key={idx}>{sig}</li>
-                  ))}
-                </ul>
-              )}
             </div>
+
+            <button
+              type="button"
+              className={`btn-card-audio ${isPlaying && activeKey === 'scam' ? 'is-playing' : ''}`}
+              onClick={() => handleSpeak(t.scamWarningNote, 'scam')}
+              style={{ background: '#FEF3C7', borderColor: '#FCD34D', color: '#92400E' }}
+            >
+              <Volume2 size={14} />
+              <span>{listenLabel}</span>
+            </button>
           </div>
+
+          {result.suspiciousSignals && result.suspiciousSignals.length > 0 && (
+            <ul style={{ paddingLeft: '24px', fontSize: '0.88rem', color: '#92400E', marginTop: '6px' }}>
+              {result.suspiciousSignals.map((sig, idx) => (
+                <li key={idx} style={{ marginBottom: '4px' }}>{sig}</li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 
-      {/* Key Highlights Grid Cards (Amount, Due Date, Doc Type) */}
+      {/* 3 Highlight Badges matching Screen 7 (Total Amount, Due Date, Document Type) with tap-to-listen */}
       {result.keyDetails && result.keyDetails.length > 0 && (
-        <div className="key-info-grid">
+        <div className="stat-badges-grid">
           {result.keyDetails.slice(0, 3).map((item, index) => (
-            <div key={index} className="key-info-card">
-              <div
-                className="icon-bubble"
-                style={{
-                  background: index === 0 ? '#ECFDF5' : index === 1 ? '#FEF2F2' : '#EFF6FF'
-                }}
+            <div
+              key={index}
+              className="stat-badge-card"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '14px 16px',
+                borderRadius: '16px'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div
+                  className="stat-icon-bubble"
+                  style={{
+                    width: '46px',
+                    height: '46px',
+                    background: index === 0 ? '#ECFDF5' : index === 1 ? '#FEF2F2' : '#EFF6FF'
+                  }}
+                >
+                  {getFieldIcon(item.icon)}
+                </div>
+                <div className="stat-texts">
+                  <span className="stat-label" style={{ fontSize: '0.82rem' }}>{item.label}</span>
+                  <span className="stat-value" style={{ fontSize: '1.3rem', fontWeight: 800 }}>{item.value}</span>
+                  {item.isUncertain && (
+                    <span className="uncertain-tag">
+                      <AlertTriangle size={12} />
+                      <span>Uncertain</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Speaker button on each badge */}
+              <button
+                type="button"
+                className={`btn-card-audio ${isPlaying && activeKey === `badge_${index}` ? 'is-playing' : ''}`}
+                onClick={() => handleSpeak(`${item.label}: ${item.value}`, `badge_${index}`)}
+                aria-label={`Listen to ${item.label}`}
+                style={{ width: '36px', height: '36px', padding: 0, justifyContent: 'center' }}
               >
-                {getFieldIcon(item.icon)}
-              </div>
-              <div className="info-texts">
-                <span className="info-label">{item.label}</span>
-                <span className="info-value">{item.value}</span>
-                {item.isUncertain && (
-                  <span className="uncertain-tag">
-                    <AlertTriangle size={12} />
-                    <span>Uncertain / अस्पष्ट</span>
-                  </span>
-                )}
-              </div>
+                <Volume2 size={16} />
+              </button>
             </div>
           ))}
         </div>
       )}
 
-      {/* Action Required Card ("इसमें क्या करना है?") */}
-      <div className="card card-highlight">
+      {/* "What should I do?" Card matching Screen 7 */}
+      <div className="card" style={{ background: '#F8FAFC', borderLeft: '4px solid var(--primary)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, color: 'var(--slate-900)' }}>
-            <CheckCircle size={20} color="var(--primary-600)" />
+            <HelpCircle size={18} color="var(--primary)" />
             <span>{t.whatToDoTitle}</span>
           </div>
 
           <button
             type="button"
-            className={`btn-audio ${isPlaying && activeKey === 'action' ? 'is-playing' : ''}`}
-            onClick={() => handleSpeakSection(result.actionRequired, 'action')}
-            style={{ padding: '6px 14px', fontSize: '0.9rem', minHeight: '38px' }}
+            className={`btn-card-audio ${isPlaying && activeKey === 'action' ? 'is-playing' : ''}`}
+            onClick={() => handleSpeak(result.actionRequired, 'action')}
           >
-            <Volume2 size={16} />
-            <span>{listenBtnText}</span>
+            <Volume2 size={14} />
+            <span>{listenLabel}</span>
           </button>
         </div>
 
-        <p style={{ fontSize: '1.05rem', color: 'var(--slate-800)', lineHeight: 1.6 }}>
+        <p style={{ fontSize: '0.98rem', color: 'var(--slate-800)', lineHeight: 1.5, margin: 0 }}>
           {result.actionRequired}
         </p>
       </div>
 
-      {/* Warnings & Important Points */}
+      {/* "Important Points" Card matching Screen 7 */}
       {result.warnings && result.warnings.length > 0 && (
         <div className="card" style={{ background: '#FFFBEB', borderColor: '#FDE68A' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, color: '#92400E' }}>
-              <AlertTriangle size={20} color="#D97706" />
+              <AlertTriangle size={18} color="#D97706" />
               <span>{t.importantPointsTitle}</span>
             </div>
 
             <button
               type="button"
-              className={`btn-audio ${isPlaying && activeKey === 'warnings' ? 'is-playing' : ''}`}
-              onClick={() => handleSpeakSection(result.warnings.map(w => w.text).join('. '), 'warnings')}
-              style={{
-                padding: '6px 14px',
-                fontSize: '0.9rem',
-                minHeight: '38px',
-                background: '#FEF3C7',
-                color: '#92400E',
-                borderColor: '#FCD34D'
-              }}
+              className={`btn-card-audio ${isPlaying && activeKey === 'warnings' ? 'is-playing' : ''}`}
+              onClick={() => handleSpeak(result.warnings.map(w => w.text).join('. '), 'warnings')}
+              style={{ background: '#FEF3C7', borderColor: '#FCD34D', color: '#92400E' }}
             >
-              <Volume2 size={16} />
-              <span>{listenBtnText}</span>
+              <Volume2 size={14} />
+              <span>{listenLabel}</span>
             </button>
           </div>
 
-          <ul style={{ paddingLeft: '20px', color: '#78350F', fontSize: '0.98rem', lineHeight: 1.55 }}>
+          <ul style={{ paddingLeft: '20px', color: '#78350F', fontSize: '0.92rem', lineHeight: 1.5 }}>
             {result.warnings.map((w, idx) => (
-              <li key={idx} style={{ marginBottom: '8px' }}>
-                <span>{w.text}</span>
-                {w.isGeneralGuidance && (
-                  <span style={{ fontSize: '0.78rem', color: '#B45309', marginLeft: '6px', fontStyle: 'italic' }}>
-                    {currentLang === 'hi' ? '(सामान्य सुरक्षा नियम)' : currentLang === 'te' ? '(సాధారణ భద్రతా నియమం)' : currentLang === 'gu' ? '(સામાન્ય સુરક્ષા નિયમ)' : '(General Safety Tip)'}
-                  </span>
-                )}
+              <li key={idx} style={{ marginBottom: '6px' }}>
+                {w.text}
               </li>
             ))}
           </ul>
         </div>
       )}
 
-      {/* Explicit Uncertainty Handling */}
+      {/* Explicit Uncertainty Note */}
       {result.uncertainFields && result.uncertainFields.length > 0 && (
         <div className="card card-warning">
-          <div style={{ fontWeight: 800, fontSize: '0.95rem', color: '#B45309', marginBottom: '4px' }}>
+          <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#B45309', marginBottom: '4px' }}>
             {t.uncertaintyWarningTitle}
           </div>
           <p style={{ fontSize: '0.85rem', color: '#78350F', marginBottom: '8px' }}>
@@ -330,179 +321,122 @@ export function ResultScreen({
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
             {result.uncertainFields.map((field, idx) => (
-              <span
-                key={idx}
-                style={{
-                  background: 'white',
-                  border: '1px solid #FCD34D',
-                  color: '#92400E',
-                  padding: '3px 10px',
-                  borderRadius: '12px',
-                  fontSize: '0.8rem',
-                  fontWeight: 600
-                }}
-              >
-                ❓ {field}
+              <span key={idx} className="uncertain-tag">
+                {field}
               </span>
             ))}
           </div>
         </div>
       )}
 
-      {/* Section Tabs (Walkthrough Screen 8) */}
-      <div style={{ marginTop: '14px' }}>
-        <div className="tab-nav">
-          <button
-            type="button"
-            className={`tab-btn ${activeTab === 'simple' ? 'active' : ''}`}
-            onClick={() => setActiveTab('simple')}
-          >
-            {t.tabSimple}
-          </button>
-          <button
-            type="button"
-            className={`tab-btn ${activeTab === 'details' ? 'active' : ''}`}
-            onClick={() => setActiveTab('details')}
-          >
-            {t.tabDetails}
-          </button>
-          <button
-            type="button"
-            className={`tab-btn ${activeTab === 'glossary' ? 'active' : ''}`}
-            onClick={() => setActiveTab('glossary')}
-          >
-            {t.tabGlossary}
-          </button>
-        </div>
-
-        {/* Tab 1: Simple Summary */}
-        {activeTab === 'simple' && (
-          <div className="card">
-            <p style={{ fontSize: '1.02rem', lineHeight: 1.6, color: 'var(--slate-800)', marginBottom: '14px' }}>
-              {result.simpleSummary}
-            </p>
-            <button
-              type="button"
-              className={`btn-audio ${isPlaying && activeKey === 'summary' ? 'is-playing' : ''}`}
-              onClick={() => handleSpeakSection(result.simpleSummary, 'summary')}
-            >
-              <Volume2 size={16} />
-              <span>{listenBtnText}</span>
-            </button>
-          </div>
-        )}
-
-        {/* Tab 2: Key Details with individual listen buttons */}
-        {activeTab === 'details' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {result.keyDetails && result.keyDetails.map((item, idx) => (
-              <div key={idx} className="card" style={{ marginBottom: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
-                  <div>
-                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--slate-500)' }}>
-                      {item.label}
-                    </div>
-                    <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--slate-900)', margin: '2px 0 4px' }}>
-                      {item.value}
-                    </div>
-                    {item.explanation && (
-                      <div style={{ fontSize: '0.92rem', color: 'var(--slate-600)' }}>
-                        {item.explanation}
-                      </div>
-                    )}
-                  </div>
-
-                  <button
-                    type="button"
-                    className={`btn-audio ${isPlaying && activeKey === `item_${idx}` ? 'is-playing' : ''}`}
-                    onClick={() => handleSpeakSection(`${item.label}: ${item.value}. ${item.explanation || ''}`, `item_${idx}`)}
-                    style={{ padding: '6px 14px', fontSize: '0.85rem', minHeight: '36px' }}
-                  >
-                    <Volume2 size={14} />
-                    <span>{listenBtnText}</span>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Tab 3: Glossary / Words Explained */}
-        {activeTab === 'glossary' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {result.glossary && result.glossary.length > 0 ? (
-              result.glossary.map((item, idx) => (
-                <div key={idx} className="card" style={{ marginBottom: 0 }}>
-                  <div style={{ fontWeight: 700, fontSize: '1.05rem', color: 'var(--slate-900)', marginBottom: '4px' }}>
-                    {item.term}
-                  </div>
-                  <div style={{ fontSize: '0.92rem', color: 'var(--slate-600)', lineHeight: 1.5 }}>
-                    {item.meaning}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="card" style={{ textAlign: 'center', color: 'var(--slate-500)', padding: '24px' }}>
-                {currentLang === 'hi' ? 'कोई कठिन शब्द नहीं पाया गया।' : currentLang === 'te' ? 'కఠినమైన పదాలు లేవు.' : currentLang === 'gu' ? 'કોઈ અઘરા શબ્દો મળ્યા નથી.' : 'No difficult terms found in this document.'}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* Anonymous Usefulness Feedback */}
-      <div
-        style={{
-          marginTop: '24px',
-          background: 'var(--slate-50)',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: '16px',
-          padding: '16px',
-          textAlign: 'center'
-        }}
-      >
-        <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--slate-800)', marginBottom: '10px' }}>
-          {t.feedbackTitle}
-        </div>
-
-        {feedbackGiven ? (
-          <div style={{ fontSize: '0.85rem', color: '#059669', fontWeight: 600 }}>
-            {t.feedbackThanks}
-          </div>
-        ) : (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px' }}>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              style={{ width: 'auto', minHeight: '38px', padding: '6px 16px', fontSize: '0.88rem' }}
-              onClick={() => setFeedbackGiven('yes')}
-            >
-              <ThumbsUp size={16} color="#059669" />
-              <span>{t.feedbackYes}</span>
-            </button>
-
-            <button
-              type="button"
-              className="btn btn-secondary"
-              style={{ width: 'auto', minHeight: '38px', padding: '6px 16px', fontSize: '0.88rem' }}
-              onClick={() => setFeedbackGiven('no')}
-            >
-              <ThumbsDown size={16} color="#DC2626" />
-              <span>{t.feedbackNo}</span>
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Primary Action Buttons */}
-      <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {/* 3 Tabs matching Screen 8: Simple Explanation, Key Info, Glossary */}
+      <div className="tab-nav">
         <button
           type="button"
-          className="btn btn-primary"
+          className={`tab-btn ${activeTab === 'simple' ? 'active' : ''}`}
+          onClick={() => setActiveTab('simple')}
+        >
+          {t.tabSimple}
+        </button>
+        <button
+          type="button"
+          className={`tab-btn ${activeTab === 'details' ? 'active' : ''}`}
+          onClick={() => setActiveTab('details')}
+        >
+          {t.tabDetails}
+        </button>
+        <button
+          type="button"
+          className={`tab-btn ${activeTab === 'glossary' ? 'active' : ''}`}
+          onClick={() => setActiveTab('glossary')}
+        >
+          {t.tabGlossary}
+        </button>
+      </div>
+
+      {/* Tab 1: Simple Summary */}
+      {activeTab === 'simple' && (
+        <div className="card">
+          <p style={{ fontSize: '1rem', lineHeight: 1.6, color: 'var(--slate-800)', marginBottom: '14px' }}>
+            {result.simpleSummary}
+          </p>
+          <button
+            type="button"
+            className={`btn-card-audio ${isPlaying && activeKey === 'summary' ? 'is-playing' : ''}`}
+            onClick={() => handleSpeak(result.simpleSummary, 'summary')}
+          >
+            <Volume2 size={14} />
+            <span>{listenLabel}</span>
+          </button>
+        </div>
+      )}
+
+      {/* Tab 2: Key Details with individual Listen buttons */}
+      {activeTab === 'details' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {result.keyDetails && result.keyDetails.map((item, idx) => (
+            <div key={idx} className="card" style={{ marginBottom: 0, padding: '14px 16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+                <div>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--slate-500)' }}>
+                    {item.label}
+                  </div>
+                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--slate-900)' }}>
+                    {item.value}
+                  </div>
+                  {item.explanation && (
+                    <div style={{ fontSize: '0.82rem', color: 'var(--slate-600)', marginTop: '2px' }}>
+                      {item.explanation}
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  className={`btn-card-audio ${isPlaying && activeKey === `item_${idx}` ? 'is-playing' : ''}`}
+                  onClick={() => handleSpeak(`${item.label}: ${item.value}. ${item.explanation || ''}`, `item_${idx}`)}
+                >
+                  <Volume2 size={14} />
+                  <span>{listenLabel}</span>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Tab 3: Glossary */}
+      {activeTab === 'glossary' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {result.glossary && result.glossary.length > 0 ? (
+            result.glossary.map((item, idx) => (
+              <div key={idx} className="card" style={{ marginBottom: 0, padding: '14px 16px' }}>
+                <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--slate-900)' }}>
+                  {item.term}
+                </div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--slate-600)', marginTop: '2px' }}>
+                  {item.meaning}
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="card" style={{ textAlign: 'center', color: 'var(--slate-500)', padding: '24px' }}>
+              {currentLang === 'hi' ? 'कोई कठिन शब्द नहीं पाया गया।' : currentLang === 'te' ? 'కఠినమైన పదాలు లేవు.' : currentLang === 'gu' ? 'કોઈ અઘરા શબ્દો મળ્યા નથી.' : 'No difficult terms found in this document.'}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Bottom Actions matching Screen 7 */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '22px' }}>
+        <button
+          type="button"
+          className="btn btn-secondary"
           onClick={onReset}
           id="btn-try-another"
+          style={{ minHeight: '48px', fontSize: '0.95rem' }}
         >
-          <RefreshCw size={18} />
+          <RefreshCw size={16} />
           <span>{t.btnTryAnother}</span>
         </button>
 
@@ -511,8 +445,9 @@ export function ResultScreen({
           className="btn btn-secondary"
           onClick={onGoHome}
           id="btn-go-home"
+          style={{ minHeight: '48px', fontSize: '0.95rem' }}
         >
-          <Home size={18} />
+          <Home size={16} />
           <span>{t.btnGoHome}</span>
         </button>
       </div>

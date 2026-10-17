@@ -1,38 +1,30 @@
 /* ==========================================================================
-   SAMJHAO ACCESSIBLE DESIGN SYSTEM (ELDER-FRIENDLY & HIGH-CONTRAST)
-   Designed specifically for elders and families: large typography,
-   tactile touch targets, clear language switching, and voice-first UI.
+   SAMJHAO MINIMALIST DESIGN SYSTEM
+   Clean, accessible, high-contrast, zero-slop UI matching the reference mockup.
+   Designed for elders and low-literacy users with large touch targets and pure SVGs.
    ========================================================================== */
 
 :root {
-  /* High-Contrast Brand Palette */
-  --primary-50: #EFF6FF;
-  --primary-100: #DBEAFE;
-  --primary-200: #BFDBFE;
-  --primary-500: #3B82F6;
-  --primary-600: #1D4ED8;
-  --primary-700: #1E40AF;
-  --primary-800: #172554;
+  /* Clean Minimalist Palette */
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-light: #EFF6FF;
+  --primary-border: #BFDBFE;
 
-  /* Semantic Success (Green for Action & Money) */
-  --success-50: #ECFDF5;
-  --success-100: #D1FAE5;
-  --success-600: #047857;
-  --success-700: #065F46;
+  --success: #059669;
+  --success-hover: #047857;
+  --success-light: #ECFDF5;
+  --success-border: #A7F3D0;
 
-  /* Semantic Warning (Warm Amber for Deadlines & Caution) */
-  --warning-50: #FFFBEB;
-  --warning-100: #FEF3C7;
-  --warning-600: #D97706;
-  --warning-700: #B45309;
+  --warning: #D97706;
+  --warning-light: #FFFBEB;
+  --warning-border: #FDE68A;
 
-  /* Semantic Danger (Deep Red for Urgency & Refusal) */
-  --danger-50: #FEF2F2;
-  --danger-100: #FEE2E2;
-  --danger-600: #DC2626;
-  --danger-700: #B91C1C;
+  --danger: #DC2626;
+  --danger-light: #FEF2F2;
+  --danger-border: #FECACA;
 
-  /* High-Contrast Slate Palette */
+  /* Neutral Slate Palette */
   --slate-50: #F8FAFC;
   --slate-100: #F1F5F9;
   --slate-200: #E2E8F0;
@@ -44,27 +36,17 @@
   --slate-800: #1E293B;
   --slate-900: #0F172A;
 
-  /* Typography for Elders */
+  /* Typography */
   --font-sans: 'Outfit', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  
-  /* Surfaces & Shadows */
-  --surface-bg: #F1F5F9;
-  --surface-card: #FFFFFF;
-  --border-subtle: #E2E8F0;
-  --border-strong: #CBD5E1;
-  --shadow-sm: 0 2px 4px 0 rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 6px 12px -2px rgba(15, 23, 42, 0.08), 0 3px 6px -2px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.1), 0 4px 8px -2px rgba(15, 23, 42, 0.05);
 
-  /* Large Elder Touch Targets */
-  --min-touch-target: 54px;
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  /* Geometry & Shadows */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
   --radius-full: 9999px;
+  --min-touch-target: 50px;
 }
 
-/* Base Accessibility Reset */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -72,75 +54,76 @@
 }
 
 html, body {
-  background-color: var(--surface-bg);
+  background-color: #EEF2F6;
   color: var(--slate-900);
   font-family: var(--font-sans);
-  font-size: 19px;
-  line-height: 1.6;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
 }
 
-/* Accessible high-contrast focus outline */
+/* High contrast focus ring */
 *:focus-visible {
-  outline: 4px solid var(--primary-600);
-  outline-offset: 3px;
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
 }
 
-/* Outer Viewport */
+/* Outer Viewport (Clean minimal framing) */
 .app-viewport {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  background: linear-gradient(180deg, #E2E8F0 0%, #F1F5F9 100%);
-  padding: 16px;
+  padding: 12px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 600px) {
   .app-viewport {
-    padding: 32px 24px;
+    padding: 24px 16px;
   }
 }
 
-/* Spacious, Elder-Friendly Container */
+/* App Container matching the clean phone/tablet frame in the walkthrough */
 .app-container {
   width: 100%;
-  max-width: 860px;
-  background: var(--surface-card);
-  min-height: calc(100vh - 48px);
+  max-width: 500px;
+  background: #FFFFFF;
+  min-height: calc(100vh - 24px);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.1), 0 4px 6px -2px rgba(15, 23, 42, 0.05);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid var(--border-subtle);
+  position: relative;
+  border: 1px solid var(--slate-200);
 }
 
-/* Top App Header */
+@media (min-width: 600px) {
+  .app-container {
+    min-height: 840px;
+    max-height: 94vh;
+    overflow-y: auto;
+  }
+}
+
+/* Clean Header matching walkthrough screen 2/3 */
 .top-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 18px 24px;
-  border-bottom: 2px solid var(--border-subtle);
-  background-color: var(--surface-card);
-  position: sticky;
-  top: 0;
-  z-index: 30;
-}
-
-.top-nav-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--slate-200);
+  background-color: #FFFFFF;
+  position: sticky;
+  top: 0;
+  z-index: 40;
 }
 
 .brand-logo-wrap {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   text-decoration: none;
   color: var(--slate-900);
   cursor: pointer;
@@ -150,86 +133,49 @@ html, body {
 }
 
 .brand-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #1D4ED8, #2563EB);
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
 }
 
 .brand-title {
-  font-size: 1.7rem;
+  font-size: 1.35rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
   color: var(--slate-900);
   line-height: 1.1;
 }
 
 .brand-tagline {
-  font-size: 0.95rem;
-  color: var(--slate-600);
-  font-weight: 600;
-  margin-top: 2px;
+  font-size: 0.75rem;
+  color: var(--slate-500);
+  font-weight: 500;
 }
 
-/* 1-Tap Language Bar (Critical for Elders) */
-.lang-bar-container {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  background: var(--slate-50);
-  padding: 10px 14px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
-}
-
-.lang-bar-label {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--slate-600);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.lang-pill-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.lang-pill-btn {
+/* Clean Language Pill Dropdown in Header */
+.header-lang-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
+  gap: 6px;
+  background: var(--slate-50);
+  border: 1px solid var(--slate-300);
   border-radius: var(--radius-full);
-  font-size: 1.05rem;
+  padding: 6px 14px;
+  font-size: 0.92rem;
   font-weight: 700;
-  border: 2px solid var(--border-subtle);
-  background: white;
   color: var(--slate-800);
   cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: 46px;
+  min-height: 38px;
+  transition: all 0.15s ease;
 }
 
-.lang-pill-btn:hover {
-  background: var(--primary-50);
-  border-color: var(--primary-500);
-}
-
-.lang-pill-btn.active {
-  background: var(--primary-600);
-  color: white;
-  border-color: var(--primary-600);
-  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
+.header-lang-btn:hover {
+  background: var(--slate-100);
+  border-color: var(--slate-400);
 }
 
 /* Main Content Area */
@@ -237,31 +183,24 @@ html, body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 28px 24px 36px;
+  padding: 22px 20px 28px;
 }
 
-@media (min-width: 768px) {
-  .main-content {
-    padding: 36px 36px 44px;
-  }
-}
-
-/* Elder-Friendly Large Button System */
+/* Minimalist Button System */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   min-height: var(--min-touch-target);
-  padding: 16px 28px;
-  font-size: 1.15rem;
+  padding: 14px 22px;
+  font-size: 1.05rem;
   font-weight: 700;
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
   text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
   width: 100%;
 }
 
@@ -270,194 +209,125 @@ html, body {
 }
 
 .btn-primary {
-  background-color: var(--primary-600);
+  background-color: var(--primary);
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-700);
-  box-shadow: var(--shadow-md);
+  background-color: var(--primary-hover);
 }
 
 .btn-success {
-  background-color: var(--success-600);
+  background-color: var(--success);
   color: white;
 }
 
 .btn-success:hover {
-  background-color: var(--success-700);
-  box-shadow: var(--shadow-md);
+  background-color: var(--success-hover);
 }
 
 .btn-secondary {
   background-color: var(--slate-100);
   color: var(--slate-800);
-  border: 2px solid var(--border-subtle);
+  border: 1px solid var(--slate-200);
 }
 
 .btn-secondary:hover {
   background-color: var(--slate-200);
-  border-color: var(--slate-300);
 }
 
-/* Giant Spoken Audio Button (Voice-First UI) */
-.btn-audio-hero {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background-color: #FEF3C7;
-  color: #92400E;
-  border: 2.5px solid #F59E0B;
-  border-radius: var(--radius-full);
-  padding: 14px 28px;
-  font-size: 1.15rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: 54px;
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
-}
-
-.btn-audio-hero:hover {
-  background-color: #FDE68A;
-  transform: translateY(-1px);
-}
-
-.btn-audio-hero.is-playing {
-  background-color: #D97706;
-  color: white;
-  border-color: #B45309;
-  animation: pulse-audio 1.5s infinite ease-in-out;
-}
-
-/* Card Level Listen Button */
-.btn-audio {
+/* Audio Listen Button (Blue Pill as shown in Screen 1 & Screen 9) */
+.btn-audio-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background-color: var(--primary-50);
-  color: var(--primary-700);
-  border: 2px solid var(--primary-200);
+  background-color: var(--primary);
+  color: white;
+  border: none;
   border-radius: var(--radius-full);
-  padding: 8px 18px;
+  padding: 12px 24px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
-  min-height: 44px;
+  min-height: 48px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
-.btn-audio:hover {
-  background-color: var(--primary-100);
-  border-color: var(--primary-500);
+.btn-audio-pill:hover {
+  background-color: var(--primary-hover);
 }
 
-.btn-audio.is-playing {
-  background-color: var(--primary-600);
-  color: white;
-  border-color: var(--primary-600);
+.btn-audio-pill.is-playing {
+  background-color: #1E40AF;
   animation: pulse-audio 1.5s infinite ease-in-out;
 }
 
-@keyframes pulse-audio {
-  0% { box-shadow: 0 0 0 0 rgba(29, 78, 216, 0.4); }
-  70% { box-shadow: 0 0 0 12px rgba(29, 78, 216, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(29, 78, 216, 0); }
-}
-
-/* Large Elder Cards */
-.card {
-  background: var(--surface-card);
-  border: 2px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 22px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow-sm);
-}
-
-.card-highlight {
-  border-left: 8px solid var(--primary-600);
-  background: #F8FAFC;
-}
-
-.card-warning {
-  background-color: var(--warning-50);
-  border: 2px solid #FDE68A;
-  border-left: 8px solid var(--warning-600);
-}
-
-.card-danger {
-  background-color: var(--danger-50);
-  border: 2px solid #FECACA;
-  border-left: 8px solid var(--danger-600);
-}
-
-/* Grid of Key Info Badges */
-.key-info-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  margin: 20px 0;
-}
-
-@media (min-width: 600px) {
-  .key-info-grid {
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  }
-}
-
-.key-info-card {
-  background: var(--slate-50);
-  border: 2px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 18px 20px;
-  display: flex;
+/* Card Listen Button (Soft Blue Pill) */
+.btn-card-audio {
+  display: inline-flex;
   align-items: center;
-  gap: 16px;
-}
-
-.key-info-card .icon-bubble {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 6px;
+  background-color: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid var(--primary-border);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 36px;
   flex-shrink: 0;
 }
 
-.key-info-card .info-texts {
-  display: flex;
-  flex-direction: column;
+.btn-card-audio:hover {
+  background-color: #DBEAFE;
 }
 
-.key-info-card .info-label {
-  font-size: 0.95rem;
-  color: var(--slate-600);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+.btn-card-audio.is-playing {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
 }
 
-.key-info-card .info-value {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--slate-900);
-  line-height: 1.2;
+@keyframes pulse-audio {
+  0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+
+/* Cards */
+.card {
+  background: #FFFFFF;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+.card-warning {
+  background: var(--warning-light);
+  border: 1px solid var(--warning-border);
+}
+
+.card-danger {
+  background: var(--danger-light);
+  border: 1px solid var(--danger-border);
 }
 
 /* Uncertainty Marker */
 .uncertain-tag {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background-color: var(--warning-100);
-  color: var(--warning-700);
-  padding: 4px 10px;
+  gap: 4px;
+  background-color: var(--warning-light);
+  color: var(--warning);
+  border: 1px solid var(--warning-border);
+  padding: 3px 8px;
   border-radius: var(--radius-sm);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  margin-top: 6px;
+  margin-top: 4px;
 }

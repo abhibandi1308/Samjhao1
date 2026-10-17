@@ -45,8 +45,8 @@ export function useSpeech(defaultLang = 'hi') {
       case 'gu': return 'gu-IN';
       case 'bn': return 'bn-IN';
       case 'mr': return 'mr-IN';
-      case 'en': return 'en-IN';
-      default: return 'hi-IN';
+      case 'en': return 'en-US';
+      default: return 'en-US';
     }
   };
 
@@ -55,6 +55,7 @@ export function useSpeech(defaultLang = 'hi') {
     if (!availableVoices.length) return null;
     const exact = availableVoices.find(v => v.lang.replace('_', '-').toLowerCase() === langCode.toLowerCase());
     if (exact) return exact;
+    // Try matching first 2 characters (e.g. 'en', 'hi', 'te', 'gu')
     const prefix = availableVoices.find(v => v.lang.toLowerCase().startsWith(langCode.slice(0, 2).toLowerCase()));
     return prefix || null;
   }, [availableVoices]);
