@@ -12,6 +12,7 @@ import { HelpModal } from './components/HelpModal.jsx';
 import { PrivacyNoticeModal } from './components/PrivacyNoticeModal.jsx';
 import { ErrorScreen } from './components/ErrorScreen.jsx';
 import { getScreenVoiceInstructions } from './voiceGuideConfig.js';
+import { compressImageIfNeeded } from './utils/imageCompressor.js';
 import './App.css';
 
 // Screen State Constants
@@ -65,23 +66,17 @@ export default function App() {
     setCurrentScreen(SCREENS.WELCOME);
   };
 
-  // File Selection & Validation
-  const handleFileSelected = (file) => {
+  // File Selection, Optimization & Validation
+  const handleFileSelected = async (file) => {
     speech.stop();
-
-    // Validate size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      setErrorDetails({
-        type: 'size',
-        message: t.errSizeDesc
-      });
-      setCurrentScreen(SCREENS.ERROR);
-      return;
-    }
+    if (!file) return;
 
     // Validate type
     const validMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'application/pdf'];
-    if (!validMimes.includes(file.type) && !file.name.match(/\.(jpg|jpeg|png|webp|pdf)$/i)) {
+    const isImage = file.type?.startsWith('image/') || Boolean(file.name?.match(/\.(jpg|jpeg|png|webp|heic)$/i));
+    const isPdf = file.type === 'application/pdf' || Boolean(file.name?.match(/\.pdf$/i));
+
+    if (!isImage && !isPdf && !validMimes.includes(file.type)) {
       setErrorDetails({
         type: 'unsupported',
         message: t.errUnsupportedDesc
@@ -90,8 +85,32 @@ export default function App() {
       return;
     }
 
-    setSelectedFile(file);
-    const objectUrl = URL.createObjectURL(file);
+    // Automatically optimize oversized camera photos taken on mobile phones
+    // Modern smartphones take 48-108MP photos resulting in 12MB-25MB files.
+    // Compressing to max 2048px preserves 100% document readability while reducing size to ~1MB.
+    let processedFile = file;
+    if (isImage) {
+      try {
+        processedFile = await compressImageIfNeeded(file);
+      } catch (err) {
+        console.warn('Image optimization skipped:', err);
+        processedFile = file;
+      }
+    }
+
+    // Validate size (max 25MB)
+    const MAX_ALLOWED_BYTES = 25 * 1024 * 1024;
+    if (processedFile.size > MAX_ALLOWED_BYTES) {
+      setErrorDetails({
+        type: 'size',
+        message: t.errSizeDesc
+      });
+      setCurrentScreen(SCREENS.ERROR);
+      return;
+    }
+
+    setSelectedFile(processedFile);
+    const objectUrl = URL.createObjectURL(processedFile);
     setPreviewUrl(objectUrl);
     setCurrentScreen(SCREENS.PREVIEW);
   };
