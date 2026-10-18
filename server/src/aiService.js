@@ -382,7 +382,19 @@ CRITICAL SAFETY & RELIABILITY RULES:
 
 5. OUTPUT FORMAT:
    - You MUST output ONLY valid JSON matching the exact schema requested. No markdown wrapping outside the JSON, no intro text.
-   - All explanations and summaries MUST be written in the user's requested language.`;
+   - All explanations and summaries MUST be written in the user's requested language.
+
+6. SPOKEN AUDIO GUIDELINES FOR ELDERS ("fullSpokenText"):
+   - "fullSpokenText" is read aloud via speech to an elderly parent or grandparent who may have difficulty reading fine print.
+   - Tone: Very warm, respectful, and reassuring (like a polite family member explaining a paper at home).
+   - Greeting: Start with a respectful native greeting:
+     - English: "Hello! Here is a simple explanation of your document."
+     - Hindi: "नमस्ते! यह आपके दस्तावेज़ की सरल जानकारी है।"
+     - Telugu: "నమస్కారం! ఇది మీ పత్రం యొక్క ముఖ్యమైన వివరాలు."
+     - Gujarati: "નમસ્તે! આ તમારા દસ્તાવેજની સરળ માહિતી છે."
+   - Pronounceable Numbers: ALWAYS spell out numbers and currencies as natural spoken words (e.g. write "eight hundred and fifty rupees" instead of "₹850.00", write "twenty-fifth of October" instead of "25/10/2024").
+   - Zero Symbol Clutter: Never use symbols like ₹, /, %, @, (), brackets, or dashes in fullSpokenText so the speech engine sounds completely human and never reads "slash" or "bracket open".
+   - Clear Action: Reassure the elder about what it is, whether they need to pay or not, and what to do next.`;
 
 /**
  * Determine offline document category based on filename or metadata

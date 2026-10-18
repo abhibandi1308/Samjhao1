@@ -61,6 +61,49 @@ app.get('/api/languages', (req, res) => {
   });
 });
 
+// High-Fidelity Text-to-Speech Endpoint for Indian Languages
+// Provides native Telugu, Gujarati, Hindi, and English audio for elders
+app.get('/api/tts', async (req, res) => {
+  try {
+    const text = String(req.query.text || '').trim();
+    const lang = String(req.query.lang || 'en').trim();
+
+    if (!text) {
+      return res.status(400).json({ error: 'Text query parameter is required.' });
+    }
+
+    let tl = 'en';
+    if (lang === 'hi') tl = 'hi';
+    else if (lang === 'te') tl = 'te';
+    else if (lang === 'gu') tl = 'gu';
+    else if (lang === 'bn') tl = 'bn';
+    else if (lang === 'mr') tl = 'mr';
+
+    // Google Translate TTS supports up to ~200 characters per single call
+    const cleanText = text.slice(0, 250);
+    const encoded = encodeURIComponent(cleanText);
+    const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=${tl}&client=tw-ob`;
+
+    const response = await fetch(ttsUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`TTS provider returned status ${response.status}`);
+    }
+
+    res.setHeader('Content-Type', 'audio/mpeg');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    const buffer = Buffer.from(await response.arrayBuffer());
+    res.send(buffer);
+  } catch (err) {
+    console.warn('⚠️ [Samjhao] TTS audio note:', err.message);
+    res.status(502).json({ error: 'TTS audio service temporarily unavailable.' });
+  }
+});
+
 // Main Explain Document Endpoint
 app.post('/api/explain', upload.single('document'), async (req, res) => {
   try {
