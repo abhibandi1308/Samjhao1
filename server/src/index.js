@@ -30,11 +30,18 @@ app.use(express.json({ limit: '15mb' }));
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: MAX_FILE_SIZE_MB * 1024 * 1024 // e.g. 10MB
+    fileSize: MAX_FILE_SIZE_MB * 1024 * 1024 // e.g. 25MB
   },
   fileFilter: (req, file, cb) => {
-    const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'application/pdf'];
-    if (allowedMimes.includes(file.mimetype)) {
+    const mime = (file.mimetype || '').toLowerCase();
+    const name = (file.originalname || '').toLowerCase();
+    const isImageOrPdf =
+      mime.startsWith('image/') ||
+      mime === 'application/pdf' ||
+      mime === 'application/octet-stream' ||
+      /\.(jpe?g|png|webp|heic|heif|bmp|pdf)$/i.test(name);
+
+    if (isImageOrPdf) {
       cb(null, true);
     } else {
       cb(new Error('Unsupported file format. Please upload JPG, PNG, WebP, or PDF.'));
@@ -166,8 +173,22 @@ app.get('/api/tts', async (req, res) => {
   }
 });
 
-// Main Explain Document Endpoint
-app.post('/api/explain', upload.single('document'), async (req, res) => {
+// Main Explain Document Endpoint with graceful upload error interception
+app.post('/api/explain', (req, res, next) => {
+  upload.single('document')(req, res, (err) => {
+    if (err) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(413).json({
+          error: `File is too large. Maximum supported size is ${MAX_FILE_SIZE_MB}MB.`
+        });
+      }
+      return res.status(400).json({
+        error: err.message || 'Invalid file format uploaded.'
+      });
+    }
+    next();
+  });
+}, async (req, res) => {
   try {
     const language = req.body.language || 'hi';
     const file = req.file;
@@ -178,7 +199,17 @@ app.post('/api/explain', upload.single('document'), async (req, res) => {
 
     if (file && file.buffer) {
       fileBuffer = file.buffer;
-      mimeType = file.mimetype;
+      mimeType = file.mimetype || 'image/jpeg';
+      // Normalize mobile mime types for Gemini API
+      if (
+        mimeType === 'image/jpg' ||
+        mimeType === 'image/pjpeg' ||
+        mimeType === 'image/heic' ||
+        mimeType === 'image/heif' ||
+        mimeType === 'application/octet-stream'
+      ) {
+        mimeType = 'image/jpeg';
+      }
     } else if (req.body.imageBase64) {
       const match = req.body.imageBase64.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,(.+)$/);
       if (match) {
@@ -227,12 +258,18 @@ if (fs.existsSync(clientDistPath)) {
   console.log(`📦 [Samjhao] Production build detected. Serving static assets from client/dist.`);
 }
 
-// Start Express Server
-app.listen(PORT, () => {
-  const mode = process.env.GEMINI_API_KEY ? 'Live AI Mode (Gemini)' : 'Offline Mock Demo Mode';
-  console.log(`\n==================================================`);
-  console.log(`✨ Samjhao Fullstack Server running on http://localhost:${PORT}`);
-  console.log(`🔒 Zero-storage policy active (Memory-only processing)`);
-  console.log(`🤖 Mode: ${mode}`);
-  console.log(`==================================================\n`);
-});
+// Export app for Vercel Serverless Functions & Testing
+export default app;
+export { app };
+
+// Start Express Server (only when run directly, not when invoked as a Vercel serverless function)
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    const mode = process.env.GEMINI_API_KEY ? 'Live AI Mode (Gemini)' : 'Offline Mock Demo Mode';
+    console.log(`\n==================================================`);
+    console.log(`✨ Samjhao Fullstack Server running on http://localhost:${PORT}`);
+    console.log(`🔒 Zero-storage policy active (Memory-only processing)`);
+    console.log(`🤖 Mode: ${mode}`);
+    console.log(`==================================================\n`);
+  });
+}

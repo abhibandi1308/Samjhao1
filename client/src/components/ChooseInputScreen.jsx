@@ -12,6 +12,8 @@ export function ChooseInputScreen({ t, currentLang, onFileSelected, onSpeak, isS
     if (file) {
       onFileSelected(file);
     }
+    // Clear value so re-selecting or taking another photo triggers onChange reliably
+    e.target.value = '';
   };
 
   const handleListenHelp = () => {
@@ -59,7 +61,7 @@ export function ChooseInputScreen({ t, currentLang, onFileSelected, onSpeak, isS
         <input
           ref={galleryInputRef}
           type="file"
-          accept="image/jpeg,image/png,image/webp,image/heic"
+          accept="image/*"
           style={{ display: 'none' }}
           onChange={handleFileChange}
           id="native-gallery-input"
@@ -67,7 +69,7 @@ export function ChooseInputScreen({ t, currentLang, onFileSelected, onSpeak, isS
         <input
           ref={pdfInputRef}
           type="file"
-          accept="application/pdf"
+          accept="application/pdf,.pdf"
           style={{ display: 'none' }}
           onChange={handleFileChange}
           id="native-pdf-input"
@@ -79,7 +81,12 @@ export function ChooseInputScreen({ t, currentLang, onFileSelected, onSpeak, isS
           <button
             type="button"
             className="input-option-card card-color-assisted"
-            onClick={() => cameraInputRef.current?.click()}
+            onClick={() => {
+              if (cameraInputRef.current) {
+                cameraInputRef.current.value = '';
+                cameraInputRef.current.click();
+              }
+            }}
             id="btn-take-photo"
             style={{
               backgroundColor: COLOR_TOKENS.yellow.lightBg,
@@ -119,7 +126,12 @@ export function ChooseInputScreen({ t, currentLang, onFileSelected, onSpeak, isS
           <button
             type="button"
             className="input-option-card card-color-assisted"
-            onClick={() => galleryInputRef.current?.click()}
+            onClick={() => {
+              if (galleryInputRef.current) {
+                galleryInputRef.current.value = '';
+                galleryInputRef.current.click();
+              }
+            }}
             id="btn-choose-photo"
             style={{
               backgroundColor: COLOR_TOKENS.pink.lightBg,
@@ -159,7 +171,12 @@ export function ChooseInputScreen({ t, currentLang, onFileSelected, onSpeak, isS
           <button
             type="button"
             className="input-option-card card-color-assisted"
-            onClick={() => pdfInputRef.current?.click()}
+            onClick={() => {
+              if (pdfInputRef.current) {
+                pdfInputRef.current.value = '';
+                pdfInputRef.current.click();
+              }
+            }}
             id="btn-choose-pdf"
             style={{
               backgroundColor: COLOR_TOKENS.blue.lightBg,

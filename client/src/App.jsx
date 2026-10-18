@@ -168,7 +168,8 @@ export default function App() {
       });
 
       if (!response.ok) {
-        throw new Error(`Server returned status ${response.status}`);
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || `Server returned status ${response.status}`);
       }
 
       const data = await response.json();
