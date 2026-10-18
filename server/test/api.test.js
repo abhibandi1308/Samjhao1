@@ -4,12 +4,12 @@ import { validateAndNormalizeResult, createFallbackErrorResult, SUPPORTED_LANGUA
 import { explainDocument } from '../src/aiService.js';
 
 describe('Samjhao Schema & Safety Guardrails Tests', () => {
-  test('Supported languages include Hindi, English, Telugu, Gujarati', () => {
+  test('Supported languages include Hindi, English, Telugu, Tamil', () => {
     const codes = SUPPORTED_LANGUAGES.map(l => l.code);
     assert.ok(codes.includes('hi'), 'Should support Hindi');
     assert.ok(codes.includes('en'), 'Should support English');
     assert.ok(codes.includes('te'), 'Should support Telugu');
-    assert.ok(codes.includes('gu'), 'Should support Gujarati');
+    assert.ok(codes.includes('ta'), 'Should support Tamil');
   });
 
   test('validateAndNormalizeResult normalizes valid document structure', () => {
@@ -87,7 +87,7 @@ describe('Samjhao Schema & Safety Guardrails Tests', () => {
     assert.ok(result.actionRequired.length > 0);
   });
 
-  test('explainDocument offline mock supports Telugu and Gujarati', async () => {
+  test('explainDocument offline mock supports Telugu and Tamil', async () => {
     const teResult = await explainDocument({
       fileBuffer: Buffer.from('bill-bytes'),
       mimeType: 'image/jpeg',
@@ -97,13 +97,13 @@ describe('Samjhao Schema & Safety Guardrails Tests', () => {
     assert.equal(teResult.language, 'te');
     assert.ok(teResult.fullSpokenText.length > 0);
 
-    const guResult = await explainDocument({
+    const taResult = await explainDocument({
       fileBuffer: Buffer.from('bill-bytes'),
       mimeType: 'image/jpeg',
       fileName: 'sample_electricity_bill.jpg',
-      language: 'gu'
+      language: 'ta'
     });
-    assert.equal(guResult.language, 'gu');
-    assert.ok(guResult.fullSpokenText.length > 0);
+    assert.equal(taResult.language, 'ta');
+    assert.ok(taResult.fullSpokenText.length > 0);
   });
 });

@@ -11,6 +11,7 @@ import { ResultScreen } from './components/ResultScreen.jsx';
 import { HelpModal } from './components/HelpModal.jsx';
 import { PrivacyNoticeModal } from './components/PrivacyNoticeModal.jsx';
 import { ErrorScreen } from './components/ErrorScreen.jsx';
+import { getScreenVoiceInstructions } from './voiceGuideConfig.js';
 import './App.css';
 
 // Screen State Constants
@@ -162,16 +163,16 @@ export default function App() {
         return;
       }
 
-      if (sampleTypeOverride === 'medical' || selectedFile?.name?.includes('prescription')) {
+      if (sampleTypeOverride === 'medical') {
         data.isMedicalOrPrescription = true;
         data.documentType = 'Doctor Prescription';
-        data.documentTypeLocalized = currentLang === 'hi' ? 'चिकित्सीय पर्चा' : (currentLang === 'te' ? 'వైద్య ప్రిస్క్రిప్షన్' : (currentLang === 'gu' ? 'ડૉક્ટરનું પ્રિસ્ક્રિપ્શન' : 'Doctor Prescription'));
+        data.documentTypeLocalized = currentLang === 'hi' ? 'चिकित्सीय पर्चा' : (currentLang === 'te' ? 'వైద్య ప్రిస్క్రిప్షన్' : (currentLang === 'ta' ? 'மருத்துவர் மருந்துச் சீட்டு' : 'Doctor Prescription'));
       }
 
-      if (sampleTypeOverride === 'scam' || selectedFile?.name?.includes('suspicious')) {
+      if (sampleTypeOverride === 'scam') {
         data.isSuspiciousMessage = true;
         data.documentType = 'Suspicious Scam Message';
-        data.documentTypeLocalized = currentLang === 'hi' ? 'संदेहास्पद फ्रॉड संदेश' : (currentLang === 'te' ? 'మోసపూరిత సందేశం' : (currentLang === 'gu' ? 'શંકાસ્પદ ફ્રોડ મેસેજ' : 'Suspicious Scam Message'));
+        data.documentTypeLocalized = currentLang === 'hi' ? 'संदेहास्पद फ्रॉड संदेश' : (currentLang === 'te' ? 'మోసపూరిత సందేశం' : (currentLang === 'ta' ? 'சந்தேகத்திற்குரிய மோசடி செய்தி' : 'Suspicious Scam Message'));
         data.suspiciousSignals = currentLang === 'hi' ? [
           'रात में बिजली काटने की झूठी धमकी।',
           'व्यक्तिगत मोबाइल नंबर पर संपर्क करने का दबाव।',
@@ -180,10 +181,10 @@ export default function App() {
           'రాత్రి విద్యుత్ నిలిపివేస్తామని నకిలీ బెదిరింపు.',
           'వ్యక్తిగత మొబైల్ నంబర్‌కు కాల్ చేయమని ఒత్తిడి.',
           'అనధికార లింక్ ద్వారా చెల్లింపు చేయమని కోరడం.'
-        ] : (currentLang === 'gu' ? [
-          'રાત્રે વીજળી કાપવાની નકલી ધમકી.',
-          'અજાણ્યા મોબાઈલ નંબર પર કોલ કરવાનું દબાણ.',
-          'અનધિકૃત લિંક પર પૈસા ચૂકવવાનું કહેવું.'
+        ] : (currentLang === 'ta' ? [
+          'இன்றிரவு மின்சாரம் துண்டிக்கப்படும் என்ற போலி மிரட்டல்.',
+          'அறியப்படாத தனிப்பட்ட கைபேசி எண்ணை அழைக்க அழுத்தம்.',
+          'அங்கீகரிக்கப்படாத லிங்கில் பணம் செலுத்தக் கூறுதல்.'
         ] : [
           'Threatens power cutoff tonight unless paid immediately.',
           'Asks to call an unknown personal mobile number.',
@@ -194,67 +195,18 @@ export default function App() {
       setExplanationResult(data);
       setCurrentScreen(SCREENS.RESULT);
     } catch (err) {
-      console.warn('Backend connection note:', err.message);
-      // Offline fallback
-      setTimeout(() => {
-        const isHindi = currentLang === 'hi';
-        const isTelugu = currentLang === 'te';
-        const isGujarati = currentLang === 'gu';
-
-        const fallback = {
-          id: `sample_${Date.now()}`,
-          documentType: selectedFile?.name?.includes('prescription')
-            ? 'Medical Prescription'
-            : selectedFile?.name?.includes('suspicious')
-            ? 'Suspicious Message'
-            : 'Electricity Utility Bill',
-          documentTypeLocalized: isHindi ? 'बिजली बिल' : (isTelugu ? 'కరెంట్ బిల్లు' : (isGujarati ? 'લાઈટ બિલ' : 'Electricity Bill')),
-          language: currentLang,
-          languageName: isHindi ? 'हिन्दी' : (isTelugu ? 'తెలుగు' : (isGujarati ? 'ગુજરાતી' : 'English')),
-          simpleSummary: isHindi
-            ? 'यह आपके घर का बिजली का बिल है। कुल 142 यूनिट बिजली खर्च हुई है।'
-            : isTelugu
-            ? 'ఇది మీ నెలవారీ కరెంట్ బిల్లు. ఈ నెలలో 142 యూనిట్ల విద్యుత్ ఖర్చయింది.'
-            : isGujarati
-            ? 'આ તમારા ઘરનું લાઈટ બિલ છે. કુલ 142 યુનિટ વીજળી વપરાઈ છે.'
-            : 'This is your monthly electricity utility bill for 142 units of power consumed.',
-          actionRequired: isHindi
-            ? 'इस बिल की राशि ₹ 850 है, जिसे 25 अक्टूबर 2024 तक भुगतान करना है।'
-            : isTelugu
-            ? 'ఈ బిల్లు మొత్తం ₹ 850, దీనిని 25 అక్టోబర్ 2024 లోగా చెల్లించాలి.'
-            : isGujarati
-            ? 'આ બિલની રકમ ₹ 850 છે, જે 25 ઑક્ટોબર 2024 સુધીમાં ભરવાની છે.'
-            : 'The total amount due is ₹ 850, payable on or before 25 October 2024.',
-          keyDetails: [
-            { label: isHindi ? 'कुल राशि' : (isTelugu ? 'మొత్తం' : (isGujarati ? 'કુલ રકમ' : 'Total Due')), value: '₹ 850', explanation: 'Total payable amount', icon: 'currency' },
-            { label: isHindi ? 'अंतिम तिथि' : (isTelugu ? 'చివరి తేదీ' : (isGujarati ? 'છેલ્લી તારીખ' : 'Due Date')), value: '25 Oct 2024', explanation: 'Due date to avoid late fee', icon: 'calendar' },
-            { label: isHindi ? 'उपभोग यूनिट' : (isTelugu ? 'యూనిట్లు' : (isGujarati ? 'યુનિટ' : 'Units Consumed')), value: '142 Units', explanation: 'Power consumption', icon: 'zap' }
-          ],
-          warnings: [
-            { text: isHindi ? 'अंतिम तिथि 25 अक्टूबर के बाद ₹50 लेट फीस लग सकती है।' : (isTelugu ? 'గడువు తేదీ తర్వాత ₹50 ఆలస్య రుసుము పడుతుంది.' : (isGujarati ? 'છેલ્લી તારીખ પછી ₹50 લેટ ફી લાગી શકે છે.' : 'Late fee applies after 25 October 2024.')), severity: 'warning', isGeneralGuidance: false }
-          ],
-          uncertainFields: [],
-          needsClearerPhoto: false,
-          isMedicalOrPrescription: Boolean(selectedFile?.name?.includes('prescription')),
-          isSuspiciousMessage: Boolean(selectedFile?.name?.includes('suspicious')),
-          suspiciousSignals: [
-            'Suspicious urgency threat and personal phone number.'
-          ],
-          fullSpokenText: isHindi
-            ? 'यह आपके घर का बिजली का बिल है। कुल देय राशि आठ सौ पचास रुपये है। भुगतान की अंतिम तिथि पच्चीस अक्टूबर है।'
-            : isTelugu
-            ? 'ఇది మీ నెలవారీ కరెంట్ బిల్లు. చెల్లించాల్సిన మొత్తం ఎనిమిది వందల యాభై రూపాయలు. చివరి తేదీ ఇరవై ఐదు అక్టోబర్.'
-            : isGujarati
-            ? 'આ તમારું લાઈટ બિલ છે. કુલ ભરવાની રકમ આઠસો પચાસ રૂપિયા છે. છેલ્લી તારીખ પચ્ચીસ ઑક્ટોબર છે.'
-            : 'This is your monthly electricity bill. The total amount due is eight hundred and fifty rupees. The last date for payment is twenty fifth October.',
-          glossary: [
-            { term: 'CA Number', meaning: isHindi ? 'उपभोक्ता खाता संख्या' : (isTelugu ? 'వినియోగదారు ఖాతా సంఖ్య' : (isGujarati ? 'ગ્રાહક ખાતા નંબર' : 'Customer Account Number')) }
-          ]
-        };
-
-        setExplanationResult(fallback);
-        setCurrentScreen(SCREENS.RESULT);
-      }, 1000);
+      console.error('Processing error:', err);
+      setErrorDetails({
+        type: 'generic',
+        message: currentLang === 'hi'
+          ? 'डॉक्यूमेंट का विश्लेषण नहीं हो सका। कृपया दोबारा प्रयास करें।'
+          : currentLang === 'te'
+          ? 'పత్రాన్ని విశ్లేషించలేకపోయాము. దయచేసి మంచి వెలుతురులో మళ్ళీ ప్రయత్నించండి.'
+          : currentLang === 'ta'
+          ? 'ஆவணத்தை பகுப்பாய்வு செய்ய முடியவில்லை. தயவுசெய்து மீண்டும் முயற்சிக்கவும்.'
+          : 'Could not analyze document. Please try again with a clearer photo.'
+      });
+      setCurrentScreen(SCREENS.ERROR);
     }
   };
 
@@ -287,6 +239,19 @@ export default function App() {
     }
   };
 
+  const isVoiceHelpSpeaking = speech.isPlaying && speech.activeKey === 'screen-voice-help';
+
+  const handleTriggerVoiceHelp = () => {
+    if (isVoiceHelpSpeaking) {
+      speech.stop();
+      return;
+    }
+    // Cancel any current utterance before speaking screen guidance
+    speech.stop();
+    const instructions = getScreenVoiceInstructions(currentScreen, currentLang, t);
+    speech.speak(instructions, currentLang, 'screen-voice-help');
+  };
+
   return (
     <div className="app-viewport">
       <div className="app-container">
@@ -302,6 +267,8 @@ export default function App() {
             showBackButton={currentScreen !== SCREENS.WELCOME}
             onBack={handleBackNavigation}
             onSpeak={speech.speak}
+            onTriggerVoiceHelp={handleTriggerVoiceHelp}
+            isVoiceHelpSpeaking={isVoiceHelpSpeaking}
           />
         )}
 
@@ -311,7 +278,7 @@ export default function App() {
             currentLang={currentLang}
             onSelectLanguage={handleInitialLanguageChosen}
             onSpeak={speech.speak}
-            isSpeaking={speech.isPlaying && speech.activeKey === 'lang-select'}
+            isSpeaking={speech.isPlaying && (speech.activeKey === 'lang-select' || speech.activeKey === 'lang-select-instructions')}
           />
         )}
 
@@ -355,7 +322,12 @@ export default function App() {
 
         {/* SCREEN 6: Processing Animation */}
         {currentScreen === SCREENS.PROCESSING && (
-          <ProcessingScreen t={t} />
+          <ProcessingScreen
+            t={t}
+            currentLang={currentLang}
+            onSpeak={speech.speak}
+            isSpeaking={speech.isPlaying && speech.activeKey === 'processing-guidance'}
+          />
         )}
 
         {/* SCREEN 7 & 8: Result Screen */}

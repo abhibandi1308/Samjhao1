@@ -1,5 +1,6 @@
 import React from 'react';
-import { AlertCircle, Camera, Image as ImageIcon, RotateCcw, ArrowLeft, Volume2 } from 'lucide-react';
+import { AlertCircle, Camera, Image as ImageIcon, RotateCcw, Home, Volume2 } from 'lucide-react';
+import { getScreenVoiceInstructions } from '../voiceGuideConfig.js';
 
 export function ErrorScreen({
   t,
@@ -19,7 +20,8 @@ export function ErrorScreen({
 
   const handleListenError = () => {
     if (onSpeak) {
-      onSpeak(`${title}. ${desc}`, currentLang, 'error-guidance');
+      const guidance = getScreenVoiceInstructions('ERROR', currentLang, t);
+      onSpeak(`${title}. ${desc}. ${guidance}`, currentLang, 'error-guidance');
     }
   };
 
@@ -29,25 +31,26 @@ export function ErrorScreen({
         {/* Error Graphic */}
         <div
           style={{
-            width: '100px',
-            height: '100px',
-            borderRadius: '28px',
-            background: '#FEE2E2',
+            width: '84px',
+            height: '84px',
+            borderRadius: '24px',
+            background: 'var(--danger-surface)',
+            border: '2px solid var(--danger-border)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            margin: '0 auto 20px',
-            boxShadow: '0 8px 20px rgba(239, 68, 68, 0.2)'
+            margin: '0 auto 18px',
+            boxShadow: '0 8px 20px rgba(220, 38, 38, 0.15)'
           }}
         >
-          <AlertCircle size={56} color="#DC2626" />
+          <AlertCircle size={48} color="var(--danger-text)" />
         </div>
 
-        <h1 style={{ fontSize: '1.55rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '8px' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '8px' }}>
           {title}
         </h1>
 
-        <p style={{ fontSize: '0.98rem', color: 'var(--slate-600)', lineHeight: 1.5, marginBottom: '20px', maxWidth: '340px', marginInline: 'auto' }}>
+        <p style={{ fontSize: '0.96rem', color: 'var(--text-secondary)', lineHeight: 1.55, marginBottom: '20px', maxWidth: '340px', marginInline: 'auto' }}>
           {desc}
         </p>
 
@@ -55,9 +58,9 @@ export function ErrorScreen({
         {onSpeak && (
           <button
             type="button"
-            className={`btn-card-audio ${isSpeaking ? 'is-playing' : ''}`}
+            className={`btn-inline-speaker ${isSpeaking ? 'is-playing' : ''}`}
             onClick={handleListenError}
-            style={{ margin: '0 auto 28px', padding: '8px 18px', borderRadius: 'var(--radius-full)' }}
+            style={{ margin: '0 auto 24px', padding: '8px 18px' }}
           >
             <Volume2 size={16} />
             <span>{t.listenToThisPage || 'Listen'}</span>
@@ -70,7 +73,7 @@ export function ErrorScreen({
             <>
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn btn-primary-action"
                 onClick={onRetakePhoto}
                 id="btn-error-retake"
               >
@@ -91,7 +94,7 @@ export function ErrorScreen({
           ) : (
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn btn-primary-action"
               onClick={onTryAgain}
               id="btn-error-try-again"
             >
@@ -104,10 +107,11 @@ export function ErrorScreen({
             type="button"
             className="btn btn-secondary"
             onClick={onGoHome}
-            style={{ marginTop: '8px' }}
+            id="btn-error-go-home"
+            style={{ minHeight: '46px', fontSize: '0.92rem' }}
           >
-            <ArrowLeft size={18} />
-            <span>{t.btnGoHome}</span>
+            <Home size={18} />
+            <span>{t.btnGoHome || 'Go to home'}</span>
           </button>
         </div>
       </div>

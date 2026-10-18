@@ -85,10 +85,13 @@ const DOMAIN_MOCKS = {
       keyDetails: [
         { label: 'చెల్లించాల్సిన మొత్తం', value: '₹ 850', explanation: 'ఈ నెలకు చెల్లించవలసిన మొత్తం.', isUncertain: false, icon: 'currency' },
         { label: 'చివరి తేదీ', value: '25 అక్టోబర్ 2024', explanation: 'ఆలస్య రుసుము లేకుండా చెల్లించడానికి చివరి తేదీ.', isUncertain: false, icon: 'calendar' },
-        { label: 'వినియోగించిన యూనిట్లు', value: '142 యూనిట్లు', explanation: 'మీ మీటర్ రీడింగ్ ప్రకారం వాడిన యూనిట్లు.', isUncertain: false, icon: 'zap' }
+        { label: 'బిల్లింగ్ వ్యవధి', value: '01 సెప్టెంబర్ - 30 సెప్టెంబర్ (30 రోజులు)', explanation: 'ఒక నెల విద్యుత్ వినియోగ కాలం.', isUncertain: false, icon: 'clock' },
+        { label: 'వినియోగించిన యూనిట్లు', value: '142 యూనిట్లు', explanation: 'మీ మీటర్ రీడింగ్ ప్రకారం వాడిన యూనిట్లు.', isUncertain: false, icon: 'zap' },
+        { label: 'ఖాతా సంఖ్య (CA నంబర్)', value: '100492819', explanation: 'ఆన్‌లైన్ చెల్లింపుల కోసం మీ ప్రత్యేక నంబర్.', isUncertain: false, icon: 'hash' }
       ],
       warnings: [
-        { text: '25 అక్టోబర్ 2024 తర్వాత చెల్లిస్తే ₹50 ఆలస్య రుసుము విధించబడుతుంది.', severity: 'warning', isGeneralGuidance: false }
+        { text: '25 అక్టోబర్ 2024 తర్వాత చెల్లిస్తే ₹50 ఆలస్య రుసుము విధించబడుతుంది.', severity: 'warning', isGeneralGuidance: false },
+        { text: 'మీరు ఇప్పటికే UPI లేదా కార్డు ద్వారా చెల్లించినట్లయితే, దయచేసి రసీదు ఉంచుకోండి.', severity: 'info', isGeneralGuidance: true }
       ],
       uncertainFields: [],
       needsClearerPhoto: false,
@@ -96,26 +99,30 @@ const DOMAIN_MOCKS = {
       isMedicalOrPrescription: false,
       isSuspiciousMessage: false,
       suspiciousSignals: [],
-      fullSpokenText: 'ఇది మీ నెలవారీ కరెంట్ బిల్లు. మొత్తం చెల్లించాల్సిన మొత్తం ఎనిమిది వందల యాభై రూపాయలు. చెల్లించడానికి చివరి తేదీ ఇరవై ఐదు అక్టోబర్ రెండు వేల ఇరవై నాలుగు.',
+      fullSpokenText: 'నమస్కారం! ఇది మీ నెలవారీ కరెంట్ బిల్లు. మొత్తం చెల్లించాల్సిన మొత్తం ఎనిమిది వందల యాభై రూపాయలు. చెల్లించడానికి చివరి తేదీ ఇరవై ఐదు అక్టోబర్ రెండు వేల ఇరవై నాలుగు. ఆలస్య రుసుము పడకుండా సమయానికి చెల్లించండి.',
       glossary: [
-        { term: 'CA Number', meaning: 'వినియోగదారు ఖాతా సంఖ్య' }
+        { term: 'ఖాతా సంఖ్య (CA Number)', meaning: 'ఆన్‌లైన్ బిల్లు చెల్లించడానికి అవసరమైన వినియోగదారు ఖాతా సంఖ్య' },
+        { term: 'సర్ఛార్జ్ (ఆలస్య రుసుము)', meaning: 'గడువు తేదీ తర్వాత చెల్లిస్తే విధించే అదనపు జరిమానా' }
       ]
     },
-    gu: {
-      id: 'mock_bill_gu',
-      documentType: 'લાઈટ બિલ (Electricity Bill)',
-      documentTypeLocalized: 'લાઈટ બિલ',
-      language: 'gu',
-      languageName: 'ગુજરાતી',
-      simpleSummary: 'આ તમારા ઘરનું લાઈટ બિલ છે. આ મહિને તમે 142 યુનિટ વીજળી વાપરી છે.',
-      actionRequired: 'આ બિલની કુલ રકમ ₹ 850 છે, જે 25 ઑક્ટોબર 2024 સુધીમાં ભરવાની રહેશે.',
+    ta: {
+      id: 'mock_bill_ta',
+      documentType: 'மின் கட்டண பில் (Electricity Bill)',
+      documentTypeLocalized: 'மின் கட்டண பில்',
+      language: 'ta',
+      languageName: 'தமிழ்',
+      simpleSummary: 'இது உங்கள் மாதாந்திர மின் கட்டண பில் ஆகும். இந்த மாதம் நீங்கள் 142 யூனிட் மின்சாரம் பயன்படுத்தியுள்ளீர்கள்.',
+      actionRequired: 'செலுத்த வேண்டிய மொத்தத் தொகை ₹ 850 ஆகும். இதனை 25 அக்டோபர் 2024-க்குள் செலுத்த வேண்டும்.',
       keyDetails: [
-        { label: 'કુલ ભરવાની રકમ', value: '₹ 850', explanation: 'આ બિલની કુલ ભરવાપાત્ર રકમ.', isUncertain: false, icon: 'currency' },
-        { label: 'છેલ્લી તારીખ', value: '25 ઑક્ટોબર 2024', explanation: 'દંડ વગર ભરવાની છેલ્લી તારીખ.', isUncertain: false, icon: 'calendar' },
-        { label: 'વાપરેલા યુનિટ', value: '142 Units', explanation: 'મીટર મુજબ વપરાયેલ વીજળીના યુનિટ.', isUncertain: false, icon: 'zap' }
+        { label: 'செலுத்த வேண்டிய தொகை', value: '₹ 850', explanation: 'இந்த மாதத்திற்கான மொத்தக் கட்டணம்.', isUncertain: false, icon: 'currency' },
+        { label: 'கடைசி தேதி', value: '25 அக்டோபர் 2024', explanation: 'கூடுதல் கட்டணம் இன்றி செலுத்த கடைசி நாள்.', isUncertain: false, icon: 'calendar' },
+        { label: 'பில்லிங் காலம்', value: '01 செப் - 30 செப் (30 நாட்கள்)', explanation: 'ஒரு மாத மின் நுகர்வு காலம்.', isUncertain: false, icon: 'clock' },
+        { label: 'பயன்படுத்திய யூனிட்டுகள்', value: '142 Units', explanation: 'உங்கள் மீட்டரில் பதிவான மின் நுகர்வு.', isUncertain: false, icon: 'zap' },
+        { label: 'நுகர்வோர் கணக்கு எண் (CA எண்)', value: '100492819', explanation: 'ஆன்லைனில் பணம் செலுத்த உதவும் தனித்துவ எண்.', isUncertain: false, icon: 'hash' }
       ],
       warnings: [
-        { text: '25 ઑક્ટોબર 2024 પછી બિલ ભરવા પર ₹50 લેટ ફી લાગી શકે છે.', severity: 'warning', isGeneralGuidance: false }
+        { text: '25 அக்டோபர் 2024-க்குப் பிறகு செலுத்தினால் ₹50 அபராதக் கட்டணம் விதிக்கப்படலாம்.', severity: 'warning', isGeneralGuidance: false },
+        { text: 'நீங்கள் ஏற்கனவே UPI அல்லது வங்கி மூலம் செலுத்தியிருந்தால் இந்த ரசீதை பத்திரமாக வைத்திருக்கவும்.', severity: 'info', isGeneralGuidance: true }
       ],
       uncertainFields: [],
       needsClearerPhoto: false,
@@ -123,9 +130,10 @@ const DOMAIN_MOCKS = {
       isMedicalOrPrescription: false,
       isSuspiciousMessage: false,
       suspiciousSignals: [],
-      fullSpokenText: 'આ તમારું લાઈટ બિલ છે. કુલ ભરવાની રકમ આઠસો પચાસ રૂપિયા છે. બિલ ભરવાની છેલ્લી તારીખ પચ્ચીસ ઑક્ટોબર બે હજાર ચોવીસ છે.',
+      fullSpokenText: 'வணக்கம்! இது உங்கள் மாதாந்திர மின் கட்டண பில். நீங்கள் செலுத்த வேண்டிய மொத்தத் தொகை எட்டு நூற்று ஐம்பது ரூபாய். பணம் செலுத்த கடைசி தேதி இருபத்தி ஐந்து அக்டோபர் இரண்டு ஆயிரத்து இருபத்தி நான்கு. தாமதக் கட்டணத்தைத் தவிர்க்க குறித்த தேதிக்குள் செலுத்துங்கள்.',
       glossary: [
-        { term: 'CA Number', meaning: 'ગ્રાહક ખાતા નંબર' }
+        { term: 'நுகர்வோர் கணக்கு எண் (CA Number)', meaning: 'மின் கட்டணம் செலுத்தப் பயன்படும் நுகர்வோர் கணக்கு எண்' },
+        { term: 'தாமதக் கட்டணம் (Surcharge)', meaning: 'கடைசி தேதிக்குப் பிறகு செலுத்தினால் வசூலிக்கப்படும் அபராதத் தொகை' }
       ]
     }
   },
@@ -210,20 +218,21 @@ const DOMAIN_MOCKS = {
       fullSpokenText: 'ఇది వైద్య ప్రిస్క్రిప్షన్. మీ భద్రత కోసం, Samjhao మందుల వివరాలను వివరించదు. దయచేసి డాక్టర్‌ను సంప్రదించండి.',
       glossary: []
     },
-    gu: {
-      id: 'mock_rx_gu',
-      documentType: 'ડૉક્ટરનું પ્રિસ્ક્રિપ્શન (Medical Prescription)',
-      documentTypeLocalized: 'ડૉક્ટરનું પ્રિસ્ક્રિપ્શન',
-      language: 'gu',
-      languageName: 'ગુજરાતી',
-      simpleSummary: 'Samjhao તબીબી પ્રિસ્ક્રિપ્શનની સમજૂતી કે દવા સંબંધી સલાહ આપતું નથી.',
-      actionRequired: 'દવા અને માત્રા માટે કૃપા કરીને ડૉક્ટર અથવા ફાર્માસિસ્ટનો સંપર્ક કરો.',
+    ta: {
+      id: 'mock_rx_ta',
+      documentType: 'மருத்துவர் மருந்துச் சீட்டு (Medical Prescription)',
+      documentTypeLocalized: 'மருந்துச் சீட்டு',
+      language: 'ta',
+      languageName: 'தமிழ்',
+      simpleSummary: 'சம்ஜாவோ (Samjhao) மருந்துச் சீட்டுகளை விளக்குவதையோ அல்லது மருத்துவ ஆலோசனைகளையோ வழங்காது.',
+      actionRequired: 'உங்கள் மருந்துகள் மற்றும் சரியான அளவுக்கு தகுதியான மருத்துவர் அல்லது மருந்தாளரை நேரில் அணுகவும்.',
       keyDetails: [
-        { label: 'દસ્તાવેજ પ્રકાર', value: 'ડૉક્ટરનું પ્રિસ્ક્રિપ્શન', explanation: 'તબીબી ચિઠ્ઠી', isUncertain: false, icon: 'file' },
-        { label: 'સુરક્ષા નિયમ', value: 'સમજૂતી આપવી નિષેધ છે', explanation: 'સ્વાસ્થ્ય સુરક્ષા માટે', isUncertain: false, icon: 'alert' }
+        { label: 'ஆவண வகை', value: 'மருத்துவர் மருந்துச் சீட்டு', explanation: 'மருத்துவர் வழங்கிய சீட்டு', isUncertain: false, icon: 'file' },
+        { label: 'பாதுகாப்பு விதிமுறை', value: 'விளக்கம் அளிக்கப்படாது', explanation: 'உடல்நலப் பாதுகாப்பிற்காக', isUncertain: false, icon: 'alert' }
       ],
       warnings: [
-        { text: 'કમ્પ્યુટર અથવા AI ના આધારે કોઈ દવા ન લેશો.', severity: 'urgent', isGeneralGuidance: false }
+        { text: 'AI அல்லது கணினி விளக்கத்தின் அடிப்படையில் எந்த ஒரு மருந்தையும் உட்கொள்ளவோ மாற்றவோ கூடாது.', severity: 'urgent', isGeneralGuidance: false },
+        { text: 'இந்த அசல் மருந்துச் சீட்டுடன் அருகில் உள்ள மருந்தகம் அல்லது மருத்துவமனைக்குச் செல்லவும்.', severity: 'info', isGeneralGuidance: true }
       ],
       uncertainFields: [],
       needsClearerPhoto: false,
@@ -231,8 +240,10 @@ const DOMAIN_MOCKS = {
       isMedicalOrPrescription: true,
       isSuspiciousMessage: false,
       suspiciousSignals: [],
-      fullSpokenText: 'આ ડૉક્ટરનું પ્રિસ્ક્રિપ્શન છે. તમારી સુરક્ષા માટે Samjhao દવાઓની સલાહ આપતું નથી. કૃપા કરીને ડૉક્ટરને મળો.',
-      glossary: []
+      fullSpokenText: 'இது மருத்துவரின் மருந்துச் சீட்டு. உங்கள் பாதுகாப்பிற்காக சம்ஜாவோ மருந்து விவரங்களை விளக்குவதில்லை. தயவுசெய்து உங்கள் மருத்துவரை நேரில் அணுகவும்.',
+      glossary: [
+        { term: 'Prescription (Rx)', meaning: 'மருத்துவரால் பரிந்துரைக்கப்பட்ட மருத்துவ மருந்துச் சீட்டு' }
+      ]
     }
   },
 
@@ -327,19 +338,21 @@ const DOMAIN_MOCKS = {
       fullSpokenText: 'హెచ్చరిక! ఇది మోసపూరిత సందేశం. రాత్రి కరెంట్ నిలిపివేస్తామని నకిలీ బెదిరింపు. ఎవరికీ డబ్బులు పంపవద్దు.',
       glossary: []
     },
-    gu: {
-      id: 'mock_scam_gu',
-      documentType: 'શંકાસ્પદ ફ્રોડ મેસેજ (Scam Message)',
-      documentTypeLocalized: 'શંકાસ્પદ ફ્રોડ મેસેજ',
-      language: 'gu',
-      languageName: 'ગુજરાતી',
-      simpleSummary: 'આ વીજળી કાપવાની ખોટી ધમકી આપીને છેતરપિંડી કરવાનો ફ્રોડ મેસેજ છે.',
-      actionRequired: 'આપેલા નંબર પર કોલ ન કરો, કોઈ લિંક પર ક્લિક ન કરો અને કોઈને પૈસા ન આપો.',
+    ta: {
+      id: 'mock_scam_ta',
+      documentType: 'சந்தேகத்திற்குரிய மோசடி செய்தி (Fraud Alert)',
+      documentTypeLocalized: 'சந்தேகத்திற்குரிய மோசடி செய்தி',
+      language: 'ta',
+      languageName: 'தமிழ்',
+      simpleSummary: 'இது மின்சாரம் துண்டிக்கப்படும் என்று மிரட்டி பணம் பறிக்க முயலும் போலி மோசடிச் செய்தியாகும்.',
+      actionRequired: 'கொடுக்கப்பட்ட எண்ணிற்கு அழைக்க வேண்டாம், எந்த இணைப்பையும் திறக்க வேண்டாம், யாருக்கும் OTP சொல்ல வேண்டாம்.',
       keyDetails: [
-        { label: 'ચેતવણી', value: 'ખોટી ધમકી', explanation: 'રાત્રે વીજળી કાપવાનો દાવો', isUncertain: false, icon: 'alert' }
+        { label: 'கண்டறியப்பட்ட அச்சுறுத்தல்', value: 'போலி மிரட்டல்', explanation: 'இரவு மின்சாரம் துண்டிக்கப்படும் என்ற பொய்', isUncertain: false, icon: 'alert' },
+        { label: 'சந்தேகத்திற்கிடமான எண்', value: 'தனிநபர் மொபைல் எண்', explanation: 'மின் வாரியம் தனிநபர் எண்களிலிருந்து செய்தி அனுப்பாது', isUncertain: false, icon: 'hash' }
       ],
       warnings: [
-        { text: 'વીજળી કાપવાની ઉતાવળી ધમકી આપવી એ છેતરપિંડીની સામાન્ય રીત છે.', severity: 'urgent', isGeneralGuidance: false }
+        { text: 'உடனடியாக பணம் செலுத்தாவிட்டால் மின்சாரம் துண்டிக்கப்படும் என்று மிரட்டுவது வழக்கமான பண மோசடி முறையாகும்.', severity: 'urgent', isGeneralGuidance: false },
+        { text: 'எப்போதும் மின் வாரியத்தின் அதிகாரப்பூர்வ அலுவலகம் அல்லது இணையதளத்தில் மட்டுமே பணம் செலுத்தவும்.', severity: 'info', isGeneralGuidance: true }
       ],
       uncertainFields: [],
       needsClearerPhoto: false,
@@ -347,11 +360,14 @@ const DOMAIN_MOCKS = {
       isMedicalOrPrescription: false,
       isSuspiciousMessage: true,
       suspiciousSignals: [
-        'રાત્રે વીજળી કાપવાની નકલી ધમકી.',
-        'અજાણ્યા મોબાઈલ નંબર પર કોલ કરવાનું દબાણ.'
+        'இன்றிரவு உடனடியாக மின்சாரம் துண்டிக்கப்படும் என்ற அவசர மிரட்டல்.',
+        'அறியப்படாத 10 இலக்க தனிநபர் மொபைல் எண்ணை அழைக்கும்படி வற்புறுத்துதல்.',
+        'சரிபார்க்கப்படாத இணைப்பில் பணம் அனுப்பும்படி தூண்டுதல்.'
       ],
-      fullSpokenText: 'સાવધાન! આ છેતરપિંડી વાળો નકલી મેસેજ છે. કોઈ નંબર પર કોલ ન કરશો અને પૈસા ન ચૂકવશો.',
-      glossary: []
+      fullSpokenText: 'எச்சரிக்கை! இது ஒரு போலி மோசடிச் செய்தி. இன்றிரவு மின்சாரம் துண்டிக்கப்படும் என்ற போலி மிரட்டல் விடுக்கப்பட்டுள்ளது. எந்த எண்ணிற்கும் அழைக்காதீர்கள் மற்றும் பணம் அனுப்பாதீர்கள்.',
+      glossary: [
+        { term: 'Fraud SMS', meaning: 'பணம் திருடும் நோக்கில் அனுப்பப்படும் போலி மோசடிச் செய்தி' }
+      ]
     }
   }
 };
@@ -391,10 +407,101 @@ CRITICAL SAFETY & RELIABILITY RULES:
      - English: "Hello! Here is a simple explanation of your document."
      - Hindi: "नमस्ते! यह आपके दस्तावेज़ की सरल जानकारी है।"
      - Telugu: "నమస్కారం! ఇది మీ పత్రం యొక్క ముఖ్యమైన వివరాలు."
-     - Gujarati: "નમસ્તે! આ તમારા દસ્તાવેજની સરળ માહિતી છે."
+     - Tamil: "வணக்கம்! இது உங்கள் ஆவணத்தின் எளிய விளக்கம்."
    - Pronounceable Numbers: ALWAYS spell out numbers and currencies as natural spoken words (e.g. write "eight hundred and fifty rupees" instead of "₹850.00", write "twenty-fifth of October" instead of "25/10/2024").
    - Zero Symbol Clutter: Never use symbols like ₹, /, %, @, (), brackets, or dashes in fullSpokenText so the speech engine sounds completely human and never reads "slash" or "bracket open".
-   - Clear Action: Reassure the elder about what it is, whether they need to pay or not, and what to do next.`;
+   - Clear Action: Reassure the elder about what it is, whether they need to pay or not, and what to do next.
+
+7. ZERO ENGLISH RESIDUE IN REGIONAL LANGUAGES (Telugu, Tamil, Hindi):
+   - When the requested language is Telugu ('te') or Tamil ('ta') or Hindi ('hi'):
+     * NEVER output English labels in "keyDetails" (e.g. for Telugu write 'చెల్లించాల్సిన మొత్తం', 'చివరి తేదీ', 'వినియోగించిన యూనిట్లు'; for Tamil write 'செலுத்த வேண்டிய தொகை', 'கடைசி தேதி', 'பயன்படுத்திய யூனிட்டுகள்').
+     * Translate every word in "documentTypeLocalized", "simpleSummary", "actionRequired", "explanation", "warnings", and "glossary" into the target native script.
+     * Do NOT leave document headings in English even if the printed bill is in English.`;
+
+/**
+ * Normalization dictionary to translate common English labels to native regional languages
+ * guarantees that even if the AI model leaves an English label, it gets translated.
+ */
+const LABEL_TRANSLATIONS = {
+  te: {
+    'total due amount': 'చెల్లించాల్సిన మొత్తం',
+    'total amount': 'చెల్లించాల్సిన మొత్తం',
+    'total due': 'చెల్లించాల్సిన మొత్తం',
+    'amount due': 'చెల్లించాల్సిన మొత్తం',
+    'amount payable': 'చెల్లించాల్సిన మొత్తం',
+    'bill amount': 'బిల్లు మొత్తం',
+    'payment due date': 'చివరి తేదీ',
+    'due date': 'చివరి తేదీ',
+    'last date': 'చివరి తేదీ',
+    'billing period': 'బిల్లింగ్ వ్యవధి',
+    'bill period': 'బిల్లింగ్ కాలం',
+    'units consumed': 'వినియోగించిన యూనిట్లు',
+    'power consumed': 'వాడిన విద్యుత్',
+    'consumer account': 'ఖాతా సంఖ్య (CA నంబర్)',
+    'consumer account (ca)': 'ఖాతా సంఖ్య (CA నంబర్)',
+    'account number': 'ఖాతా సంఖ్య',
+    'consumer name': 'వినియోగదారు పేరు',
+    'name': 'పేరు',
+    'meter number': 'మీటర్ నంబర్',
+    'bill number': 'బిల్లు సంఖ్య',
+    'threat detected': 'గుర్తించబడిన హెచ్చరిక',
+    'suspicious contact': 'అనుమానాస్పద నంబర్',
+    'document category': 'పత్రం రకం',
+    'safety protocol': 'భద్రతా నిబంధన'
+  },
+  ta: {
+    'total due amount': 'செலுத்த வேண்டிய தொகை',
+    'total amount': 'செலுத்த வேண்டிய தொகை',
+    'total due': 'செலுத்த வேண்டிய தொகை',
+    'amount due': 'செலுத்த வேண்டிய தொகை',
+    'amount payable': 'செலுத்த வேண்டிய தொகை',
+    'bill amount': 'மின்கட்டணத் தொகை',
+    'payment due date': 'கடைசி தேதி',
+    'due date': 'கடைசி தேதி',
+    'last date': 'கடைசி தேதி',
+    'billing period': 'பில்லிங் காலம்',
+    'bill period': 'பில்லிங் காலம்',
+    'units consumed': 'பயன்படுத்திய யூனிட்டுகள்',
+    'power consumed': 'பயன்படுத்திய மின்சாரம்',
+    'consumer account': 'நுகர்வோர் கணக்கு எண் (CA எண்)',
+    'consumer account (ca)': 'நுகர்வோர் கணக்கு எண் (CA எண்)',
+    'account number': 'கணக்கு எண்',
+    'consumer name': 'நுகர்வோர் பெயர்',
+    'name': 'பெயர்',
+    'meter number': 'மீட்டர் எண்',
+    'bill number': 'பில் எண்',
+    'threat detected': 'கண்டறியப்பட்ட எச்சரிக்கை',
+    'suspicious contact': 'சந்தேகத்திற்கிடமான எண்',
+    'document category': 'ஆவண வகை',
+    'safety protocol': 'பாதுகாப்பு விதிமுறை'
+  },
+  hi: {
+    'total due amount': 'कुल देय राशि',
+    'total amount': 'कुल राशि',
+    'total due': 'कुल देय राशि',
+    'amount due': 'देय राशि',
+    'amount payable': 'कुल भुगतान राशि',
+    'bill amount': 'बिल की राशि',
+    'payment due date': 'भुगतान की अंतिम तिथि',
+    'due date': 'अंतिम तिथि',
+    'last date': 'अंतिम तिथि',
+    'billing period': 'बिलिंग अवधि',
+    'bill period': 'बिलिंग समय',
+    'units consumed': 'उपभोग की गई यूनिट',
+    'power consumed': 'खर्च हुई बिजली',
+    'consumer account': 'उपभोक्ता संख्या (CA Number)',
+    'consumer account (ca)': 'उपभोक्ता संख्या (CA Number)',
+    'account number': 'खाता संख्या',
+    'consumer name': 'उपभोक्ता का नाम',
+    'name': 'नाम',
+    'meter number': 'मीटर संख्या',
+    'bill number': 'बिल संख्या',
+    'threat detected': 'धमकी का प्रकार',
+    'suspicious contact': 'संदेहास्पद नंबर',
+    'document category': 'दस्तावेज़ प्रकार',
+    'safety protocol': 'सुरक्षा नियम'
+  }
+};
 
 /**
  * Determine offline document category based on filename or metadata
@@ -415,13 +522,13 @@ function detectMockCategory(fileName = '') {
  * @param {Object} params
  * @param {Buffer} [params.fileBuffer] - In-memory image buffer
  * @param {string} [params.mimeType] - Mime type of the image
- * @param {string} [params.language] - Target language code ('en', 'hi', 'te', 'gu')
+ * @param {string} [params.language] - Target language code ('en', 'hi', 'te', 'ta')
  * @param {string} [params.fileName] - Original file name for fallback hints
  * @returns {Promise<Object>} Validated structured result
  */
 export async function explainDocument({ fileBuffer, mimeType, language = 'en', fileName = '' }) {
   const apiKey = process.env.GEMINI_API_KEY;
-  const langKey = ['en', 'hi', 'te', 'gu'].includes(language) ? language : 'en';
+  const langKey = ['en', 'hi', 'te', 'ta'].includes(language) ? language : 'en';
 
   // Offline mock mode when API key is missing
   if (!apiKey || apiKey.trim() === '') {
@@ -441,6 +548,14 @@ export async function explainDocument({ fileBuffer, mimeType, language = 'en', f
   ];
   let lastError = null;
 
+  const targetLangDescriptor = langKey === 'hi' 
+    ? 'Hindi (हिन्दी)' 
+    : langKey === 'te' 
+    ? 'Telugu (తెలుగు)' 
+    : langKey === 'ta' 
+    ? 'Tamil (தமிழ்)' 
+    : 'English';
+
   for (const modelName of CANDIDATE_MODELS) {
     try {
       console.log(`🤖 [Samjhao] Analyzing document with model "${modelName}" in language "${langKey}"...`);
@@ -454,20 +569,25 @@ export async function explainDocument({ fileBuffer, mimeType, language = 'en', f
         }
       });
 
-      const prompt = `Analyze this document image carefully. Explain it simply and clearly in ${langKey === 'hi' ? 'Hindi (हिन्दी)' : langKey === 'te' ? 'Telugu' : langKey === 'gu' ? 'Gujarati' : 'English'}.
+      const prompt = `Analyze this document image carefully. Explain it simply, warmly, and clearly for everyday families and elders in ${targetLangDescriptor}.
+CRITICAL LANGUAGE RULES:
+1. Every label in "keyDetails" MUST be written in ${targetLangDescriptor} (NOT in English).
+2. "simpleSummary", "actionRequired", "documentTypeLocalized", "warnings", and "glossary" must be 100% in ${targetLangDescriptor}.
+3. "fullSpokenText" must be spoken naturally and warmly in ${targetLangDescriptor} with spelled-out amounts and dates.
+
 Return a JSON object adhering to this schema:
 {
   "documentType": string,
   "documentTypeLocalized": string,
   "language": "${langKey}",
-  "languageName": string,
-  "simpleSummary": string (2-3 simple sentences for elders/families),
-  "actionRequired": string (what to do next, e.g. amount to pay, due date, or no action),
+  "languageName": "${langKey === 'hi' ? 'हिन्दी' : langKey === 'te' ? 'తెలుగు' : langKey === 'ta' ? 'தமிழ்' : 'English'}",
+  "simpleSummary": string (2-3 simple sentences in ${targetLangDescriptor}),
+  "actionRequired": string (clear instruction in ${targetLangDescriptor}),
   "keyDetails": [
     {
-      "label": string,
+      "label": string (in ${targetLangDescriptor}),
       "value": string,
-      "explanation": string,
+      "explanation": string (in ${targetLangDescriptor}),
       "isUncertain": boolean,
       "uncertaintyReason": string or null,
       "icon": "currency" | "calendar" | "clock" | "zap" | "hash" | "file" | "alert" | "info"
@@ -475,7 +595,7 @@ Return a JSON object adhering to this schema:
   ],
   "warnings": [
     {
-      "text": string,
+      "text": string (in ${targetLangDescriptor}),
       "severity": "urgent" | "warning" | "info",
       "isGeneralGuidance": boolean
     }
@@ -486,7 +606,7 @@ Return a JSON object adhering to this schema:
   "isMedicalOrPrescription": boolean,
   "isSuspiciousMessage": boolean,
   "suspiciousSignals": string[],
-  "fullSpokenText": string (a natural, warm text designed to be read aloud via Text-to-Speech),
+  "fullSpokenText": string (natural warm spoken text in ${targetLangDescriptor}),
   "glossary": [
     { "term": string, "meaning": string }
   ]
@@ -502,6 +622,18 @@ Return a JSON object adhering to this schema:
       const response = await model.generateContent([prompt, imagePart]);
       const rawText = response.response.text();
       const parsed = JSON.parse(rawText);
+
+      // Post-process labels: if model left English labels for te/gu/hi, translate them
+      if (LABEL_TRANSLATIONS[langKey] && Array.isArray(parsed.keyDetails)) {
+        parsed.keyDetails.forEach(item => {
+          if (item && item.label) {
+            const cleanKey = item.label.trim().toLowerCase();
+            if (LABEL_TRANSLATIONS[langKey][cleanKey]) {
+              item.label = LABEL_TRANSLATIONS[langKey][cleanKey];
+            }
+          }
+        });
+      }
 
       console.log(`✅ [Samjhao] Document analyzed successfully with "${modelName}".`);
       return validateAndNormalizeResult(parsed, langKey);

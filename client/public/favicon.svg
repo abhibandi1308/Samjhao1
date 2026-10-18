@@ -1,8 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
-  <rect width="48" height="48" rx="12" fill="#2563EB"/>
-  <path d="M14 12C14 10.8954 14.8954 10 16 10H26L34 18V36C34 37.1046 33.1046 38 32 38H16C14.8954 38 14 37.1046 14 36V12Z" fill="white"/>
-  <path d="M26 10V18H34" fill="#DBEAFE"/>
-  <path d="M19 24H29M19 28H27M19 32H24" stroke="#2563EB" stroke-width="2" stroke-linecap="round"/>
-  <circle cx="33" cy="33" r="6" fill="#F59E0B"/>
-  <path d="M33 30V34M31 32H35" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="samjhao-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#17324D" />
+      <stop offset="100%" stopColor="#0B1A28" />
+    </linearGradient>
+    <linearGradient id="samjhao-sheet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#FFFFFF" />
+      <stop offset="100%" stopColor="#E2E8F0" />
+    </linearGradient>
+    <linearGradient id="samjhao-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#10B981" />
+      <stop offset="100%" stopColor="#059669" />
+    </linearGradient>
+    <linearGradient id="samjhao-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#38BDF8" />
+      <stop offset="100%" stopColor="#2563EB" />
+    </linearGradient>
+  </defs>
+
+  <rect width="48" height="48" rx="12" fill="url(#samjhao-bg)" />
+  <rect x="0.75" y="0.75" width="46.5" height="46.5" rx="11.25" stroke="#334E68" strokeWidth="1.5" />
+
+  <path
+    d="M13 11C13 9.89543 13.8954 9 15 9H26.5L34 16.5V37C34 38.1046 33.1046 39 32 39H15C13.8954 39 13 38.1046 13 37V11Z"
+    fill="url(#samjhao-sheet)"
+  />
+
+  <path
+    d="M26.5 9V16.5H34"
+    fill="url(#samjhao-emerald)"
+  />
+
+  <rect x="17" y="15" width="6" height="2" rx="1" fill="#94A3B8" />
+  <rect x="17" y="20" width="13" height="2" rx="1" fill="#94A3B8" />
+
+  <path
+    d="M18 29.5C19.8 27.5 22.8 26.5 25.5 27.2"
+    stroke="url(#samjhao-cyan)"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+  />
+  <path
+    d="M17 33.5C21.2 30.5 26.5 29.8 30.5 32"
+    stroke="url(#samjhao-cyan)"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+  />
+
+  <circle cx="17.5" cy="25.5" r="2.25" fill="#F59E0B" />
+  <path d="M17.5 23.5V27.5M15.5 25.5H19.5" stroke="#FFFFFF" strokeWidth="1" strokeLinecap="round" />
 </svg>

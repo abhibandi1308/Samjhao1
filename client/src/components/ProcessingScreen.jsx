@@ -1,61 +1,66 @@
 import React from 'react';
-import { FileText, Clock, Sparkles } from 'lucide-react';
+import { CheckCircle2, Lock, Volume2 } from 'lucide-react';
+import { getScreenVoiceInstructions } from '../voiceGuideConfig.js';
 
-export function ProcessingScreen({ t }) {
+export function ProcessingScreen({ t, currentLang = 'en', onSpeak = null, isSpeaking = false }) {
+  const handleListenProcessing = () => {
+    if (onSpeak) {
+      const textToSpeak = getScreenVoiceInstructions('PROCESSING', currentLang, t);
+      onSpeak(textToSpeak, currentLang, 'processing-guidance');
+    }
+  };
+
   return (
     <div className="main-content" style={{ justifyContent: 'center' }}>
       <div className="processing-card">
-        {/* Animated Document Graphic matching Screen 6 */}
-        <div className="processing-graphic">
-          <div className="pulse-ring"></div>
-          <div
-            style={{
-              width: '80px',
-              height: '80px',
-              borderRadius: '20px',
-              background: 'var(--primary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              boxShadow: '0 8px 24px rgba(37, 99, 235, 0.3)',
-              position: 'relative',
-              zIndex: 2
-            }}
+        {/* Subtle Rotating Progress Spinner */}
+        <div className="processing-spinner" aria-hidden="true"></div>
+
+        <h1 className="processing-title">
+          {t.processingTitle || 'Reading your document...'}
+        </h1>
+        <p className="processing-sub">
+          {t.processingSubtitle || 'Please wait a few seconds.'}
+        </p>
+
+        {onSpeak && (
+          <button
+            type="button"
+            className={`btn-inline-speaker ${isSpeaking ? 'is-playing' : ''}`}
+            onClick={handleListenProcessing}
+            style={{ margin: '0 auto 16px', padding: '6px 16px' }}
+            aria-label="Listen to processing status"
+            id="btn-processing-audio"
           >
-            <FileText size={42} strokeWidth={2.2} />
-            <Sparkles
-              size={22}
-              color="#FBBF24"
-              style={{ position: 'absolute', top: '-6px', right: '-6px' }}
-            />
+            <Volume2 size={16} />
+            <span>{t.listenToThisPage || 'Listen'}</span>
+          </button>
+        )}
+
+        {/* 3 Step Sequence Checklist with Checkmarks matching Screen 4 */}
+        <div className="processing-steps-list">
+          <div className="processing-step-row">
+            <CheckCircle2 size={18} color="var(--primary-green)" strokeWidth={2.5} />
+            <span>{t.processingStep1 || 'Extracting text from photo'}</span>
+          </div>
+
+          <div className="processing-step-row">
+            <CheckCircle2 size={18} color="var(--primary-green)" strokeWidth={2.5} />
+            <span>{t.processingStep2 || 'Understanding the content'}</span>
+          </div>
+
+          <div className="processing-step-row">
+            <CheckCircle2 size={18} color="var(--primary-green)" strokeWidth={2.5} />
+            <span>{t.processingStep3 || 'Preparing simple explanation'}</span>
           </div>
         </div>
 
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '8px' }}>
-          {t.processingTitle}
-        </h1>
-        <p style={{ fontSize: '0.98rem', color: 'var(--slate-600)', maxWidth: '340px', lineHeight: 1.5 }}>
-          {t.processingSubtitle}
-        </p>
-
-        {/* Indeterminate Loading Progress Bar */}
-        <div className="progress-bar-container">
-          <div className="progress-bar-fill"></div>
-        </div>
-
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            fontSize: '0.88rem',
-            color: 'var(--slate-500)',
-            marginTop: '8px'
-          }}
-        >
-          <Clock size={16} />
-          <span>{t.processingWaitNote}</span>
+        {/* Privacy Statement / Zero Storage Promise */}
+        <div className="processing-trust-badge">
+          <Lock size={18} color="#2563EB" style={{ flexShrink: 0 }} />
+          <span>
+            {t.privacyPromise || 'Your photo is deleted after processing. We do not store your images.'}
+          </span>
         </div>
       </div>
     </div>

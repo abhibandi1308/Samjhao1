@@ -61,8 +61,34 @@ app.get('/api/languages', (req, res) => {
   });
 });
 
+// Helper function to split long text into natural sentence chunks (max 180 chars for TTS URL limits)
+function splitTtsChunks(text, maxLen = 180) {
+  const parts = text.split(/(?<=[.!?।,\n])\s+/);
+  const chunks = [];
+  let current = '';
+
+  for (const part of parts) {
+    if (!part.trim()) continue;
+    if ((current + ' ' + part).trim().length <= maxLen) {
+      current = (current + ' ' + part).trim();
+    } else {
+      if (current) chunks.push(current);
+      if (part.length <= maxLen) {
+        current = part;
+      } else {
+        for (let i = 0; i < part.length; i += maxLen) {
+          chunks.push(part.slice(i, i + maxLen));
+        }
+        current = '';
+      }
+    }
+  }
+  if (current) chunks.push(current);
+  return chunks.length > 0 ? chunks : [text.slice(0, maxLen)];
+}
+
 // High-Fidelity Text-to-Speech Endpoint for Indian Languages
-// Provides native Telugu, Gujarati, Hindi, and English audio for elders
+// Supports optional ElevenLabs Multilingual v2 with zero-config fallback to Google Native Regional TTS
 app.get('/api/tts', async (req, res) => {
   try {
     const text = String(req.query.text || '').trim();
@@ -72,34 +98,70 @@ app.get('/api/tts', async (req, res) => {
       return res.status(400).json({ error: 'Text query parameter is required.' });
     }
 
+    // 1. Optional ElevenLabs Voice Engine (Free tier: 10,000 chars/month, hyper-realistic accents)
+    if (process.env.ELEVENLABS_API_KEY && process.env.ELEVENLABS_API_KEY.trim() !== '') {
+      try {
+        const voiceId = process.env.ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL'; // Sarah - warm, clear voice
+        const elRes = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+          method: 'POST',
+          headers: {
+            'xi-api-key': process.env.ELEVENLABS_API_KEY.trim(),
+            'Content-Type': 'application/json',
+            'Accept': 'audio/mpeg'
+          },
+          body: JSON.stringify({
+            text: text.slice(0, 1500),
+            model_id: 'eleven_multilingual_v2',
+            voice_settings: {
+              stability: 0.5,
+              similarity_boost: 0.75
+            }
+          })
+        });
+
+        if (elRes.ok) {
+          const buffer = Buffer.from(await elRes.arrayBuffer());
+          res.setHeader('Content-Type', 'audio/mpeg');
+          res.setHeader('Cache-Control', 'public, max-age=86400');
+          return res.send(buffer);
+        } else {
+          console.warn(`⚠️ [Samjhao] ElevenLabs TTS returned ${elRes.status}. Falling back to Google native regional engine.`);
+        }
+      } catch (elErr) {
+        console.warn(`⚠️ [Samjhao] ElevenLabs error: ${elErr.message}. Falling back to Google native regional engine.`);
+      }
+    }
+
+    // 2. High-Fidelity Google Native Regional TTS (Telugu, Tamil, Hindi, English)
     let tl = 'en';
     if (lang === 'hi') tl = 'hi';
     else if (lang === 'te') tl = 'te';
-    else if (lang === 'gu') tl = 'gu';
+    else if (lang === 'ta') tl = 'ta';
     else if (lang === 'bn') tl = 'bn';
     else if (lang === 'mr') tl = 'mr';
 
-    // Google Translate TTS supports up to ~200 characters per single call
-    const cleanText = text.slice(0, 250);
-    const encoded = encodeURIComponent(cleanText);
-    const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=${tl}&client=tw-ob`;
+    const chunks = splitTtsChunks(text, 180);
 
-    const response = await fetch(ttsUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+    const buffers = await Promise.all(chunks.map(async (chunk) => {
+      const encoded = encodeURIComponent(chunk);
+      const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=${tl}&client=tw-ob`;
+      const response = await fetch(ttsUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`TTS provider returned status ${response.status}`);
       }
-    });
+      return Buffer.from(await response.arrayBuffer());
+    }));
 
-    if (!response.ok) {
-      throw new Error(`TTS provider returned status ${response.status}`);
-    }
-
+    const combinedBuffer = Buffer.concat(buffers);
     res.setHeader('Content-Type', 'audio/mpeg');
     res.setHeader('Cache-Control', 'public, max-age=86400');
-    const buffer = Buffer.from(await response.arrayBuffer());
-    res.send(buffer);
+    res.send(combinedBuffer);
   } catch (err) {
-    console.warn('⚠️ [Samjhao] TTS audio note:', err.message);
+    console.warn('⚠️ [Samjhao] TTS audio error:', err.message);
     res.status(502).json({ error: 'TTS audio service temporarily unavailable.' });
   }
 });

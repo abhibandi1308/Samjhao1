@@ -25,9 +25,9 @@ function sanitizeForSpeech(text, lang = 'en') {
   } else if (lang === 'te') {
     cleaned = cleaned.replace(/₹\s*([0-9,]+)/g, '$1 రూపాయలు');
     cleaned = cleaned.replace(/\bRs\.?\s*([0-9,]+)/gi, '$1 రూపాయలు');
-  } else if (lang === 'gu') {
-    cleaned = cleaned.replace(/₹\s*([0-9,]+)/g, '$1 રૂપિયા');
-    cleaned = cleaned.replace(/\bRs\.?\s*([0-9,]+)/gi, '$1 રૂપિયા');
+  } else if (lang === 'ta') {
+    cleaned = cleaned.replace(/₹\s*([0-9,]+)/g, '$1 ரூபாய்');
+    cleaned = cleaned.replace(/\bRs\.?\s*([0-9,]+)/gi, '$1 ரூபாய்');
   } else {
     cleaned = cleaned.replace(/₹\s*([0-9,]+)/g, '$1 rupees');
     cleaned = cleaned.replace(/\bRs\.?\s*([0-9,]+)/gi, '$1 rupees');
@@ -55,7 +55,7 @@ function sanitizeForSpeech(text, lang = 'en') {
 /**
  * Universal Speech Hook:
  * Combines Browser Web Speech API with fallback high-fidelity regional audio streaming (/api/tts)
- * Ensures 100% flawless speech in Telugu, Gujarati, Hindi, and English even if the user's OS lacks native voices.
+ * Ensures 100% flawless speech in Telugu, Tamil, Hindi, and English even if the user's OS lacks native voices.
  */
 export function useSpeech(defaultLang = 'hi') {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -104,7 +104,7 @@ export function useSpeech(defaultLang = 'hi') {
     switch (lang) {
       case 'hi': return 'hi-IN';
       case 'te': return 'te-IN';
-      case 'gu': return 'gu-IN';
+      case 'ta': return 'ta-IN';
       case 'bn': return 'bn-IN';
       case 'mr': return 'mr-IN';
       case 'en': return 'en-IN';
@@ -126,7 +126,7 @@ export function useSpeech(defaultLang = 'hi') {
     const keywords = {
       hi: ['hindi', 'हिन्दी', 'kalpana', 'hemant'],
       te: ['telugu', 'తెలుగు', 'chitra', 'mohan'],
-      gu: ['gujarati', 'ગુજરાતી', 'dhwani', 'niranjan'],
+      ta: ['tamil', 'தமிழ்', 'valluvar', 'pallavi'],
       en: ['india', 'indian', 'en-in', 'zira', 'david']
     };
 
@@ -138,7 +138,7 @@ export function useSpeech(defaultLang = 'hi') {
     });
     if (matched) return matched;
 
-    // 3. Prefix match (e.g. starts with 'hi', 'te', 'gu')
+    // 3. Prefix match (e.g. starts with 'hi', 'te', 'ta')
     matched = availableVoices.find(v => v.lang.toLowerCase().startsWith(targetPrefix));
     if (matched) return matched;
 
@@ -198,12 +198,12 @@ export function useSpeech(defaultLang = 'hi') {
     const langCode = getLangCode(lang);
     const matchedVoice = findBestVoice(langCode, lang);
 
-    // If device lacks native voice for this language (common for Telugu/Gujarati on desktop Windows),
-    // stream native high-fidelity audio directly from our backend TTS engine
-    const shouldUseBackendTTS = !matchedVoice && ['te', 'gu', 'bn', 'mr'].includes(lang);
+    // If language is Telugu, Tamil, Bengali, Marathi, or device lacks a matching voice,
+    // stream native high-fidelity audio directly from our backend regional TTS engine (or ElevenLabs if configured)
+    const shouldUseBackendTTS = ['te', 'ta', 'bn', 'mr'].includes(lang) || (!matchedVoice);
 
     if (shouldUseBackendTTS) {
-      const audioUrl = `/api/tts?text=${encodeURIComponent(sanitized.slice(0, 300))}&lang=${lang}`;
+      const audioUrl = `/api/tts?text=${encodeURIComponent(sanitized.slice(0, 1500))}&lang=${lang}`;
       const audio = new Audio(audioUrl);
       audio.playbackRate = playbackRate;
       currentAudioRef.current = audio;

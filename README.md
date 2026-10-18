@@ -26,7 +26,7 @@ Many cannot read fine print or understand technical English. Existing AI tools o
 
 ### 🌟 Key Highlights
 
-1. **Native Spoken Audio (Read-Aloud)**: Uses the browser's native Web Speech API to read the entire explanation or individual cards aloud in **Hindi (हिन्दी)**, **Telugu (తెలుగు)**, **Gujarati (ગુજરાતી)**, or **English**, with a **0.8x slower playback speed** designed for elders.
+1. **Native Spoken Audio (Read-Aloud)**: Uses the browser's native Web Speech API to read the entire explanation or individual cards aloud in **Hindi (हिन्दी)**, **Telugu (తెలుగు)**, **Tamil (தமிழ்)**, or **English**, with a **0.8x slower playback speed** designed for elders.
 2. **Prominent Key Information Cards**: Instant visibility on the three things that matter most:
    - **Total Due Amount** (e.g. ₹ 850)
    - **Payment Due Date** (e.3. **Action-First Summaries**: Clear answer to *"What should I do?"* (e.g., *"Pay ₹850 before 25 October to avoid ₹50 late fee. If already paid via UPI, keep receipt."*).
@@ -165,7 +165,7 @@ npm test
 
 ### Test Coverage Highlights:
 - **`server/test/api.test.js`**:
-  - Supported languages validation (Hindi, English, Telugu, Gujarati)
+  - Supported languages validation (Hindi, English, Telugu, Tamil)
   - Normalized schema contract enforcement
   - Medical prescription refusal safety guardrail
   - Blurry image fallback generation

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Camera, HelpCircle, ArrowRight, Volume2, Sparkles, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { Camera, Volume2, HelpCircle, FileText, Pill, MessageSquare } from 'lucide-react';
 import welcomeImg from '../assets/welcome_illustration.jpg';
+import { getScreenVoiceInstructions } from '../voiceGuideConfig.js';
 
 export function WelcomeScreen({
   t,
@@ -12,223 +13,124 @@ export function WelcomeScreen({
   isSpeaking
 }) {
   const handleListenWelcome = () => {
-    const textToSpeak = `${t.welcomeTitle}. ${t.welcomeSubtitle}. ${t.btnUnderstandDoc}: ${t.btnUnderstandDocSub || ''}.`;
+    const textToSpeak = getScreenVoiceInstructions('WELCOME', currentLang, t);
     onSpeak(textToSpeak, currentLang, 'welcome-summary');
   };
 
   return (
     <div className="main-content">
       <div className="welcome-hero">
-        {/* Friendly Grandparents Illustration */}
+        {/* Modest Warm Illustration of Elderly Couple */}
         <div className="welcome-avatar-wrap">
           <img 
             src={welcomeImg} 
-            alt="Samjhao friendly illustration" 
+            alt="Samjhao welcome illustration" 
             style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
           />
         </div>
 
+        {/* Clear Main Heading */}
         <h1 className="welcome-title">{t.welcomeTitle}</h1>
         <p className="welcome-subtitle">{t.welcomeSubtitle}</p>
 
-        {/* Prominent Voice Guidance Button for Illiterate & Elderly Users */}
+        {/* Audio Button for Spoken Explanation */}
         <button
           type="button"
-          className={`btn-card-audio ${isSpeaking ? 'is-playing' : ''}`}
+          className={`btn-inline-speaker ${isSpeaking ? 'is-playing' : ''}`}
           onClick={handleListenWelcome}
           style={{
-            padding: '10px 22px',
-            fontSize: '1rem',
-            minHeight: '46px',
-            marginBottom: '24px',
-            borderRadius: 'var(--radius-full)'
+            padding: '8px 20px',
+            fontSize: '0.94rem',
+            minHeight: '42px',
+            marginBottom: '24px'
           }}
           aria-label="Listen out loud to welcome message"
           id="welcome-audio-btn"
         >
-          <Volume2 size={20} />
+          <Volume2 size={18} />
           <span>{t.listenToThisPage}</span>
         </button>
 
-        {/* Primary Action Buttons Matching Screen 2 */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', width: '100%', maxWidth: '400px', marginBottom: '28px' }}>
-          {/* Big Green Primary Button: Take photo of paper */}
-          <button
-            type="button"
-            className="btn btn-success"
-            onClick={onStart}
-            id="start-understand-btn"
-            style={{
-              minHeight: '64px',
-              fontSize: '1.2rem',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '12px 20px',
-              borderRadius: 'var(--radius-md)',
-              boxShadow: '0 6px 18px rgba(5, 150, 105, 0.25)'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 800 }}>
-              <Camera size={26} strokeWidth={2.4} />
-              <span>{t.btnUnderstandDoc}</span>
-            </div>
-            {t.btnUnderstandDocSub && (
-              <span style={{ fontSize: '0.85rem', fontWeight: 500, opacity: 0.9, marginTop: '2px' }}>
-                {t.btnUnderstandDocSub}
-              </span>
-            )}
-          </button>
-
-          {/* Secondary Button: How does Samjhao work? */}
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={onOpenHelp}
-            id="help-guide-btn"
-            style={{ minHeight: '52px', fontSize: '1.05rem', fontWeight: 700 }}
-          >
-            <HelpCircle size={22} color="var(--slate-600)" />
-            <span>{t.btnTeachMe}</span>
-          </button>
-        </div>
-
-        {/* 3 Simple Visual Steps for Beginners & Elders */}
-        <div
-          style={{
-            width: '100%',
-            maxWidth: '400px',
-            background: 'var(--slate-50)',
-            border: '1px solid var(--slate-200)',
-            borderRadius: 'var(--radius-md)',
-            padding: '16px 18px',
-            marginBottom: '20px',
-            textAlign: 'left'
-          }}
+        {/* GIANT PRIMARY ACTION: Green Take Photo Button */}
+        <button
+          type="button"
+          className="btn-giant-camera"
+          onClick={onStart}
+          id="start-understand-btn"
+          aria-label={t.btnUnderstandDoc}
         >
-          <div style={{ fontSize: '0.88rem', fontWeight: 800, color: 'var(--slate-700)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-            {t.howItWorksHeading || '3 Simple Steps'}
+          <div className="btn-giant-camera-content">
+            <Camera size={26} strokeWidth={2.4} />
+            <span>{t.btnUnderstandDoc}</span>
+          </div>
+          {t.btnUnderstandDocSub && (
+            <span className="btn-giant-camera-sub">
+              {t.btnUnderstandDocSub}
+            </span>
+          )}
+        </button>
+
+        {/* Secondary Action: How does Samjhao work? */}
+        <button
+          type="button"
+          className="btn-how-to-use"
+          onClick={onOpenHelp}
+          id="help-guide-btn"
+        >
+          <HelpCircle size={18} />
+          <span>{t.btnTeachMe || 'How does Samjhao work?'}</span>
+        </button>
+
+        {/* Quick Example Category Pills (Bills, Medicines, Messages) */}
+        <div className="sample-categories-section">
+          <div className="sample-categories-label">
+            {currentLang === 'hi'
+              ? 'या उदाहरण देखकर आजमाएं'
+              : currentLang === 'te'
+              ? 'లేదా ఉదాహరణలను ప్రయత్నించండి'
+              : currentLang === 'ta'
+              ? 'அல்லது உதாரணங்களை முயற்சிக்கவும்'
+              : 'Or test with an example document'}
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-              <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#ECFDF5', color: 'var(--success)', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                1
-              </div>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--slate-900)' }}>{t.step1Title}</div>
-                <div style={{ fontSize: '0.82rem', color: 'var(--slate-500)' }}>{t.step1Desc}</div>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-              <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#EFF6FF', color: 'var(--primary)', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                2
-              </div>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--slate-900)' }}>{t.step2Title}</div>
-                <div style={{ fontSize: '0.82rem', color: 'var(--slate-500)' }}>{t.step2Desc}</div>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-              <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#FEF3C7', color: '#B45309', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                3
-              </div>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--slate-900)' }}>{t.step3Title}</div>
-                <div style={{ fontSize: '0.82rem', color: 'var(--slate-500)' }}>{t.step3Desc}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Quick Sample Document Tray (Instant test without camera) */}
-        <div style={{ width: '100%', borderTop: '1px solid var(--slate-200)', paddingTop: '16px', textAlign: 'center' }}>
-          <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--slate-600)', marginBottom: '10px' }}>
-            {t.quickTryHeading}
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '380px', marginInline: 'auto' }}>
-            {/* Sample 1: Electricity Bill */}
+          <div className="sample-categories-grid">
             <button
               type="button"
+              className="sample-pill-btn"
               onClick={() => onSelectSample('bill')}
-              style={{
-                background: 'var(--primary-light)',
-                border: '1px solid var(--primary-border)',
-                color: 'var(--primary)',
-                fontSize: '0.92rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '10px 14px',
-                borderRadius: 'var(--radius-md)',
-                width: '100%'
-              }}
-              id="quick-sample-bill-btn"
+              id="sample-bill-btn"
+              title="Test with an electricity bill"
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Sparkles size={16} />
-                <span>{t.sampleBillBtn}</span>
-              </div>
-              <ArrowRight size={14} />
+              <FileText size={20} color="#2563EB" />
+              <span>
+                {currentLang === 'hi' ? 'बिजली बिल' : (currentLang === 'te' ? 'కరెంట్ బిల్లు' : (currentLang === 'ta' ? 'மின்சார பில்' : 'Utility Bill'))}
+              </span>
             </button>
 
-            {/* Sample 2: Suspicious Scam Message */}
             <button
               type="button"
-              onClick={() => onSelectSample('scam')}
-              style={{
-                background: '#FFFBEB',
-                border: '1px solid #FDE68A',
-                color: '#B45309',
-                fontSize: '0.92rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '10px 14px',
-                borderRadius: 'var(--radius-md)',
-                width: '100%'
-              }}
-              id="quick-sample-scam-btn"
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <AlertTriangle size={16} />
-                <span>{t.sampleScamBtn}</span>
-              </div>
-              <ArrowRight size={14} />
-            </button>
-
-            {/* Sample 3: Doctor Prescription Refusal */}
-            <button
-              type="button"
+              className="sample-pill-btn"
               onClick={() => onSelectSample('medical')}
-              style={{
-                background: '#FEF2F2',
-                border: '1px solid #FECACA',
-                color: '#DC2626',
-                fontSize: '0.92rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '10px 14px',
-                borderRadius: 'var(--radius-md)',
-                width: '100%'
-              }}
-              id="quick-sample-medical-btn"
+              id="sample-medical-btn"
+              title="Test with a medical prescription"
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <ShieldAlert size={16} />
-                <span>{t.sampleMedicalBtn}</span>
-              </div>
-              <ArrowRight size={14} />
+              <Pill size={20} color="#059669" />
+              <span>
+                {currentLang === 'hi' ? 'दवा का पर्चा' : (currentLang === 'te' ? 'వైద్య చీటీ' : (currentLang === 'ta' ? 'மருந்துச் சீட்டு' : 'Prescription'))}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              className="sample-pill-btn"
+              onClick={() => onSelectSample('scam')}
+              id="sample-scam-btn"
+              title="Test with a suspicious SMS message"
+            >
+              <MessageSquare size={20} color="#D97706" />
+              <span>
+                {currentLang === 'hi' ? 'संदेश / SMS' : (currentLang === 'te' ? 'SMS / లేఖ' : (currentLang === 'ta' ? 'மோசடி SMS' : 'Suspicious SMS'))}
+              </span>
             </button>
           </div>
         </div>

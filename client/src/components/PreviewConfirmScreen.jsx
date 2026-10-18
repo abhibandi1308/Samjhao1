@@ -1,5 +1,6 @@
 import React from 'react';
 import { RotateCcw, CheckCircle2, Volume2, FileText } from 'lucide-react';
+import { getScreenVoiceInstructions } from '../voiceGuideConfig.js';
 
 export function PreviewConfirmScreen({
   t,
@@ -14,7 +15,7 @@ export function PreviewConfirmScreen({
   const isPdf = file?.type === 'application/pdf';
 
   const handleListenGuidance = () => {
-    const textToSpeak = `${t.previewTitle}. ${t.previewSubtitle}. If readable, tap the green continue button. If blurry, tap the retake button.`;
+    const textToSpeak = getScreenVoiceInstructions('PREVIEW', currentLang, t);
     onSpeak(textToSpeak, currentLang, 'preview-guidance');
   };
 
@@ -22,23 +23,22 @@ export function PreviewConfirmScreen({
     <div className="main-content" style={{ justifyContent: 'space-between' }}>
       <div>
         <div style={{ marginBottom: '14px' }}>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '4px' }}>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '4px' }}>
             {t.previewTitle}
           </h1>
-          <p style={{ fontSize: '0.95rem', color: 'var(--slate-600)', marginBottom: '12px' }}>
+          <p style={{ fontSize: '0.94rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
             {t.previewSubtitle}
           </p>
 
-          {/* Audio Guidance Pill right under heading */}
+          {/* Audio Guidance Pill */}
           <button
             type="button"
-            className={`btn-card-audio ${isSpeaking ? 'is-playing' : ''}`}
+            className={`btn-inline-speaker ${isSpeaking ? 'is-playing' : ''}`}
             onClick={handleListenGuidance}
             id="btn-preview-audio-top"
             style={{
-              padding: '8px 18px',
-              fontSize: '0.92rem',
-              borderRadius: 'var(--radius-full)'
+              padding: '6px 16px',
+              fontSize: '0.88rem'
             }}
           >
             <Volume2 size={16} />
@@ -46,26 +46,25 @@ export function PreviewConfirmScreen({
           </button>
         </div>
 
-        {/* Document Preview Box matching Screen 5 */}
-        <div className="preview-box" style={{ borderRadius: '16px', border: '2px solid var(--slate-300)' }}>
+        {/* Document Preview Box matching Walkthrough Screen 4/5 */}
+        <div className="preview-box">
           {isPdf ? (
-            <div style={{ padding: '48px 20px', textAlign: 'center', color: 'white' }}>
+            <div style={{ padding: '48px 20px', textAlign: 'center', color: '#FFFFFF' }}>
               <FileText size={64} color="#EF4444" style={{ marginBottom: '12px' }} />
               <div style={{ fontWeight: 700, fontSize: '1.15rem' }}>PDF Document</div>
-              <div style={{ fontSize: '0.85rem', color: '#94A3B8' }}>{file?.name}</div>
+              <div style={{ fontSize: '0.85rem', color: '#94A3B8', marginTop: '4px' }}>{file?.name}</div>
             </div>
           ) : (
             <img
               src={previewUrl}
               alt="Uploaded document preview"
               className="preview-img"
-              style={{ maxHeight: '380px' }}
             />
           )}
         </div>
 
-        {/* Action Buttons: Retake (left) & Yes, Continue (right) */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: '12px', marginTop: '18px' }}>
+        {/* Two Clear Actions: Retake (left) & Use this photo (right, prominent green) */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.25fr', gap: '12px', marginTop: '16px' }}>
           <button
             type="button"
             className="btn btn-secondary"
@@ -73,18 +72,18 @@ export function PreviewConfirmScreen({
             id="btn-preview-retake"
             style={{ minHeight: '56px', fontSize: '1rem', fontWeight: 700 }}
           >
-            <RotateCcw size={20} />
+            <RotateCcw size={18} />
             <span>{t.btnRetake}</span>
           </button>
 
           <button
             type="button"
-            className="btn btn-success"
+            className="btn btn-primary-action"
             onClick={onConfirm}
             id="btn-preview-continue"
-            style={{ minHeight: '56px', fontSize: '1.1rem', fontWeight: 800, boxShadow: '0 4px 14px rgba(5, 150, 105, 0.3)' }}
+            style={{ minHeight: '56px', fontSize: '1.05rem', fontWeight: 800 }}
           >
-            <CheckCircle2 size={22} strokeWidth={2.5} />
+            <CheckCircle2 size={20} strokeWidth={2.4} />
             <span>{t.btnContinue}</span>
           </button>
         </div>

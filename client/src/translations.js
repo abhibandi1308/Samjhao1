@@ -19,7 +19,7 @@ export const TRANSLATIONS = {
     chooseLangTitle: 'Choose your language',
     chooseLangSubtitle: 'अपनी भाषा चुनें / మీ భాషను ఎంచుకోండి',
     listenToThisPage: 'Listen to this page',
-    audioInstructionPrompt: 'Please choose your language. Tap English, Hindi, Telugu, or Gujarati.',
+    audioInstructionPrompt: 'Please choose your language. Tap English, Hindi, Telugu, or Tamil.',
 
     // Screen 2: Welcome Screen
     welcomeTitle: 'Understand your documents with ease',
@@ -61,9 +61,13 @@ export const TRANSLATIONS = {
     fileSizeLabel: 'Size:',
 
     // Screen 6: Processing
-    processingTitle: 'Analyzing your document...',
-    processingSubtitle: 'We are reading your document and translating it into simple language.',
+    processingTitle: 'Reading your document...',
+    processingSubtitle: 'Please wait a few seconds.',
     processingWaitNote: 'This takes only a few seconds. Please wait.',
+    processingStep1: 'Extracting text from photo',
+    processingStep2: 'Understanding the content',
+    processingStep3: 'Preparing simple explanation',
+    privacyPromise: 'Your photo is deleted after processing. We do not store your images.',
 
     // Screen 7 & 8: Result
     resultHeading: 'Document Explanation',
@@ -133,9 +137,9 @@ export const TRANSLATIONS = {
 
     // Screen 1: Choose Language
     chooseLangTitle: 'अपनी भाषा चुनें',
-    chooseLangSubtitle: 'Choose your preferred language',
+    chooseLangSubtitle: 'अपनी पसंदीदा भाषा चुनें',
     listenToThisPage: 'इस पेज को सुनें',
-    audioInstructionPrompt: 'कृपया अपनी भाषा चुनें। अंग्रेजी, हिन्दी, तेलुगु या गुजराती पर टैप करें।',
+    audioInstructionPrompt: 'कृपया अपनी भाषा चुनें। अंग्रेजी, हिन्दी, तेलुगु या तमिल पर टैप करें।',
 
     // Screen 2: Welcome Screen
     welcomeTitle: 'अपने डॉक्यूमेंट को आसानी से समझें',
@@ -177,9 +181,13 @@ export const TRANSLATIONS = {
     fileSizeLabel: 'साइज़:',
 
     // Screen 6: Processing
-    processingTitle: 'आपका डॉक्यूमेंट समझा जा रहा है...',
-    processingSubtitle: 'हम आपके डॉक्यूमेंट को पढ़कर आसान भाषा में समझ रहे हैं।',
-    processingWaitNote: 'इसमें कुछ समय लग सकता है। कृपया इंतजार करें।',
+    processingTitle: 'आपका डॉक्यूमेंट पढ़ा जा रहा है...',
+    processingSubtitle: 'कृपया कुछ सेकंड प्रतीक्षा करें।',
+    processingWaitNote: 'इसमें कुछ सेकंड लगेंगे। कृपया प्रतीक्षा करें।',
+    processingStep1: 'फोटो से लिखावट पढ़ी जा रही है',
+    processingStep2: 'दस्तावेज़ की जानकारी समझी जा रही है',
+    processingStep3: 'आसान शब्दों में समझाई तैयार हो रही है',
+    privacyPromise: 'प्रक्रिया के बाद आपकी फोटो हटा दी जाती है। हम कोई फोटो सुरक्षित नहीं रखते।',
 
     // Screen 7 & 8: Result
     resultHeading: 'डॉक्यूमेंट की समझाई',
@@ -249,9 +257,9 @@ export const TRANSLATIONS = {
 
     // Screen 1: Choose Language
     chooseLangTitle: 'మీ భాషను ఎంచుకోండి',
-    chooseLangSubtitle: 'Choose your preferred language',
+    chooseLangSubtitle: 'మీకు నచ్చిన భాషను ఎంచుకోండి',
     listenToThisPage: 'ఈ పేజీని వినండి',
-    audioInstructionPrompt: 'దయచేసి మీ భాషను ఎంచుకోండి. ఇంగ్లీష్, హిందీ, తెలుగు లేదా గుజరాతీని ఎంచుకోండి.',
+    audioInstructionPrompt: 'దయచేసి మీ భాషను ఎంచుకోండి. ఇంగ్లీష్, హిందీ, తెలుగు లేదా తమిళం ఎంచుకోండి.',
 
     // Screen 2: Welcome Screen
     welcomeTitle: 'మీ పత్రాలను సులభంగా అర్థం చేసుకోండి',
@@ -293,9 +301,13 @@ export const TRANSLATIONS = {
     fileSizeLabel: 'పరిమాణం:',
 
     // Screen 6: Processing
-    processingTitle: 'మీ పత్రం పరిశీలించబడుతోంది...',
-    processingSubtitle: 'మేము మీ పత్రాన్ని చదివి సరళమైన భాషలో వివరిస్తున్నాము.',
-    processingWaitNote: 'దయచేసి కొన్ని సెకన్లు వేచి ఉండండి.',
+    processingTitle: 'మీ పత్రం చదవబడుతోంది...',
+    processingSubtitle: 'దయచేసి కొన్ని సెకన్లు వేచి ఉండండి.',
+    processingWaitNote: 'ఇది కేవలం కొన్ని సెకన్ల సమయం తీసుకుంటుంది. దయచేసి వేచి ఉండండి.',
+    processingStep1: 'ఫోటో నుండి అక్షరాలు చదువుతోంది',
+    processingStep2: 'పత్రం యొక్క విషయాన్ని అర్థం చేసుకుంటోంది',
+    processingStep3: 'సరళమైన వివరణను సిద్ధం చేస్తోంది',
+    privacyPromise: 'ప్రాసెసింగ్ పూర్తయిన వెంటనే మీ ఫోటో తొలగించబడుతుంది. మేము మీ చిత్రాలను భద్రపరచము.',
 
     // Screen 7 & 8: Result
     resultHeading: 'పత్రం యొక్క వివరణ',
@@ -352,119 +364,123 @@ export const TRANSLATIONS = {
     btnTryAgain: 'మళ్ళీ ప్రయత్నించండి'
   },
 
-  gu: {
+  ta: {
     appName: 'Samjhao',
-    appSubtitle: 'તમારા દસ્તાવેજો, સરળ ભાષામાં.',
-    tagline: 'બિલ, રસીદ અને નોટિસ સરળ ભાષામાં સમજો અને સાંભળો.',
-    navHome: 'હોમ',
-    navBack: 'પાછા',
-    navHelp: 'મદદ',
-    navPrivacy: 'ગોપનીયતા',
-    privacyBadge: 'ઝીરો સ્ટોરેજ: દસ્તાવેજ સેવ થતો નથી',
-    langChangeModalTitle: 'ભાષા બદલો',
+    appSubtitle: 'உங்கள் ஆவணங்கள், எளிய தமிழில்.',
+    tagline: 'பில்கள், ரசீதுகள் மற்றும் அறிவிப்புகளை எளிய தமிழில் புரிந்து கொள்ளுங்கள்.',
+    navHome: 'முகப்பு',
+    navBack: 'பின்செல்க',
+    navHelp: 'உதவி',
+    navPrivacy: 'தனியுரிமை',
+    privacyBadge: 'ஜீரோ ஸ்டோரேஜ்: ஆவணம் சேமிக்கப்படாது',
+    langChangeModalTitle: 'மொழியை மாற்றவும்',
 
     // Screen 1: Choose Language
-    chooseLangTitle: 'તમારી ભાષા પસંદ કરો',
-    chooseLangSubtitle: 'Choose your preferred language',
-    listenToThisPage: 'આ પેજ સાંભળો',
-    audioInstructionPrompt: 'કૃપા કરીને તમારી ભાષા પસંદ કરો. અંગ્રેજી, હિન્દી, તેલુગુ અથવા ગુજરાતી પસંદ કરો.',
+    chooseLangTitle: 'உங்கள் மொழியைத் தேர்வுசெய்யவும்',
+    chooseLangSubtitle: 'உங்களுக்கு விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும்',
+    listenToThisPage: 'இப்பக்கத்தைக் கேளுங்கள்',
+    audioInstructionPrompt: 'தயவுசெய்து உங்கள் மொழியைத் தேர்ந்தெடுக்கவும். ஆங்கிலம், இந்தி, தெலுங்கு அல்லது தமிழைத் தொடவும்.',
 
     // Screen 2: Welcome Screen
-    welcomeTitle: 'તમારા દસ્તાવેજને સરળતાથી સમજો',
-    welcomeSubtitle: 'બિલ, રસીદ, નોટિસ કે કોઈ પણ દસ્તાવેજ અપલોડ કરો. હું તેને સરળ ભાષામાં સમજાવીશ અને બોલીને સંભળાવીશ.',
-    btnUnderstandDoc: 'કાગળનો ફોટો પાડો',
-    btnUnderstandDocSub: 'લાઈટ બિલ કે નોટિસ કેમેરા સામે રાખો',
-    btnTeachMe: 'Samjhao કેવી રીતે કામ કરે છે?',
-    howItWorksHeading: 'કોઈ પણ દસ્તાવેજ સમજવાના 3 સરળ પગલાં',
-    step1Title: '1. કાગળનો ફોટો લો',
-    step1Desc: 'તમારા લાઈટ બિલ કે નોટિસ સામે કેમેરો રાખો',
-    step2Title: '2. સમજો તેને વાંચશે',
-    step2Desc: 'અઘરા શબ્દો સરળ ભાષામાં સમજાવશે',
-    step3Title: '3. બોલીને સાંભળો',
-    step3Desc: 'કુલ રકમ અને છેલ્લી તારીખ સાંભળો',
-    quickTryHeading: 'અથવા નમૂના લાઈટ બિલ જુઓ:',
-    sampleBillBtn: 'લાઈટ બિલ ઉદાહરણ',
-    sampleScamBtn: 'શંકાસ્પદ ફ્રોડ મેસેજ',
-    sampleMedicalBtn: 'ડૉક્ટરનું પ્રિસ્ક્રિપ્શન',
+    welcomeTitle: 'உங்கள் ஆவணங்களை எளிதாகப் புரிந்து கொள்ளுங்கள்',
+    welcomeSubtitle: 'மின்சார பில், ரசீது அல்லது அறிவிப்பைப் பதிவேற்றுங்கள். நான் அதை எளிய தமிழில் விளக்கி, வாசித்துக் காட்டுவேன்.',
+    btnUnderstandDoc: 'காகிதத்தைப் படம் எடுங்கள்',
+    btnUnderstandDocSub: 'மின்சார பில் அல்லது அறிவிப்பை கேமரா முன் காட்டுங்கள்',
+    btnTeachMe: 'Samjhao எவ்வாறு செயல்படுகிறது?',
+    howItWorksHeading: 'ஆவணத்தைப் புரிந்துகொள்ள 3 எளிய வழிகள்',
+    step1Title: '1. படம் எடுக்கவும்',
+    step1Desc: 'உங்கள் பில் அல்லது காகிதத்தை கேமரா முன் காட்டுங்கள்',
+    step2Title: '2. Samjhao படிக்கும்',
+    step2Desc: 'கடினமான சொற்களை எளிய தமிழில் விளக்கும்',
+    step3Title: '3. தெளிவாகக் கேளுங்கள்',
+    step3Desc: 'தொகை, கடைசி தேதி மற்றும் செய்ய வேண்டியதைக் கேளுங்கள்',
+    quickTryHeading: 'அல்லது மாதிரி மின்சார பில்லைப் பாருங்கள்:',
+    sampleBillBtn: 'மின்சார பில் உதாரணம்',
+    sampleScamBtn: 'மோசடி குறுஞ்செய்தி',
+    sampleMedicalBtn: 'மருத்துவர் மருந்துச் சீட்டு',
 
     // Screen 3: Choose Document Input
-    chooseDocTitle: 'તમારો દસ્તાવેજ પસંદ કરો',
-    chooseDocSubtitle: 'તમે દસ્તાવેજ કેવી રીતે આપવા માંગો છો?',
-    optionCamera: 'ફોટો પાડો',
-    optionCameraSub: 'તમારા કેમેરાથી હમણાં જ ફોટો પાડો',
-    optionGallery: 'ફોટો પસંદ કરો',
-    optionGallerySub: 'પહેલેથી લીધેલો ફોટો પસંદ કરો',
-    optionPdf: 'PDF પસંદ કરો',
-    optionPdfSub: 'તમારા ફોનમાંથી PDF પસંદ કરો',
-    frameGuidanceTitle: 'આખો દસ્તાવેજ ફ્રેમમાં રાખો',
-    frameGuidanceSub: 'ચારેય ખૂણા દેખાય અને અક્ષરો સ્પષ્ટ હોય તે સુનિશ્ચિત કરો.',
-    listenToHelp: 'આ પેજ કેવી રીતે વાપરવું?',
+    chooseDocTitle: 'உங்கள் ஆவணத்தைத் தேர்வுசெய்யவும்',
+    chooseDocSubtitle: 'ஆவணத்தை எவ்வாறு வழங்க விரும்புகிறீர்கள்?',
+    optionCamera: 'படம் எடுக்கவும்',
+    optionCameraSub: 'இப்போதே கேமராவில் படம் எடுங்கள்',
+    optionGallery: 'படத்தைத் தேர்ந்தெடுக்கவும்',
+    optionGallerySub: 'ஏற்கனவே உள்ள படத்தைத் தேர்ந்தெடுக்கவும்',
+    optionPdf: 'PDF தேர்ந்தெடுக்கவும்',
+    optionPdfSub: 'உங்கள் போனிலிருந்து PDF தேர்ந்தெடுக்கவும்',
+    frameGuidanceTitle: 'முழு ஆவணமும் தெரியும்படி வைக்கவும்',
+    frameGuidanceSub: 'நான்கு மூலைகளும் தெரியும்படியும் நல்ல வெளிச்சம் இருக்கும்படியும் வைக்கவும்.',
+    listenToHelp: 'இப்பக்கத்தை எவ்வாறு பயன்படுத்துவது?',
 
     // Screen 5: Preview & Confirm
-    previewTitle: 'શું આ દસ્તાવેજ સ્પષ્ટ દેખાય છે?',
-    previewSubtitle: 'જો ફોટો ઝાંખો હોય કે ખૂણા કપાઈ ગયા હોય, તો ફરીથી ફોટો લો.',
-    btnRetake: 'ફરીથી લો',
-    btnContinue: 'હા, આગળ વધો',
-    btnGuidanceAudio: 'માર્ગદર્શન સાંભળો',
-    fileSizeLabel: 'સાઇઝ:',
+    previewTitle: 'இந்த ஆவணம் தெளிவாகத் தெரிகிறதா?',
+    previewSubtitle: 'படம் மங்கலாகவோ அல்லது மூலைகள் வெட்டப்பட்டோ இருந்தால், மீண்டும் படம் எடுக்கவும்.',
+    btnRetake: 'மீண்டும் எடுங்கள்',
+    btnContinue: 'ஆம், தொடரவும்',
+    btnGuidanceAudio: 'வழிகாட்டுதலைக் கேட்கவும்',
+    fileSizeLabel: 'அளவு:',
 
     // Screen 6: Processing
-    processingTitle: 'તમારો દસ્તાવેજ સમજવામાં આવી રહ્યો છે...',
-    processingSubtitle: 'અમે તમારા દસ્તાવેજને વાંચીને સરળ ભાષામાં સમજી રહ્યા છીએ.',
-    processingWaitNote: 'કૃપા કરીને થોડી ક્ષણો રાહ જુઓ.',
+    processingTitle: 'உங்கள் ஆவணம் படிக்கப்படுகிறது...',
+    processingSubtitle: 'தயவுசெய்து சில நொடிகள் காத்திருக்கவும்.',
+    processingWaitNote: 'இது சில நொடிகள் மட்டுமே எடுக்கும். காத்திருக்கவும்.',
+    processingStep1: 'புகைப்படத்திலிருந்து எழுத்துக்கள் படிக்கப்படுகின்றன',
+    processingStep2: 'ஆவணத்தின் விவரங்கள் புரிந்து கொள்ளப்படுகின்றன',
+    processingStep3: 'எளிய தமிழில் விளக்கம் தயாராகிறது',
+    privacyPromise: 'செயலாக்கத்திற்குப் பிறகு உங்கள் புகைப்படம் நீக்கப்படும். நாங்கள் படங்களைச் சேமிப்பதில்லை.',
 
     // Screen 7 & 8: Result
-    resultHeading: 'દસ્તાવેજની સમજૂતી',
-    btnListenFull: 'આખી માહિતી સાંભળો',
-    btnPause: 'રોકો',
-    btnResume: 'ફરી શરૂ કરો',
-    btnReplay: 'શરૂઆતથી સાંભળો',
-    speedNormal: '1.0x સામાન્ય અવાજ',
-    speedSlow: '0.8x ધીમો અવાજ (સરળ)',
-    btnListen: 'સાંભળો',
+    resultHeading: 'ஆவணத்தின் எளிய விளக்கம்',
+    btnListenFull: 'முழு விளக்கத்தைக் கேளுங்கள்',
+    btnPause: 'நிறுத்து',
+    btnResume: 'மீண்டும் தொடங்கு',
+    btnReplay: 'ஆரம்பத்திலிருந்து கேளுங்கள்',
+    speedNormal: '1.0x இயல்பான குரல்',
+    speedSlow: '0.8x மெதுவான குரல் (தெளிவு)',
+    btnListen: 'கேளுங்கள்',
 
     // Result Sections
-    whatToDoTitle: 'આમાં શું કરવાનું છે?',
-    importantPointsTitle: 'મહત્વની બાબતો',
-    tabSimple: 'સરળ સમજૂતી',
-    tabDetails: 'મુખ્ય માહિતી',
-    tabGlossary: 'શબ્દોનો અર્થ',
-    uncertaintyWarningTitle: 'અસ્પષ્ટ માહિતી',
-    uncertaintyNote: 'આ માહિતી ફોટામાં સ્પષ્ટ ન હતી, તેથી અમે અંદાજ લગાવ્યો નથી:',
+    whatToDoTitle: 'நான் என்ன செய்ய வேண்டும்?',
+    importantPointsTitle: 'முக்கியமான குறிப்புகள்',
+    tabSimple: 'எளிய விளக்கம்',
+    tabDetails: 'முக்கிய விவரங்கள்',
+    tabGlossary: 'கடின சொற்களின் விளக்கம்',
+    uncertaintyWarningTitle: 'தெளிவற்ற விவரங்கள்',
+    uncertaintyNote: 'இந்த விவரங்கள் படத்தில் தெளிவாக இல்லை, எனவே நாங்கள் யூகிக்கவில்லை:',
 
     // Safety & Guardrails
-    medicalRefusalTitle: 'ડૉક્ટરનું પ્રિસ્ક્રિપ્શન',
-    medicalRefusalText: 'Samjhao તબીબી પ્રિસ્ક્રિપ્શનની સમજૂતી કે દવા સંબંધી સલાહ આપતું નથી. દવા અને માત્રા માટે કૃપા કરીને ડૉક્ટર અથવા ફાર્માસિસ્ટનો સંપર્ક કરો.',
-    scamWarningTitle: 'શંકાસ્પદ ફ્રોડ મેસેજ ચેતવણી',
-    scamWarningNote: 'આ છેતરપિંડી વાળો મેસેજ હોઈ શકે છે. કોઈ અજાણી લિંક પર ક્લિક ન કરો અને કોઈને OTP ન આપો.',
+    medicalRefusalTitle: 'மருத்துவர் மருந்துச் சீட்டு கண்டறியப்பட்டது',
+    medicalRefusalText: 'Samjhao மருத்துவ மருந்துச் சீட்டுகளை விளக்குவதோ அல்லது மருத்துவ ஆலோசனைகளை வழங்குவதோ இல்லை. மருந்து மற்றும் அளவு பற்றி உங்கள் மருத்துவர் அல்லது மருந்தாளரை நேரில் அணுகவும்.',
+    scamWarningTitle: 'மோசடி குறுஞ்செய்தி எச்சரிக்கை',
+    scamWarningNote: 'இது பணத்தைப் பறிக்க அனுப்பப்பட்ட மோசடி செய்தியாகத் தெரிகிறது. தெரியாத எண்களுக்கு அழைக்காதீர்கள், ஓடிபி-யை எவரிடமும் பகிராதீர்கள்.',
 
     // Actions & Feedback
-    btnTryAnother: 'બીજો દસ્તાવેજ સમજો',
-    btnGoHome: 'મુખ્ય પેજ પર જાઓ',
-    btnShareFamily: 'પરિવાર સાથે શેર કરો (WhatsApp)',
-    feedbackTitle: 'શું આ માહિતી ઉપયોગી હતી?',
-    feedbackYes: 'હા, સમજાઈ ગયું',
-    feedbackNo: 'ના',
-    feedbackThanks: 'આભાર!',
+    btnTryAnother: 'மற்றொரு ஆவணத்தைப் புரிந்து கொள்ளுங்கள்',
+    btnGoHome: 'முகப்புப் பக்கத்திற்குச் செல்லவும்',
+    btnShareFamily: 'குடும்பத்தினருடன் பகிருங்கள் (WhatsApp)',
+    feedbackTitle: 'இந்த விளக்கம் பயனுள்ளதாக இருந்ததா?',
+    feedbackYes: 'ஆம், புரிந்தது',
+    feedbackNo: 'இல்லை',
+    feedbackThanks: 'நன்றி!',
 
     // Help Modal
-    helpTitle: 'હું તમારી મદદ કરી શકું છું',
-    helpSubtitle: 'Samjhao વાપરવું ખૂબ સરળ છે:',
-    helpStep1: 'આખી માહિતી સાંભળવા માટે ઉપર "આખી માહિતી સાંભળો" દબાવો.',
-    helpStep2: 'કુલ રકમ અને છેલ્લી તારીખ મોટા બોક્સમાં દર્શાવેલ છે.',
-    helpStep3: 'કોઈ પણ ભાગ સાંભળવા માટે બાજુનું "સાંભળો" બટન દબાવો.',
-    helpStep4: 'ધીમેથી સાંભળવા માટે "ધીમો અવાજ" વિકલ્પ પસંદ કરો.',
-    btnClose: 'સમજાઈ ગયું / બંધ કરો',
+    helpTitle: 'நான் உங்களுக்கு எவ்வாறு உதவ முடியும்?',
+    helpSubtitle: 'Samjhao-வை பயன்படுத்துவது மிகவும் எளிது:',
+    helpStep1: 'முழு ஆவணத்தையும் கேட்க மேலே உள்ள "முழு விளக்கத்தைக் கேளுங்கள்" பட்டனை அழுத்தவும்.',
+    helpStep2: 'செலுத்த வேண்டிய தொகை மற்றும் கடைசி தேதி பெரிய பெட்டிகளில் இருக்கும்.',
+    helpStep3: 'குறிப்பிட்ட பகுதியைக் கேட்க அதன் அருகிலுள்ள "கேளுங்கள்" பட்டனை அழுத்தவும்.',
+    helpStep4: 'மெதுவாகக் கேட்க "மெதுவான குரல்" விருப்பத்தைத் தேர்ந்தெடுக்கவும்.',
+    btnClose: 'புரிந்தது / மூடுக',
 
     // Errors
-    errBlurryTitle: 'હું આ દસ્તાવેજ સ્પષ્ટ વાંચી શકતો નથી',
-    errBlurryDesc: 'કૃપા કરીને સારા અજવાળામાં ફરીથી ફોટો પાડો અને આખો દસ્તાવેજ બતાવો.',
-    errUnsupportedTitle: 'આ ફાઈલ સપોર્ટ નથી',
-    errUnsupportedDesc: 'કૃપા કરીને ફોટો (JPG, PNG) અથવા PDF ફાઈલ પસંદ કરો.',
-    errSizeTitle: 'ફાઈલ ખૂબ મોટી છે',
-    errSizeDesc: 'કૃપા કરીને 10MB કરતાં નાની ફાઈલ પસંદ કરો.',
-    btnTakeAgain: 'ફરીથી ફોટો લો',
-    btnChooseAnother: 'બીજો ફોટો પસંદ કરો',
-    btnTryAgain: 'ફરીથી પ્રયાસ કરો'
+    errBlurryTitle: 'என்னால் இதைத் தெளிவாகப் படிக்க முடியவில்லை',
+    errBlurryDesc: 'படம் மங்கலாக உள்ளது. தயவுசெய்து நல்ல வெளிச்சத்தில் கேமராவை ஆவணத்திற்கு நேராக வைத்து மீண்டும் படம் எடுக்கவும்.',
+    errUnsupportedTitle: 'இந்த கோப்பு ஆதரிக்கப்படவில்லை',
+    errUnsupportedDesc: 'தயவுசெய்து புகைப்படம் (JPG, PNG) அல்லது PDF கோப்பைத் தேர்ந்தெடுக்கவும்.',
+    errSizeTitle: 'கோப்பின் அளவு மிகவும் பெரியது',
+    errSizeDesc: 'தயவுசெய்து 10MB-க்குக் குறைவான கோப்பைத் தேர்ந்தெடுக்கவும்.',
+    btnTakeAgain: 'மீண்டும் படம் எடுக்கவும்',
+    btnChooseAnother: 'மற்றொரு படத்தைத் தேர்ந்தெடுக்கவும்',
+    btnTryAgain: 'மீண்டும் முயற்சிக்கவும்'
   }
 };
