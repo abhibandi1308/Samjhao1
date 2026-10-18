@@ -1,21 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Volume2,
   Pause,
   RotateCcw,
   Calendar,
-  IndianRupee,
-  Clock,
-  Zap,
-  Hash,
-  FileText,
+  CheckCircle2,
   AlertTriangle,
   AlertOctagon,
   HelpCircle,
   Home,
   RefreshCw,
-  Info,
-  Share2
+  FileText,
+  Share2,
+  BookOpen
 } from 'lucide-react';
 
 export function ResultScreen({
@@ -26,8 +23,6 @@ export function ResultScreen({
   onReset,
   onGoHome
 }) {
-  const [activeTab, setActiveTab] = useState('simple');
-
   const {
     isPlaying,
     isPaused,
@@ -40,17 +35,6 @@ export function ResultScreen({
   } = speech;
 
   const listenLabel = t.btnListen || 'Listen';
-
-  const getFieldIcon = (iconName) => {
-    switch (iconName) {
-      case 'currency': return <IndianRupee size={20} color="#059669" />;
-      case 'calendar': return <Calendar size={20} color="#DC2626" />;
-      case 'clock': return <Clock size={20} color="#7C3AED" />;
-      case 'zap': return <Zap size={20} color="#2563EB" />;
-      case 'hash': return <Hash size={20} color="#475569" />;
-      default: return <FileText size={20} color="#2563EB" />;
-    }
-  };
 
   const toggleFullAudio = () => {
     if (isPlaying && activeKey === 'full') {
@@ -69,9 +53,9 @@ export function ResultScreen({
   };
 
   const handleShareWhatsApp = () => {
-    let shareText = `*${result.title || 'Document Explanation via Samjhao'}*\n\n`;
-    if (result.whatToDo) {
-      shareText += `📌 *Action Needed:* ${result.whatToDo}\n\n`;
+    let shareText = `*${result.documentTypeLocalized || result.documentType || 'Document Explanation via Samjhao'}*\n\n`;
+    if (result.actionRequired) {
+      shareText += `📌 *Action Needed:* ${result.actionRequired}\n\n`;
     }
     if (result.keyDetails && result.keyDetails.length > 0) {
       shareText += `📋 *Key Details:*\n`;
@@ -80,8 +64,8 @@ export function ResultScreen({
       });
       shareText += `\n`;
     }
-    if (result.suspiciousAlert) {
-      shareText += `⚠️ *Warning:* ${result.suspiciousAlert}\n\n`;
+    if (result.isSuspiciousMessage) {
+      shareText += `⚠️ *Warning:* Possible fraud/scam message detected.\n\n`;
     }
     shareText += `_Simplified with Samjhao (समझो) - Accessible AI Document Reader_`;
 
@@ -89,55 +73,82 @@ export function ResultScreen({
     window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank', 'noopener,noreferrer');
   };
 
+  // Find primary amount item
+  const amountItem = result.keyDetails?.find(item =>
+    item.icon === 'currency' ||
+    /amount|pay|total|राशि|रुपये|రకం|మొత్తం|చెల్లించ|રકમ/i.test(item.label)
+  ) || (result.keyDetails?.length > 0 ? result.keyDetails[0] : null);
+
+  // Find due date item
+  const dueDateItem = result.keyDetails?.find(item =>
+    item !== amountItem && (
+      item.icon === 'calendar' ||
+      /date|due|अंतिम|तिथि|తేదీ|తారీఖు|તારીખ/i.test(item.label)
+    )
+  ) || (result.keyDetails?.length > 1 && result.keyDetails[1] !== amountItem ? result.keyDetails[1] : null);
+
+  // Remaining key details (Consumer name, account number, units, etc.)
+  const otherDetails = (result.keyDetails || []).filter(item =>
+    item !== amountItem && item !== dueDateItem
+  );
+
   return (
-    <div className="main-content" style={{ paddingBottom: '28px' }}>
-      {/* Top Prominent Voice Player Bar for Elders & Low-Literacy Users */}
+    <div className="main-content" style={{ paddingBottom: '32px' }}>
+      {/* 1. Master Audio Bar (Top, high contrast, clean) */}
       <div
-        className="result-audio-bar"
         style={{
-          background: 'var(--primary-light)',
-          border: '1.5px solid var(--primary-border)',
-          borderRadius: '16px',
-          padding: '14px 18px',
+          background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
+          border: '1.5px solid #BFDBFE',
+          borderRadius: '18px',
+          padding: '12px 16px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '12px',
-          marginBottom: '18px'
+          gap: '10px',
+          marginBottom: '20px',
+          boxShadow: '0 2px 8px rgba(37, 99, 235, 0.08)'
         }}
       >
         <button
           type="button"
-          className={`btn ${isPlaying && activeKey === 'full' ? 'btn-primary is-playing' : 'btn-primary'}`}
           onClick={toggleFullAudio}
           id="btn-result-full-audio"
+          className="btn"
           style={{
-            minHeight: '48px',
-            fontSize: '1.05rem',
-            padding: '10px 20px',
-            borderRadius: 'var(--radius-full)',
+            background: isPlaying && activeKey === 'full' && !isPaused ? '#1E40AF' : '#2563EB',
+            color: '#FFFFFF',
+            minHeight: '46px',
+            fontSize: '0.98rem',
+            fontWeight: 700,
+            padding: '10px 18px',
+            borderRadius: '9999px',
             flex: 1,
-            boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)'
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            border: 'none',
+            boxShadow: '0 3px 10px rgba(37, 99, 235, 0.25)',
+            cursor: 'pointer'
           }}
         >
-          {isPlaying && activeKey === 'full' && !isPaused ? <Pause size={20} /> : <Volume2 size={20} />}
+          {isPlaying && activeKey === 'full' && !isPaused ? <Pause size={18} /> : <Volume2 size={18} />}
           <span>{isPlaying && activeKey === 'full' && !isPaused ? t.btnPause : t.btnListenFull}</span>
         </button>
 
-        {/* Slower Voice Toggle for Elders */}
         <button
           type="button"
           onClick={() => setPlaybackRate(playbackRate === 1.0 ? 0.8 : 1.0)}
           style={{
             background: '#FFFFFF',
-            border: '1.5px solid var(--slate-300)',
-            borderRadius: 'var(--radius-full)',
-            padding: '10px 16px',
-            fontSize: '0.88rem',
+            border: '1.5px solid #CBD5E1',
+            borderRadius: '9999px',
+            padding: '10px 14px',
+            fontSize: '0.85rem',
             fontWeight: 800,
-            color: 'var(--slate-800)',
+            color: '#1E293B',
             cursor: 'pointer',
-            minHeight: '48px',
+            minHeight: '46px',
             flexShrink: 0
           }}
           aria-label="Toggle slower voice speed"
@@ -146,31 +157,70 @@ export function ResultScreen({
         </button>
       </div>
 
-      {/* Document Type Badge & Title */}
-      <div style={{ marginBottom: '16px' }}>
-        <div className="result-doc-badge" style={{ marginBottom: '6px' }}>
-          <FileText size={14} />
+      {/* 2. Document Identity Banner */}
+      <div style={{ marginBottom: '18px' }}>
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            background: '#F1F5F9',
+            border: '1px solid #CBD5E1',
+            borderRadius: '8px',
+            padding: '4px 10px',
+            fontSize: '0.82rem',
+            fontWeight: 700,
+            color: '#475569',
+            marginBottom: '8px'
+          }}
+        >
+          <FileText size={14} color="#3B82F6" />
           <span>{result.documentTypeLocalized || result.documentType}</span>
         </div>
-        <h1 className="result-main-title" style={{ margin: '4px 0 6px', fontSize: '1.65rem' }}>
-          {result.documentTypeLocalized ? `${result.documentTypeLocalized}` : t.resultHeading}
+
+        <h1
+          style={{
+            fontSize: '1.75rem',
+            fontWeight: 800,
+            color: '#0F172A',
+            margin: '0 0 8px 0',
+            lineHeight: 1.2
+          }}
+        >
+          {result.documentTypeLocalized || result.documentType}
         </h1>
-        <p className="result-subtitle" style={{ margin: 0, fontSize: '0.98rem' }}>
-          {result.simpleSummary ? result.simpleSummary.split('.')[0] : ''}
+
+        <p
+          style={{
+            fontSize: '1.02rem',
+            color: '#334155',
+            lineHeight: 1.55,
+            margin: 0
+          }}
+        >
+          {result.simpleSummary}
         </p>
       </div>
 
-      {/* MEDICAL PRESCRIPTION REFUSAL GUARDRAIL */}
+      {/* 3. SAFETY GUARDRAIL: Medical Prescription Refusal */}
       {result.isMedicalOrPrescription && (
-        <div className="card card-danger" style={{ marginBottom: '16px' }}>
+        <div
+          style={{
+            background: '#FEF2F2',
+            border: '1.5px solid #FCA5A5',
+            borderRadius: '16px',
+            padding: '18px',
+            marginBottom: '18px'
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-              <AlertOctagon size={26} color="#DC2626" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+              <AlertOctagon size={28} color="#DC2626" style={{ flexShrink: 0, marginTop: '2px' }} />
               <div>
-                <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#991B1B', marginBottom: '4px' }}>
+                <div style={{ fontWeight: 800, fontSize: '1.1rem', color: '#991B1B', marginBottom: '4px' }}>
                   {t.medicalRefusalTitle}
                 </div>
-                <div style={{ fontSize: '0.92rem', color: '#7F1D1D', lineHeight: 1.5 }}>
+                <div style={{ fontSize: '0.94rem', color: '#7F1D1D', lineHeight: 1.5 }}>
                   {t.medicalRefusalText}
                 </div>
               </div>
@@ -178,7 +228,7 @@ export function ResultScreen({
 
             <button
               type="button"
-              className={`btn-card-audio ${isPlaying && activeKey === 'medical' ? 'is-playing' : ''}`}
+              className="btn-card-audio"
               onClick={() => handleSpeak(t.medicalRefusalText, 'medical')}
               style={{ background: '#FEE2E2', borderColor: '#FCA5A5', color: '#991B1B' }}
             >
@@ -189,17 +239,25 @@ export function ResultScreen({
         </div>
       )}
 
-      {/* SUSPICIOUS SCAM MESSAGE ALERT */}
+      {/* 4. SAFETY GUARDRAIL: Suspicious Scam Message Alert */}
       {result.isSuspiciousMessage && (
-        <div className="card card-warning" style={{ marginBottom: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px', marginBottom: '6px' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-              <AlertTriangle size={26} color="#D97706" style={{ flexShrink: 0, marginTop: '2px' }} />
+        <div
+          style={{
+            background: '#FFFBEB',
+            border: '1.5px solid #FCD34D',
+            borderRadius: '16px',
+            padding: '18px',
+            marginBottom: '18px'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px', marginBottom: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+              <AlertTriangle size={28} color="#D97706" style={{ flexShrink: 0, marginTop: '2px' }} />
               <div>
-                <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#92400E', marginBottom: '4px' }}>
+                <div style={{ fontWeight: 800, fontSize: '1.1rem', color: '#92400E', marginBottom: '4px' }}>
                   {t.scamWarningTitle}
                 </div>
-                <div style={{ fontSize: '0.92rem', color: '#78350F' }}>
+                <div style={{ fontSize: '0.94rem', color: '#78350F', lineHeight: 1.5 }}>
                   {t.scamWarningNote}
                 </div>
               </div>
@@ -207,7 +265,7 @@ export function ResultScreen({
 
             <button
               type="button"
-              className={`btn-card-audio ${isPlaying && activeKey === 'scam' ? 'is-playing' : ''}`}
+              className="btn-card-audio"
               onClick={() => handleSpeak(t.scamWarningNote, 'scam')}
               style={{ background: '#FEF3C7', borderColor: '#FCD34D', color: '#92400E' }}
             >
@@ -217,7 +275,7 @@ export function ResultScreen({
           </div>
 
           {result.suspiciousSignals && result.suspiciousSignals.length > 0 && (
-            <ul style={{ paddingLeft: '24px', fontSize: '0.88rem', color: '#92400E', marginTop: '6px' }}>
+            <ul style={{ paddingLeft: '28px', fontSize: '0.9rem', color: '#92400E', margin: '8px 0 0', lineHeight: 1.5 }}>
               {result.suspiciousSignals.map((sig, idx) => (
                 <li key={idx} style={{ marginBottom: '4px' }}>{sig}</li>
               ))}
@@ -226,85 +284,159 @@ export function ResultScreen({
         </div>
       )}
 
-      {/* 3 Highlight Badges matching Screen 7 (Total Amount, Due Date, Document Type) with tap-to-listen */}
-      {result.keyDetails && result.keyDetails.length > 0 && (
-        <div className="stat-badges-grid">
-          {result.keyDetails.slice(0, 3).map((item, index) => (
-            <div
-              key={index}
-              className="stat-badge-card"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '14px 16px',
-                borderRadius: '16px'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      {/* 5. HERO CARD: Key Numbers & Details (Spacious, Non-Squished) */}
+      {(amountItem || dueDateItem || otherDetails.length > 0) && (
+        <div
+          style={{
+            background: '#FFFFFF',
+            border: '1.5px solid #E2E8F0',
+            borderRadius: '20px',
+            padding: '22px 20px',
+            marginBottom: '18px',
+            boxShadow: '0 4px 16px rgba(15, 23, 42, 0.04)'
+          }}
+        >
+          {/* Top Hero Section: Amount & Due Date */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px' }}>
+            {amountItem && (
+              <div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  {amountItem.label}
+                </div>
                 <div
-                  className="stat-icon-bubble"
                   style={{
-                    width: '46px',
-                    height: '46px',
-                    background: index === 0 ? '#ECFDF5' : index === 1 ? '#FEF2F2' : '#EFF6FF'
+                    fontSize: '2.3rem',
+                    fontWeight: 800,
+                    color: '#047857',
+                    lineHeight: 1.1,
+                    marginTop: '4px',
+                    letterSpacing: '-0.5px'
                   }}
                 >
-                  {getFieldIcon(item.icon)}
+                  {amountItem.value}
                 </div>
-                <div className="stat-texts">
-                  <span className="stat-label" style={{ fontSize: '0.82rem' }}>{item.label}</span>
-                  <span className="stat-value" style={{ fontSize: '1.3rem', fontWeight: 800 }}>{item.value}</span>
-                  {item.isUncertain && (
-                    <span className="uncertain-tag">
-                      <AlertTriangle size={12} />
-                      <span>Uncertain</span>
-                    </span>
-                  )}
+                {amountItem.explanation && (
+                  <div style={{ fontSize: '0.82rem', color: '#64748B', marginTop: '4px' }}>
+                    {amountItem.explanation}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {dueDateItem && (
+              <div
+                style={{
+                  background: '#FEF2F2',
+                  border: '1px solid #FECACA',
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                <Calendar size={18} color="#DC2626" />
+                <div>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#991B1B', textTransform: 'uppercase' }}>
+                    {dueDateItem.label}
+                  </div>
+                  <div style={{ fontSize: '1.05rem', fontWeight: 800, color: '#991B1B' }}>
+                    {dueDateItem.value}
+                  </div>
                 </div>
               </div>
+            )}
+          </div>
 
-              {/* Speaker button on each badge */}
-              <button
-                type="button"
-                className={`btn-card-audio ${isPlaying && activeKey === `badge_${index}` ? 'is-playing' : ''}`}
-                onClick={() => handleSpeak(`${item.label}: ${item.value}`, `badge_${index}`)}
-                aria-label={`Listen to ${item.label}`}
-                style={{ width: '36px', height: '36px', padding: 0, justifyContent: 'center' }}
-              >
-                <Volume2 size={16} />
-              </button>
+          {/* Full-width Details List (Zero Cramping) */}
+          {otherDetails.length > 0 && (
+            <div
+              style={{
+                marginTop: '18px',
+                paddingTop: '16px',
+                borderTop: '1px solid #F1F5F9',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px'
+              }}
+            >
+              {otherDetails.map((item, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'baseline',
+                    padding: '6px 0',
+                    borderBottom: idx < otherDetails.length - 1 ? '1px dashed #F1F5F9' : 'none',
+                    gap: '12px'
+                  }}
+                >
+                  <div style={{ fontSize: '0.9rem', color: '#64748B', fontWeight: 600 }}>
+                    {item.label}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: '1rem',
+                      color: '#0F172A',
+                      fontWeight: 700,
+                      textAlign: 'right'
+                    }}
+                  >
+                    {item.value}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
       )}
 
-      {/* "What should I do?" Card matching Screen 7 */}
-      <div className="card" style={{ background: '#F8FAFC', borderLeft: '4px solid var(--primary)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, color: 'var(--slate-900)' }}>
-            <HelpCircle size={18} color="var(--primary)" />
-            <span>{t.whatToDoTitle}</span>
+      {/* 6. "What should I do?" Action Box */}
+      {result.actionRequired && (
+        <div
+          style={{
+            background: '#F0FDF4',
+            border: '1.5px solid #BBF7D0',
+            borderRadius: '18px',
+            padding: '20px',
+            marginBottom: '18px'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, fontSize: '1.05rem', color: '#166534' }}>
+              <CheckCircle2 size={20} color="#16A34A" />
+              <span>{t.whatToDoTitle}</span>
+            </div>
+
+            <button
+              type="button"
+              className="btn-card-audio"
+              onClick={() => handleSpeak(result.actionRequired, 'action')}
+              style={{ background: '#DCFCE7', borderColor: '#86EFAC', color: '#166534' }}
+            >
+              <Volume2 size={14} />
+              <span>{listenLabel}</span>
+            </button>
           </div>
 
-          <button
-            type="button"
-            className={`btn-card-audio ${isPlaying && activeKey === 'action' ? 'is-playing' : ''}`}
-            onClick={() => handleSpeak(result.actionRequired, 'action')}
-          >
-            <Volume2 size={14} />
-            <span>{listenLabel}</span>
-          </button>
+          <p style={{ fontSize: '1rem', color: '#14532D', lineHeight: 1.55, margin: 0, fontWeight: 500 }}>
+            {result.actionRequired}
+          </p>
         </div>
+      )}
 
-        <p style={{ fontSize: '0.98rem', color: 'var(--slate-800)', lineHeight: 1.5, margin: 0 }}>
-          {result.actionRequired}
-        </p>
-      </div>
-
-      {/* "Important Points" Card matching Screen 7 */}
+      {/* 7. Important Notes / Warnings */}
       {result.warnings && result.warnings.length > 0 && (
-        <div className="card" style={{ background: '#FFFBEB', borderColor: '#FDE68A' }}>
+        <div
+          style={{
+            background: '#FFFBEB',
+            border: '1.5px solid #FDE68A',
+            borderRadius: '18px',
+            padding: '18px',
+            marginBottom: '18px'
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, color: '#92400E' }}>
               <AlertTriangle size={18} color="#D97706" />
@@ -313,7 +445,7 @@ export function ResultScreen({
 
             <button
               type="button"
-              className={`btn-card-audio ${isPlaying && activeKey === 'warnings' ? 'is-playing' : ''}`}
+              className="btn-card-audio"
               onClick={() => handleSpeak(result.warnings.map(w => w.text).join('. '), 'warnings')}
               style={{ background: '#FEF3C7', borderColor: '#FCD34D', color: '#92400E' }}
             >
@@ -322,7 +454,7 @@ export function ResultScreen({
             </button>
           </div>
 
-          <ul style={{ paddingLeft: '20px', color: '#78350F', fontSize: '0.92rem', lineHeight: 1.5 }}>
+          <ul style={{ paddingLeft: '22px', color: '#78350F', fontSize: '0.92rem', lineHeight: 1.5, margin: 0 }}>
             {result.warnings.map((w, idx) => (
               <li key={idx} style={{ marginBottom: '6px' }}>
                 {w.text}
@@ -332,124 +464,34 @@ export function ResultScreen({
         </div>
       )}
 
-      {/* Explicit Uncertainty Note */}
-      {result.uncertainFields && result.uncertainFields.length > 0 && (
-        <div className="card card-warning">
-          <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#B45309', marginBottom: '4px' }}>
-            {t.uncertaintyWarningTitle}
+      {/* 8. Words Explained (Glossary) if any */}
+      {result.glossary && result.glossary.length > 0 && (
+        <div
+          style={{
+            background: '#F8FAFC',
+            border: '1px solid #E2E8F0',
+            borderRadius: '16px',
+            padding: '18px',
+            marginBottom: '18px'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, color: '#334155', marginBottom: '12px' }}>
+            <BookOpen size={18} color="#475569" />
+            <span>{t.tabGlossary || 'Words Explained'}</span>
           </div>
-          <p style={{ fontSize: '0.85rem', color: '#78350F', marginBottom: '8px' }}>
-            {t.uncertaintyNote}
-          </p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-            {result.uncertainFields.map((field, idx) => (
-              <span key={idx} className="uncertain-tag">
-                {field}
-              </span>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {result.glossary.map((item, idx) => (
+              <div key={idx} style={{ padding: '8px 10px', background: '#FFFFFF', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                <span style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.9rem' }}>{item.term}: </span>
+                <span style={{ color: '#475569', fontSize: '0.88rem' }}>{item.meaning}</span>
+              </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* 3 Tabs matching Screen 8: Simple Explanation, Key Info, Glossary */}
-      <div className="tab-nav">
-        <button
-          type="button"
-          className={`tab-btn ${activeTab === 'simple' ? 'active' : ''}`}
-          onClick={() => setActiveTab('simple')}
-        >
-          {t.tabSimple}
-        </button>
-        <button
-          type="button"
-          className={`tab-btn ${activeTab === 'details' ? 'active' : ''}`}
-          onClick={() => setActiveTab('details')}
-        >
-          {t.tabDetails}
-        </button>
-        <button
-          type="button"
-          className={`tab-btn ${activeTab === 'glossary' ? 'active' : ''}`}
-          onClick={() => setActiveTab('glossary')}
-        >
-          {t.tabGlossary}
-        </button>
-      </div>
-
-      {/* Tab 1: Simple Summary */}
-      {activeTab === 'simple' && (
-        <div className="card">
-          <p style={{ fontSize: '1rem', lineHeight: 1.6, color: 'var(--slate-800)', marginBottom: '14px' }}>
-            {result.simpleSummary}
-          </p>
-          <button
-            type="button"
-            className={`btn-card-audio ${isPlaying && activeKey === 'summary' ? 'is-playing' : ''}`}
-            onClick={() => handleSpeak(result.simpleSummary, 'summary')}
-          >
-            <Volume2 size={14} />
-            <span>{listenLabel}</span>
-          </button>
-        </div>
-      )}
-
-      {/* Tab 2: Key Details with individual Listen buttons */}
-      {activeTab === 'details' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {result.keyDetails && result.keyDetails.map((item, idx) => (
-            <div key={idx} className="card" style={{ marginBottom: 0, padding: '14px 16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
-                <div>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--slate-500)' }}>
-                    {item.label}
-                  </div>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--slate-900)' }}>
-                    {item.value}
-                  </div>
-                  {item.explanation && (
-                    <div style={{ fontSize: '0.82rem', color: 'var(--slate-600)', marginTop: '2px' }}>
-                      {item.explanation}
-                    </div>
-                  )}
-                </div>
-
-                <button
-                  type="button"
-                  className={`btn-card-audio ${isPlaying && activeKey === `item_${idx}` ? 'is-playing' : ''}`}
-                  onClick={() => handleSpeak(`${item.label}: ${item.value}. ${item.explanation || ''}`, `item_${idx}`)}
-                >
-                  <Volume2 size={14} />
-                  <span>{listenLabel}</span>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Tab 3: Glossary */}
-      {activeTab === 'glossary' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {result.glossary && result.glossary.length > 0 ? (
-            result.glossary.map((item, idx) => (
-              <div key={idx} className="card" style={{ marginBottom: 0, padding: '14px 16px' }}>
-                <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--slate-900)' }}>
-                  {item.term}
-                </div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--slate-600)', marginTop: '2px' }}>
-                  {item.meaning}
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="card" style={{ textAlign: 'center', color: 'var(--slate-500)', padding: '24px' }}>
-              {currentLang === 'hi' ? 'कोई कठिन शब्द नहीं पाया गया।' : currentLang === 'te' ? 'కఠినమైన పదాలు లేవు.' : currentLang === 'gu' ? 'કોઈ અઘરા શબ્દો મળ્યા નથી.' : 'No difficult terms found in this document.'}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* 1-Tap Share with Family via WhatsApp */}
+      {/* 9. 1-Tap Share with Family via WhatsApp (High Contrast Green, Prominent) */}
       <button
         type="button"
         id="btn-share-family"
@@ -457,34 +499,35 @@ export function ResultScreen({
         className="btn"
         style={{
           width: '100%',
-          minHeight: '50px',
+          minHeight: '52px',
           backgroundColor: '#16A34A',
           color: '#FFFFFF',
           borderRadius: '16px',
-          fontWeight: 700,
-          fontSize: '0.98rem',
+          fontWeight: 800,
+          fontSize: '1.02rem',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           gap: '10px',
-          boxShadow: '0 4px 14px rgba(22, 163, 74, 0.25)',
-          marginTop: '22px',
+          boxShadow: '0 4px 14px rgba(22, 163, 74, 0.28)',
+          marginTop: '8px',
+          marginBottom: '14px',
           border: 'none',
           cursor: 'pointer'
         }}
       >
-        <Share2 size={18} />
+        <Share2 size={20} />
         <span>{t.btnShareFamily || 'Share with Family (WhatsApp)'}</span>
       </button>
 
-      {/* Bottom Actions matching Screen 7 */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '12px' }}>
+      {/* 10. Secondary Navigation Buttons */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
         <button
           type="button"
           className="btn btn-secondary"
           onClick={onReset}
           id="btn-try-another"
-          style={{ minHeight: '48px', fontSize: '0.95rem' }}
+          style={{ minHeight: '48px', fontSize: '0.92rem', fontWeight: 700 }}
         >
           <RefreshCw size={16} />
           <span>{t.btnTryAnother}</span>
@@ -495,7 +538,7 @@ export function ResultScreen({
           className="btn btn-secondary"
           onClick={onGoHome}
           id="btn-go-home"
-          style={{ minHeight: '48px', fontSize: '0.95rem' }}
+          style={{ minHeight: '48px', fontSize: '0.92rem', fontWeight: 700 }}
         >
           <Home size={16} />
           <span>{t.btnGoHome}</span>

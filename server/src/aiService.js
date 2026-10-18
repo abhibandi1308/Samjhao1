@@ -420,7 +420,13 @@ export async function explainDocument({ fileBuffer, mimeType, language = 'en', f
   }
 
   // Live Multimodal AI with Gemini
-  const CANDIDATE_MODELS = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro'];
+  const CANDIDATE_MODELS = [
+    'gemini-3.8-flash',
+    'gemini-3.5-flash',
+    'gemini-3.5-flash-lite',
+    'gemini-flash-latest',
+    'gemini-pro-latest'
+  ];
   let lastError = null;
 
   for (const modelName of CANDIDATE_MODELS) {

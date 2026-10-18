@@ -2,11 +2,20 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import { explainDocument } from './aiService.js';
 import { SUPPORTED_LANGUAGES } from '../../shared/documentSchema.js';
 
-// Load environment variables
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Robustly load environment variables from server/.env, root .env, or process env
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+if (!process.env.GEMINI_API_KEY) {
+  dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -102,12 +111,6 @@ app.post('/api/explain', upload.single('document'), async (req, res) => {
 });
 
 // Production Static Serving (Single-Port Fullstack Deployment)
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const clientDistPath = path.resolve(__dirname, '../../client/dist');
 
 if (fs.existsSync(clientDistPath)) {
