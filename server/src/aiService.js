@@ -565,7 +565,10 @@ export async function explainDocument({ fileBuffer, mimeType, language = 'en', f
         systemInstruction: SYSTEM_INSTRUCTION,
         generationConfig: {
           responseMimeType: 'application/json',
-          temperature: 0.1
+          temperature: 0.1,
+          thinkingConfig: {
+            thinkingBudget: 0
+          }
         }
       });
 
