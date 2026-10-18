@@ -247,15 +247,17 @@ app.post('/api/explain', (req, res, next) => {
 });
 
 // Production Static Serving (Single-Port Fullstack Deployment)
+const rootDistPath = path.resolve(__dirname, '../../dist');
 const clientDistPath = path.resolve(__dirname, '../../client/dist');
+const distPath = fs.existsSync(rootDistPath) ? rootDistPath : clientDistPath;
 
-if (fs.existsSync(clientDistPath)) {
-  app.use(express.static(clientDistPath));
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api')) return next();
-    res.sendFile(path.join(clientDistPath, 'index.html'));
+    res.sendFile(path.join(distPath, 'index.html'));
   });
-  console.log(`📦 [Samjhao] Production build detected. Serving static assets from client/dist.`);
+  console.log(`📦 [Samjhao] Production build detected. Serving static assets from ${distPath}.`);
 }
 
 // Export app for Vercel Serverless Functions & Testing
